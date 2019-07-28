@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { StatisticsService } from 'src/app/services/statistics.service';
-import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { Technology } from '../charts/charts-interfaces';
+
 
 const VacanciesQuery = (technologyType: string) => {
   return gql`{
@@ -24,23 +26,17 @@ const VacanciesQuery = (technologyType: string) => {
 })
 export class StatisticsPageComponent implements OnInit {
 
+  desiredQueries: string[] = ['programmingLanguage', 'frontend', 'backend', 'database']
+  chartDatasets: Technology[][] = [];
   constructor(private service: StatisticsService) { }
 
-  chartDatasets = [];
+
 
   ngOnInit() {
-
-    this.service.getVacancies(VacanciesQuery('programmingLanguage')).subscribe(data => {
-      if (data) {
-        console.log("TCL: StatisticsPageComponent -> ngOnInit -> data", data)
-        this.chartDatasets.push(data.getTechnologiesListByType);
-      }
-    });
-    // this.service.getVacancies(VacanciesQuery('frontend')).subscribe(data => {
-    //   if (data) {
-    //     console.log("TCL: StatisticsPageComponent -> ngOnInit -> data", data)
-    //     this.chartDatasets.push(data.getTechnologiesListByType);
-    //   }
-    // });
+    for (let index = 0; index < this.desiredQueries.length; index++) {
+      this.service.getVacancies(VacanciesQuery(this.desiredQueries[index])).subscribe(data => {
+        this.chartDatasets.push(data);
+      });
+    }
   }
 }
