@@ -27,7 +27,7 @@ export interface Dataset {
 export interface Technology {
   technologyName: string;
   numberOfVacancies: Array<TechnologyResourceData>
-  type: string;
+  technologyType: string;
 }
 
 export interface TechnologyResourceData {

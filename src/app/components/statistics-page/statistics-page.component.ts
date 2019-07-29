@@ -13,7 +13,7 @@ const VacanciesQuery = (technologyType: string) => {
         resource
         totalNumberOfVacancies
       }
-      type
+      technologyType
     }
   }
   `
@@ -33,10 +33,11 @@ export class StatisticsPageComponent implements OnInit {
 
 
   ngOnInit() {
-    for (let index = 0; index < this.desiredQueries.length; index++) {
+    this.desiredQueries.map((data, index) => {
       this.service.getVacancies(VacanciesQuery(this.desiredQueries[index])).subscribe(data => {
-        this.chartDatasets.push(data);
+        const mappedData = data.filter(item => item.technologyType === this.desiredQueries[index]);
+        this.chartDatasets.push(mappedData);
       });
-    }
+    })
   }
 }

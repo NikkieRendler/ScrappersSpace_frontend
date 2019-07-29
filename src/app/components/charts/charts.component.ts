@@ -70,13 +70,14 @@ export class ChartsComponent implements OnInit, DoCheck {
     const data: ChartData = { labels: [], datasets: [] };
     const resourcesNames: string[] = this.setResourcesNames(dataForNewChart[0].numberOfVacancies);
     const datasetsTemplates = this.setDatasetsTemplates(resourcesNames);
-    this.titleChart(dataForNewChart[0].type[0]);
+    const options = this.options;
+    options.title = this.titleChart(dataForNewChart[0].technologyType);
     dataForNewChart.map(technology => {
       data.labels.push(technology.technologyName);
       data.datasets = this.setDatasets(technology, datasetsTemplates);
     });
-    this.charts.push({ type: this.type, data: data, options: this.options });
-    console.log(this.charts);
+
+    this.charts.push({ type: this.type, data: data, options: options });
   }
 
   setResourcesNames(firstItemResources: TechnologyResourceData[]) {
@@ -104,15 +105,15 @@ export class ChartsComponent implements OnInit, DoCheck {
   }
 
   titleChart(name) {
-    name === 'frontend'
-      ? this.options.title = { text: 'Фронтенд технологии', display: true }
+    return name === 'frontend'
+      ? { text: 'Фронтенд технологии', display: true }
       : name === 'programmingLanguage'
-        ? this.options.title = { text: 'Языки программирования', display: true }
+        ? { text: 'Языки программирования', display: true }
         : name === 'backend'
-          ? this.options.title = { text: 'Бекенд технологии', display: true }
+          ? { text: 'Бекенд технологии', display: true }
           : name === 'database'
-            ? this.options.title = { text: 'Базы данных', display: true }
-            : this.options.title = { text: 'Вакансии', display: true }
-
+            ? { text: 'Базы данных', display: true }
+            : { text: 'Вакансии', display: true }
   }
+
 }
