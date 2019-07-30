@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, IterableDiffers, DoCheck } from '@angular/core';
 import { Chart, ChartData, Options, Dataset, Technology, TechnologyResourceData, GlobalTechnologyData } from './charts-interfaces';
 
-
 @Component({
   selector: 'app-charts',
   templateUrl: './charts.component.html',
@@ -67,6 +66,7 @@ export class ChartsComponent implements OnInit, DoCheck {
   }
 
   createChart = (dataForNewChart: Technology[], technologyType: string, createdAt: string) => {
+    console.log("TCL: ChartsComponent -> createChart -> createdAt", new Date(+createdAt ))
     const data: ChartData = { labels: [], datasets: [] };
     const resourcesNames: string[] = this.setResourcesNames(dataForNewChart[0].numberOfVacancies);
     const datasetsTemplates = this.setDatasetsTemplates(resourcesNames);
@@ -77,7 +77,7 @@ export class ChartsComponent implements OnInit, DoCheck {
       data.datasets = this.setDatasets(technology, datasetsTemplates);
     });
 
-    this.charts.push({ type: this.type, data: data, options: options });
+    this.charts.push({ type: this.type, data: data, options: options, lastUpdate: createdAt });
   }
 
   setResourcesNames(firstItemResources: TechnologyResourceData[]) {

@@ -7,6 +7,7 @@ export interface Chart {
   type: string;
   data: ChartData;
   options: Options;
+  lastUpdate: string;
 }
 
 export interface ChartData {
