@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, IterableDiffers, DoCheck } from '@angular/core';
-import { Chart, ChartData, Options, Dataset, Technology, TechnologyResourceData } from './charts-interfaces';
+import { Chart, ChartData, Options, Dataset, Technology, TechnologyResourceData, GlobalTechnologyData } from './charts-interfaces';
 
 
 @Component({
@@ -10,7 +10,7 @@ import { Chart, ChartData, Options, Dataset, Technology, TechnologyResourceData 
 
 export class ChartsComponent implements OnInit, DoCheck {
   iterableDiffer: any = [];
-  @Input() chartDatasets: Technology[][] = [];
+  @Input() chartDatasets: GlobalTechnologyData[] = [];
 
   datasetsToUse: Technology[] = [];
   charts: Chart[] = [];
@@ -57,21 +57,21 @@ export class ChartsComponent implements OnInit, DoCheck {
 
   ngDoCheck() {
     if (this.iterableDiffer.diff(this.chartDatasets)) {
-      this.chartDatasets.map(dataset => {
-        if (!this.datasetsToUse.includes(dataset[dataset.length - 1])) {
-          this.datasetsToUse.push(dataset[dataset.length - 1]);
-          this.createChart(dataset)
+      this.chartDatasets.map((dataset, index) => {
+        if (!this.datasetsToUse.includes(dataset.data[index])) {
+          this.datasetsToUse.push(dataset.data[index]);
+          this.createChart(dataset.data, dataset.technologyType, dataset.createdAt)
         }
       })
     }
   }
 
-  createChart = (dataForNewChart: Technology[]) => {
+  createChart = (dataForNewChart: Technology[], technologyType: string, createdAt: string) => {
     const data: ChartData = { labels: [], datasets: [] };
     const resourcesNames: string[] = this.setResourcesNames(dataForNewChart[0].numberOfVacancies);
     const datasetsTemplates = this.setDatasetsTemplates(resourcesNames);
     const options = this.options;
-    options.title = this.titleChart(dataForNewChart[0].technologyType);
+    options.title = this.titleChart(technologyType);
     dataForNewChart.map(technology => {
       data.labels.push(technology.technologyName);
       data.datasets = this.setDatasets(technology, datasetsTemplates);

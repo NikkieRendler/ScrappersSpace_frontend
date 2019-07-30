@@ -1,4 +1,8 @@
-
+export interface GlobalTechnologyData {
+  technologyType: string;
+  createdAt: string;
+  data: Technology[]
+}
 export interface Chart {
   type: string;
   data: ChartData;
