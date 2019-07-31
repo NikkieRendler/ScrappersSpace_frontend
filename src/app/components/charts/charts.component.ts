@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, IterableDiffers, DoCheck } from '@angular/core';
 import { Chart, ChartData, Options, Dataset, Technology, TechnologyResourceData, GlobalTechnologyData } from './charts-interfaces';
+import { last } from 'rxjs/operators';
 
 @Component({
   selector: 'app-charts',
@@ -11,13 +12,12 @@ export class ChartsComponent implements OnInit, DoCheck {
   iterableDiffer: any = [];
   @Input() chartDatasets: GlobalTechnologyData[] = [];
 
-  datasetsToUse: Technology[] = [];
   charts: Chart[] = [];
   resoucesColors: Array<string> = [
-    "rgba(50, 150, 200, .5)",
-    "rgba(150, 200, 50, .5)",
-    "rgba(60, 160, 90, .5)"
-  ]
+    'rgba(50, 150, 200, .5)',
+    'rgba(150, 200, 50, .5)',
+    'rgba(60, 160, 90, .5)'
+  ];
   type = 'horizontalBar';
   options: Options = {
     title: {
@@ -56,17 +56,26 @@ export class ChartsComponent implements OnInit, DoCheck {
 
   ngDoCheck() {
     if (this.iterableDiffer.diff(this.chartDatasets)) {
-      this.chartDatasets.map((dataset, index) => {
-        if (!this.datasetsToUse.includes(dataset.data[index])) {
-          this.datasetsToUse.push(dataset.data[index]);
-          this.createChart(dataset.data, dataset.technologyType, dataset.createdAt)
-        }
-      })
+      const lastDataset = this.chartDatasets[this.chartDatasets.length - 1];
+      this.createChart(this.sortChartData(lastDataset.data), lastDataset.technologyType, lastDataset.createdAt);
     }
   }
 
+  sortChartData(technologies: Technology[]) {
+    return technologies = technologies.sort((techOne, techTwo) => {
+      let techTwoOverall = 0;
+      techTwo.numberOfVacancies.map(resource => {
+        techTwoOverall += resource.totalNumberOfVacancies;
+      });
+      let techOneOverall = 0;
+      techOne.numberOfVacancies.map(resource => {
+        techOneOverall += resource.totalNumberOfVacancies;
+      });
+      return techTwoOverall - techOneOverall;
+    });
+  }
+
   createChart = (dataForNewChart: Technology[], technologyType: string, createdAt: string) => {
-    console.log("TCL: ChartsComponent -> createChart -> createdAt", new Date(+createdAt ))
     const data: ChartData = { labels: [], datasets: [] };
     const resourcesNames: string[] = this.setResourcesNames(dataForNewChart[0].numberOfVacancies);
     const datasetsTemplates = this.setDatasetsTemplates(resourcesNames);
@@ -82,15 +91,15 @@ export class ChartsComponent implements OnInit, DoCheck {
 
   setResourcesNames(firstItemResources: TechnologyResourceData[]) {
     return firstItemResources.map(entry => {
-      return entry.resource
+      return entry.resource;
     });
 
   }
 
   setDatasetsTemplates(resourcesNames): Dataset[] {
-    let datasetsTemplates: Dataset[] = [];
+    const datasetsTemplates: Dataset[] = [];
     for (let index = 0; index < resourcesNames.length; index++) {
-      datasetsTemplates.push({ label: resourcesNames[index], data: [], backgroundColor: this.resoucesColors[index] })
+      datasetsTemplates.push({ label: resourcesNames[index], data: [], backgroundColor: this.resoucesColors[index] });
     }
     return datasetsTemplates;
   }
@@ -99,7 +108,7 @@ export class ChartsComponent implements OnInit, DoCheck {
     technology.numberOfVacancies.forEach(entry => {
       templates[technology.numberOfVacancies.indexOf(entry)].data.push(
         technology.numberOfVacancies[technology.numberOfVacancies.indexOf(entry)].totalNumberOfVacancies
-      )
+      );
     });
     return templates;
   }
@@ -113,7 +122,7 @@ export class ChartsComponent implements OnInit, DoCheck {
           ? { text: 'Бекенд технологии', display: true }
           : name === 'database'
             ? { text: 'Базы данных', display: true }
-            : { text: 'Вакансии', display: true }
+            : { text: 'Вакансии', display: true };
   }
 
 }
