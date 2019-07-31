@@ -3,20 +3,39 @@ import { Apollo } from 'apollo-angular';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { GlobalTechnologyData } from '../components/charts/charts-interfaces';
+import gql from 'graphql-tag';
 
 
-
+function VacanciesQuery(technologyType: string) {
+  return gql`{
+    getTechnologiesListByType(technologyType: "${technologyType}") {
+      technologyType
+      createdAt
+      data {
+        technologyName
+        numberOfVacancies{
+          resource
+          totalNumberOfVacancies
+        }
+      }
+    }
+  }
+  `;
+};
 @Injectable({
   providedIn: 'root'
 })
+
 export class StatisticsService {
 
   constructor(private apollo: Apollo) { }
 
-  getVacancies(dataType): Observable<GlobalTechnologyData> {
+  getVacancies(dataType): Observable<any> {
     return this.apollo.watchQuery<any>({
-      query: dataType
-    }).valueChanges.pipe(map(({ data }) => data.getTechnologiesListByType));
+      query: VacanciesQuery(dataType)
+    }).valueChanges.pipe(map(data => {
+      return data.data.getTechnologiesListByType;
+    }));
   }
 
 }
