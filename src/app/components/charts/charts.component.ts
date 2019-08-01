@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, IterableDiffers, DoCheck } from '@angular/core';
 import { Chart, ChartData, Options, Dataset, Technology, TechnologyResourceData, GlobalTechnologyData } from './charts-interfaces';
-import { last } from 'rxjs/operators';
+import { last, mergeMap, switchMap, concatMap } from 'rxjs/operators';
+import { StatisticsService } from 'src/app/services/statistics.service';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-charts',
@@ -46,18 +48,37 @@ export class ChartsComponent implements OnInit, DoCheck {
       }]
     }
   };
-  constructor(private _iterableDiffers: IterableDiffers) {
+  constructor(private _iterableDiffers: IterableDiffers, private service: StatisticsService) {
     this.iterableDiffer = this._iterableDiffers.find([]).create(null);
   }
 
   ngOnInit() {
+    this.service.test.subscribe(val => {
+      console.log("TCL: ChartsComponent -> ngOnInit -> val", val)
+      // this.createChart(this.sortChartData(val.data), val.technologyType, val.createdAt);
 
+      // this.chartDatasets.push(val)
+      // console.log("TCL: StatisticsPageComponent -> ngOnInit -> this.chartDatasets", this.chartDatasets)
+    })
   }
 
   ngDoCheck() {
     if (this.iterableDiffer.diff(this.chartDatasets)) {
-      const lastDataset = this.chartDatasets[this.chartDatasets.length - 1];
-      this.createChart(this.sortChartData(lastDataset.data), lastDataset.technologyType, lastDataset.createdAt);
+      console.log(this.chartDatasets);
+      if (this.chartDatasets.length === 4) {
+        console.log("TCL: ChartsComponent -> ngDoCheck -> this.chartDatasets", this.chartDatasets)
+        for (let index = 0; index < this.chartDatasets.length; index++) {
+          setTimeout(() => {
+            this.createChart(this.sortChartData(this.chartDatasets[index].data), this.chartDatasets[index].technologyType, this.chartDatasets[index].createdAt)
+          }, 300);
+
+        }
+
+
+      }
+
+      // const lastDataset = this.chartDatasets[this.chartDatasets.length - 1];
+      // this.createChart(this.sortChartData(lastDataset.data), lastDataset.technologyType, lastDataset.createdAt);
     }
   }
 
