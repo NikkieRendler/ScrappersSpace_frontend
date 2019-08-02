@@ -17,57 +17,20 @@ export class StatisticsPageComponent implements OnInit {
     this.service.getVacancies('frontend'),
     this.service.getVacancies('backend'),
     this.service.getVacancies('database')
-  ]
-  chartDatasets: GlobalTechnologyData[] = [];
+  ];
   constructor(private service: StatisticsService) { }
 
 
   ngOnInit() {
-
-    // combineLatest(this.service.getVacancies('programmingLanguage'),
-    //   this.service.getVacancies('frontend'),
-    //   this.service.getVacancies('backend'),
-    //   this.service.getVacancies('database'))
-    //   .pipe(map(val => of(val)))
-    //   .subscribe(val => {
-    //     val.subscribe(res => {
-    //       res.map(val => {
-    //         this.chartDatasets.push(val)
-    //       })
-    //     })
-    //     return
-    //   }
-    //   )
-
-
-
-
-    merge(
+    combineLatest(
       this.service.getVacancies('programmingLanguage'),
       this.service.getVacancies('frontend'),
       this.service.getVacancies('backend'),
-      this.service.getVacancies('database')
-    ).pipe(concatMap(val => of(val)))
-      .subscribe(val => {
-        this.chartDatasets.push(val)
-        // console.log("TCL: StatisticsPageComponent -> ngOnInit -> this.chartDatasets", this.chartDatasets)
-      })
-      
-
-
-
-    // this.observableList.map(observable => {
-    //   observable
-    //     .pipe(mergeMap(val => combineLatest(of(val))))
-    //     .subscribe(val => {
-    //       console.log("TCL: StatisticsPageComponent -> ngOnInit -> val", val)
-    //       return this.chartDatasets.push(val[0])
-    //     })
-    // })
-
-    // this.service.getVacancies('frontend')
-    //   .pipe(concatMap(val => of(val)))
-    //   .subscribe(val => console.log(val)
-    //   )
+      this.service.getVacancies('database'))
+      .subscribe(res => {
+        res.map(chartData => {
+          this.service.chartData.next(chartData);
+        });
+      });
   }
 }

@@ -28,7 +28,7 @@ function VacanciesQuery(technologyType: string) {
 
 export class StatisticsService {
 
-  test: Subject<GlobalTechnologyData[]> = new Subject()
+  chartData: Subject<GlobalTechnologyData> = new Subject();
 
   constructor(private apollo: Apollo) { }
 

@@ -1,7 +1,8 @@
 export interface GlobalTechnologyData {
   technologyType: string;
   createdAt: string;
-  data: Technology[]
+  data: Technology[];
+  position?: number;
 }
 export interface Chart {
   type: string;

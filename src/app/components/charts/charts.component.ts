@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, IterableDiffers, DoCheck } from '@angular/core';
+import { Component, OnInit, Input, IterableDiffers } from '@angular/core';
 import { Chart, ChartData, Options, Dataset, Technology, TechnologyResourceData, GlobalTechnologyData } from './charts-interfaces';
-import { last, mergeMap, switchMap, concatMap } from 'rxjs/operators';
+import { last, mergeMap, switchMap, concatMap, debounceTime } from 'rxjs/operators';
 import { StatisticsService } from 'src/app/services/statistics.service';
 import { of } from 'rxjs';
 
@@ -10,9 +10,8 @@ import { of } from 'rxjs';
   styleUrls: ['./charts.component.scss']
 })
 
-export class ChartsComponent implements OnInit, DoCheck {
+export class ChartsComponent implements OnInit {
   iterableDiffer: any = [];
-  @Input() chartDatasets: GlobalTechnologyData[] = [];
 
   charts: Chart[] = [];
   resoucesColors: Array<string> = [
@@ -48,38 +47,15 @@ export class ChartsComponent implements OnInit, DoCheck {
       }]
     }
   };
-  constructor(private _iterableDiffers: IterableDiffers, private service: StatisticsService) {
-    this.iterableDiffer = this._iterableDiffers.find([]).create(null);
-  }
+  constructor(private service: StatisticsService) { }
 
   ngOnInit() {
-    this.service.test.subscribe(val => {
-      console.log("TCL: ChartsComponent -> ngOnInit -> val", val)
-      // this.createChart(this.sortChartData(val.data), val.technologyType, val.createdAt);
-
-      // this.chartDatasets.push(val)
-      // console.log("TCL: StatisticsPageComponent -> ngOnInit -> this.chartDatasets", this.chartDatasets)
-    })
-  }
-
-  ngDoCheck() {
-    if (this.iterableDiffer.diff(this.chartDatasets)) {
-      console.log(this.chartDatasets);
-      if (this.chartDatasets.length === 4) {
-        console.log("TCL: ChartsComponent -> ngDoCheck -> this.chartDatasets", this.chartDatasets)
-        for (let index = 0; index < this.chartDatasets.length; index++) {
-          setTimeout(() => {
-            this.createChart(this.sortChartData(this.chartDatasets[index].data), this.chartDatasets[index].technologyType, this.chartDatasets[index].createdAt)
-          }, 300);
-
-        }
-
-
-      }
-
-      // const lastDataset = this.chartDatasets[this.chartDatasets.length - 1];
-      // this.createChart(this.sortChartData(lastDataset.data), lastDataset.technologyType, lastDataset.createdAt);
-    }
+    this.service.chartData.subscribe(chartData => {
+      chartData.position = this.setChartPosition(chartData);
+      setTimeout(() => {
+        this.createChart(this.sortChartData(chartData.data), chartData.technologyType, chartData.createdAt, chartData.position)
+      }, 100);
+    });
   }
 
   sortChartData(technologies: Technology[]) {
@@ -96,7 +72,7 @@ export class ChartsComponent implements OnInit, DoCheck {
     });
   }
 
-  createChart = (dataForNewChart: Technology[], technologyType: string, createdAt: string) => {
+  createChart = (dataForNewChart: Technology[], technologyType: string, createdAt: string, position?: number) => {
     const data: ChartData = { labels: [], datasets: [] };
     const resourcesNames: string[] = this.setResourcesNames(dataForNewChart[0].numberOfVacancies);
     const datasetsTemplates = this.setDatasetsTemplates(resourcesNames);
@@ -107,7 +83,7 @@ export class ChartsComponent implements OnInit, DoCheck {
       data.datasets = this.setDatasets(technology, datasetsTemplates);
     });
 
-    this.charts.push({ type: this.type, data: data, options: options, lastUpdate: createdAt });
+    this.charts[position] = { type: this.type, data: data, options: options, lastUpdate: createdAt };
   }
 
   setResourcesNames(firstItemResources: TechnologyResourceData[]) {
@@ -146,4 +122,13 @@ export class ChartsComponent implements OnInit, DoCheck {
             : { text: 'Вакансии', display: true };
   }
 
+  setChartPosition(chartData) {
+    return chartData.technologyType === 'programmingLanguage'
+      ? 0
+      : chartData.technologyType === 'frontend'
+        ? 1
+        : chartData.technologyType === 'backend'
+          ? 2
+          : 3;
+  }
 }
