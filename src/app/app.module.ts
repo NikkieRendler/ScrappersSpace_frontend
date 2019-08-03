@@ -10,7 +10,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ChartModule } from 'angular2-chartjs';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { GraphQLModule } from './graphql.module';
-import { StatisticsPageComponent } from './components/statistics-page/statistics-page.component';
 import { ChartsComponent } from './components/charts/charts.component';
 import { LOCALE_ID } from '@angular/core';
 import localeRu from '@angular/common/locales/ru';
@@ -22,7 +21,6 @@ registerLocaleData(localeRu, 'ru');
 @NgModule({
   declarations: [
     AppComponent,
-    StatisticsPageComponent,
     ChartsComponent
   ],
   imports: [

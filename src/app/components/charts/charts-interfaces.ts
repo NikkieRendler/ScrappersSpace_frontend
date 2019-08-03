@@ -1,8 +1,25 @@
-export interface GlobalTechnologyData {
+export interface QueryData {
+  queryData: VacanciesQueryData[] | FreelanceVacanciesQueryData[];
+  kind: string;
+}
+
+export interface VacanciesQueryData {
   technologyType: string;
   createdAt: string;
   data: Technology[];
   position?: number;
+}
+
+export interface FreelanceVacanciesQueryData {
+  technologyType: string;
+  createdAt: string;
+  data: FreelanceTechnologyJobs[];
+  position?: number;
+}
+
+export interface FreelanceTechnologyJobs {
+  technologyName: string;
+  numberOfJobs: number;
 }
 export interface Chart {
   type: string;
@@ -40,3 +57,4 @@ export interface TechnologyResourceData {
   resource: string
   totalNumberOfVacancies: number;
 }
+

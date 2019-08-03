@@ -1,17 +1,22 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { StatisticsPageComponent } from './components/statistics-page/statistics-page.component';
+import { ChartsComponent } from './components/charts/charts.component';
 
 const routes: Routes = [
   {
-    path: 'statistics',
-    component: StatisticsPageComponent
+    path: 'vacancies',
+    component: ChartsComponent
+  },
+  {
+    path: 'freelance',
+    component: ChartsComponent
   },
   {
     path: '',
-    redirectTo: 'statistics',
+    redirectTo: 'vacancies',
     pathMatch: 'full'
-  }];
+  }
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
