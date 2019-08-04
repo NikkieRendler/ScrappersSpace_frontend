@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ChartsComponent } from './components/charts/charts.component';
+import { AdminComponent } from './components/admin/admin.component';
 
 const routes: Routes = [
   {
@@ -10,6 +11,10 @@ const routes: Routes = [
   {
     path: 'freelance',
     component: ChartsComponent
+  },
+  {
+    path: 'admin',
+    component: AdminComponent
   },
   {
     path: '',

@@ -1,0 +1,68 @@
+<div class="admin-wrapper">
+    <form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" (ngSubmit)="submitForm()">
+
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>Company Name</nz-form-label>
+            <nz-form-control>
+                <nz-input-group>
+                    <input formControlName="name" nz-input placeholder="Company Name" />
+                </nz-input-group>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="regirationCountry" nzRequired>Registration Country</nz-form-label>
+            <nz-form-control>
+                <nz-input-group>
+                    <input formControlName="registrationCountry" nz-input placeholder="Registration Country" />
+                </nz-input-group>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="companyType" nzRequired>Company Type</nz-form-label>
+            <nz-form-control nzErrorTip="Please input your Password!">
+                <nz-input-group>
+                    <input formControlName="companyType" nz-input placeholder="Company Type" />
+                </nz-input-group>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="motto" nzRequired>Motto</nz-form-label>
+            <nz-form-control nzErrorTip="Please input your Password!">
+                <nz-input-group>
+                    <input formControlName="motto" nz-input placeholder="Motto" />
+                </nz-input-group>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="description" nzRequired>Description</nz-form-label>
+            <nz-form-control nzErrorTip="Please input your Password!">
+                <nz-input-group>
+                    <input formControlName="description" nz-input placeholder="Description" />
+                </nz-input-group>
+            </nz-form-control>
+        </nz-form-item>
+
+        <form style="margin-top: 20px" nz-form [formGroup]="resourcesForm">
+            <nz-form-item fxLayout fxLayoutAlign="start center" *ngFor="let resource of resourcesList; let i = index">
+                <nz-form-label style="margin-right: 20px; width: 14%; padding: 5px 0px;" [nzFor]="resource.resource">
+                    <img style="width: 25px" [src]="resource.icon" alt="">
+                    {{resource.resource.toUpperCase()}}
+                </nz-form-label>
+                <nz-form-control style="width: 70%;">
+                        <input style="width: 20%;" nz-input placeholder="Content Amount" [formControlName]="contentAmount" />
+                        <input style="width: 80%;" nz-input placeholder="Link" [formControlName]="link" />
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+
+        <nz-form-item style="margin-top: 20px">
+            <nz-form-control>
+                <button nz-button nzType="primary" [disabled]="!validateForm.valid">Add company</button>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+</div>

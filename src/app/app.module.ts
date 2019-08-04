@@ -14,6 +14,10 @@ import { ChartsComponent } from './components/charts/charts.component';
 import { LOCALE_ID } from '@angular/core';
 import localeRu from '@angular/common/locales/ru';
 import { registerLocaleData } from '@angular/common';
+import { AdminComponent } from './components/admin/admin.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NzFormModule } from 'ng-zorro-antd/form';
+
 
 registerLocaleData(localeRu, 'ru');
 
@@ -21,13 +25,16 @@ registerLocaleData(localeRu, 'ru');
 @NgModule({
   declarations: [
     AppComponent,
-    ChartsComponent
+    ChartsComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgZorroAntdModule,
     FormsModule,
+    ReactiveFormsModule,
+    NzFormModule,
     HttpClientModule,
     BrowserAnimationsModule,
     ChartModule,
