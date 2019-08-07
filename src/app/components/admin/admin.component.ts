@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
 import { AdminService } from 'src/app/services/admin.service';
 import { Resource } from './admin-interfaces';
 
@@ -12,23 +12,21 @@ export class AdminComponent implements OnInit {
   resourcesList: Resource[] = [];
   listOfControl: Array<{ id: number; controlInstance: string }> = [];
   validateForm: FormGroup;
-  resourcesForm: FormGroup;
-
+  resourcesFormArray: FormArray;
   constructor(private fb: FormBuilder, private service: AdminService) {
 
   }
 
   ngOnInit() {
+    this.resourcesFormArray = this.fb.array([]);
+
     this.service.getResources().subscribe(resources => {
-      this.resourcesList.push(...resources)
-      console.log("TCL: AdminComponent -> constructor -> this.resourcesList", this.resourcesList)
+      this.resourcesList.push(...resources);
       this.resourcesList.map(resource => {
-        this.addField(resource)
-      })
-      console.log(this.resourcesForm.controls);
-      
-    })
-    this.resourcesForm = this.fb.group({})
+        this.addField(resource);
+      });
+      console.log(this.resourcesFormArray);
+    });
 
     this.validateForm = this.fb.group({
       name: [null, [Validators.required]],
@@ -36,26 +34,27 @@ export class AdminComponent implements OnInit {
       companyType: [null, [Validators.required]],
       motto: [null, [Validators.required]],
       description: [null, [Validators.required]],
-      resources: this.resourcesForm,
+      resources: [this.resourcesFormArray],
       remember: [true]
     });
-
 
 
   }
 
   addField(resource: Resource): void {
-
-    this.resourcesForm.addControl(
-      resource.resource,
-      new FormControl(null, Validators.required)
-    )
+    const newGroup = this.fb.group({
+      link: [''],
+      amount: [0],
+      id: [resource._id],
+      name: [resource.resource],
+      icon: [resource.icon]
+    });
+    this.resourcesFormArray.push(newGroup);
   }
 
   submitForm(): void {
-    for (const i in this.validateForm.controls) {
-      console.log(this.validateForm.controls[i].value)
-    }
+    console.log(this.validateForm);
+
   }
 
 }

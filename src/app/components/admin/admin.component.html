@@ -11,7 +11,8 @@
         </nz-form-item>
 
         <nz-form-item>
-            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="regirationCountry" nzRequired>Registration Country</nz-form-label>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="regirationCountry" nzRequired>Registration Country
+            </nz-form-label>
             <nz-form-control>
                 <nz-input-group>
                     <input formControlName="registrationCountry" nz-input placeholder="Registration Country" />
@@ -46,18 +47,34 @@
             </nz-form-control>
         </nz-form-item>
 
-        <form style="margin-top: 20px" nz-form [formGroup]="resourcesForm">
-            <nz-form-item fxLayout fxLayoutAlign="start center" *ngFor="let resource of resourcesList; let i = index">
-                <nz-form-label style="margin-right: 20px; width: 14%; padding: 5px 0px;" [nzFor]="resource.resource">
-                    <img style="width: 25px" [src]="resource.icon" alt="">
-                    {{resource.resource.toUpperCase()}}
-                </nz-form-label>
-                <nz-form-control style="width: 70%;">
-                        <input style="width: 20%;" nz-input placeholder="Content Amount" [formControlName]="contentAmount" />
-                        <input style="width: 80%;" nz-input placeholder="Link" [formControlName]="link" />
+        <!-- <div > -->
+        <form *ngFor="let group of resourcesFormArray.controls" nz-form fxLayout [formGroup]="group">
+            <div fxLayout style="align-self: center; width: 130px">
+                <img style="width: 20px; height: 20px; margin: 0px 3px" [src]="group.controls.icon.value" alt="">
+                <div style="margin: 0px 3px">{{group.controls.name.value}}</div>
+            </div>
+            <nz-form-item style="width: 15%">
+                <nz-form-label nzFor="amount">Amount</nz-form-label>
+                <nz-form-control nzErrorTip="Please input your Password!">
+                    <nz-input-group>
+                        <input formControlName="amount" nz-input placeholder="amount" />
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item style="width: 55%; padding-left: 5px">
+                <nz-form-label nzFor="link" nzRequired>Link</nz-form-label>
+                <nz-form-control nzErrorTip="Please input your Password!">
+                    <nz-input-group>
+                        <input formControlName="link" nz-input placeholder="link" />
+                    </nz-input-group>
                 </nz-form-control>
             </nz-form-item>
         </form>
+        <!-- <div>{{group.controls.amount.value}}</div>
+            <div>{{group.controls.link.value}}</div> -->
+
+        <!-- </div> -->
+
 
         <nz-form-item style="margin-top: 20px">
             <nz-form-control>
