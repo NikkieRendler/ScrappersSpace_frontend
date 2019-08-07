@@ -27,7 +27,8 @@ export class ChartsComponent implements OnInit, OnDestroy {
   vacanciesColors: string[] = [
     'rgba(50, 150, 200, .6)',
     'rgba(150, 200, 50, .6)',
-    'rgba(60, 160, 90, .6)'
+    'rgba(60, 160, 90, .6)',
+    'rgba(200, 50, 150, .6)'
   ];
   freelanceVacanciesColors: string[] = [
     'rgba(55, 160, 0, 0.6)'
@@ -72,7 +73,24 @@ export class ChartsComponent implements OnInit, OnDestroy {
         this.service.getVacancies('backend'),
         this.service.getVacancies('database'))
         .subscribe(pipe((data: VacanciesQueryData[]) => {
-          this.charts.length = 0;
+          this.clearChartList();
+          data.map(item => {
+            setTimeout(() => {
+              this.setChartPosition(item);
+              this.createVacanciesChart(this.sortVacanciesData(item.data), item.technologyType, item.createdAt, item.position);
+            }, 100);
+          });
+        }));
+    };
+    if (this.router.url === "/relocate") {
+      combineLatest(
+        this.service.getRelocateVacancies('programmingLanguage'),
+        this.service.getRelocateVacancies('frontend'),
+        this.service.getRelocateVacancies('backend'),
+        this.service.getRelocateVacancies('database'))
+        .subscribe(pipe((data: VacanciesQueryData[]) => {
+        console.log("TCL: ChartsComponent -> ngOnInit -> data", data)
+          this.clearChartList();
           data.map(item => {
             setTimeout(() => {
               this.setChartPosition(item);
@@ -88,7 +106,7 @@ export class ChartsComponent implements OnInit, OnDestroy {
         this.service.getFreelanceVacancies('backend'),
         this.service.getFreelanceVacancies('database'))
         .subscribe(pipe((data: FreelanceVacanciesQueryData[]) => {
-          this.charts.length = 0;
+          this.clearChartList();
           data.map(item => {
             setTimeout(() => {
               this.setChartPosition(item);
@@ -96,12 +114,15 @@ export class ChartsComponent implements OnInit, OnDestroy {
             }, 100);
           });
         }));
-    };
-  };
+    }
+  }
 
   ngOnDestroy() {
-  };
+  }
 
+  clearChartList() {
+    this.charts.length = 0;
+  }
 
   sortVacanciesData(technologies: Technology[]) {
     return technologies = technologies.sort((techOne, techTwo) => {
@@ -184,11 +205,11 @@ export class ChartsComponent implements OnInit, OnDestroy {
     return templates;
   }
 
-  setFreelanceVacanciesDatasets(technology: FreelanceTechnologyJobs[], templates: Dataset[]): Dataset[] {
-    technology.map(technology => {
-      templates[0].data.push(technology.numberOfJobs)
-    })
-    return templates
+  setFreelanceVacanciesDatasets(technologies: FreelanceTechnologyJobs[], templates: Dataset[]): Dataset[] {
+    technologies.map(technology => {
+      templates[0].data.push(technology.numberOfJobs);
+    });
+    return templates;
   }
 
   titleChart(name) {
@@ -204,6 +225,7 @@ export class ChartsComponent implements OnInit, OnDestroy {
   }
 
   setChartPosition(chartData: VacanciesQueryData | FreelanceVacanciesQueryData) {
+    console.log("TCL: ChartsComponent -> setChartPosition -> chartData", chartData)
     return chartData.technologyType === 'programmingLanguage'
       ? 0
       : chartData.technologyType === 'frontend'

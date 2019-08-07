@@ -13,6 +13,10 @@ const routes: Routes = [
     component: ChartsComponent
   },
   {
+    path: 'relocate',
+    component: ChartsComponent
+  },
+  {
     path: 'admin',
     component: AdminComponent
   },

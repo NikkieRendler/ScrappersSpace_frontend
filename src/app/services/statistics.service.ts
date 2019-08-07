@@ -22,6 +22,23 @@ function VacanciesQuery(technologyType: string) {
   `;
 };
 
+function RelocateVacanciesQuery(technologyType: string) {
+  return gql`{
+    getRelocateNumberOfVacsByType(technologyType: "${technologyType}") {
+      technologyType
+      createdAt
+      data {
+        technologyName
+        numberOfVacancies{
+          resource
+          totalNumberOfVacancies
+        }
+      }
+    }
+  }
+  `;
+};
+
 function FreelanceVacanciesQuery(technologyType: string) {
   return gql`{
     getNumberOfFreelanceJobsByTechnologyType(technologyType: "${technologyType}") {
@@ -59,6 +76,15 @@ export class StatisticsService {
       query: FreelanceVacanciesQuery(dataType)
     }).valueChanges.pipe(map(({ data }) => {
       return data.getNumberOfFreelanceJobsByTechnologyType;
+    }));
+  }
+
+  getRelocateVacancies(dataType): Observable<VacanciesQueryData> {
+    return this.apollo.watchQuery<any>({
+      query: RelocateVacanciesQuery(dataType)
+    }).valueChanges.pipe(map(({ data }) => {
+      console.log("TCL: StatisticsService -> constructor -> data", data);
+      return data.getRelocateNumberOfVacsByType;
     }));
   }
 }
