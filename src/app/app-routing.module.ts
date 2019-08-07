@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ChartsComponent } from './components/charts/charts.component';
 import { AdminComponent } from './components/admin/admin.component';
+import { CompaniesComponent } from './components/companies/companies.component';
 
 const routes: Routes = [
   {
@@ -15,6 +16,10 @@ const routes: Routes = [
   {
     path: 'relocate',
     component: ChartsComponent
+  },
+  {
+    path: 'companies',
+    component: CompaniesComponent
   },
   {
     path: 'admin',

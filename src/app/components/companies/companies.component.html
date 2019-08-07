@@ -1,0 +1,42 @@
+<div class="companies-wrapper">
+    <div *ngFor="let company of companiesList" style="margin-bottom: 15px">
+        <div fxLayout fxLayoutAlign="start start">
+            <nz-card fxFlex="30" [nzCover]="coverTemplate" [nzActions]="[links]">
+                <nz-card-meta></nz-card-meta>
+            </nz-card>
+            <ng-template #coverTemplate>
+                <img src="assets/images/logo.png" />
+            </ng-template>
+            <ng-template #links>
+                <div fxLayout="row wrap" fxLayoutAlign="center center" fxLayoutGap="5%">
+                    <div *ngFor="let resource of company.resources">
+                        <a [href]="resource.link">
+                            <button nz-button nzShape="circle">
+                                <img [src]="resource.icon" style="width: 100%; height: 100%; border-radius: 50%">
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </ng-template>
+            <div fxFlex="70" fxLayout="column" fxLayoutAlign="start start">
+                <nz-descriptions [nzColumn]="{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }" nzBordered>
+                    <nz-descriptions-item nzTitle="Company">
+                        <b>{{company.name}}</b>
+                    </nz-descriptions-item>
+                    <nz-descriptions-item nzTitle="Registration country">
+                        {{company.registrationCountry.toUpperCase()}}
+                    </nz-descriptions-item>
+                    <nz-descriptions-item nzTitle="Company Type">
+                        {{company.companyType}}
+                    </nz-descriptions-item>
+                    <nz-descriptions-item nzTitle="Motto">
+                        {{company.motto}}
+                    </nz-descriptions-item>
+                    <nz-descriptions-item nzTitle="Description">
+                        {{company.description}}
+                    </nz-descriptions-item>
+                </nz-descriptions>
+            </div>
+        </div>
+    </div>
+</div>

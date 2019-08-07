@@ -89,7 +89,6 @@ export class ChartsComponent implements OnInit, OnDestroy {
         this.service.getRelocateVacancies('backend'),
         this.service.getRelocateVacancies('database'))
         .subscribe(pipe((data: VacanciesQueryData[]) => {
-        console.log("TCL: ChartsComponent -> ngOnInit -> data", data)
           this.clearChartList();
           data.map(item => {
             setTimeout(() => {
@@ -225,7 +224,6 @@ export class ChartsComponent implements OnInit, OnDestroy {
   }
 
   setChartPosition(chartData: VacanciesQueryData | FreelanceVacanciesQueryData) {
-    console.log("TCL: ChartsComponent -> setChartPosition -> chartData", chartData)
     return chartData.technologyType === 'programmingLanguage'
       ? 0
       : chartData.technologyType === 'frontend'

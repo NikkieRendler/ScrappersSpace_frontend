@@ -17,6 +17,7 @@ import { registerLocaleData } from '@angular/common';
 import { AdminComponent } from './components/admin/admin.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NzFormModule } from 'ng-zorro-antd/form';
+import { CompaniesComponent } from './components/companies/companies.component';
 
 
 registerLocaleData(localeRu, 'ru');
@@ -26,7 +27,8 @@ registerLocaleData(localeRu, 'ru');
   declarations: [
     AppComponent,
     ChartsComponent,
-    AdminComponent
+    AdminComponent,
+    CompaniesComponent
   ],
   imports: [
     BrowserModule,
