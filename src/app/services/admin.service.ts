@@ -6,10 +6,11 @@ import { Observable } from 'rxjs';
 import { Resource } from '../components/admin/admin-interfaces';
 import { CompanyData } from '../components/admin/admin-interfaces';
 
-const CompanyMutationQuery = (CompanyToAdd: CompanyData) => {
-  return gql`
+
+
+const CompanyMutationQuery = gql`
 mutation ($name: String!, $registrationCountry: String,
-  $companyType: String, $motto: String, $description: String, $resources: Array!) {
+  $companyType: String, $motto: String, $description: String, $resources: [inputResource!]) {
   addCompany(
     name: $name,
     registrationCountry: $registrationCountry,
@@ -25,7 +26,7 @@ mutation ($name: String!, $registrationCountry: String,
     description
   }
 }`;
-};
+
 
 const adminCompanyResources = gql`{
   getCompanyLinkTypes {
@@ -53,7 +54,7 @@ export class AdminService {
   addCompany(companyData: CompanyData): Observable<CompanyData> {
     console.log("TCL: companyData", companyData);
     return this.apollo.mutate({
-      mutation: CompanyMutationQuery(companyData),
+      mutation: CompanyMutationQuery,
       variables: {
         name: companyData.name,
         registrationCountry: companyData.registrationCountry,

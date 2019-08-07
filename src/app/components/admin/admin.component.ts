@@ -41,7 +41,7 @@ export class AdminComponent implements OnInit {
 
   addField(resource: Resource): void {
     const newGroup = this.fb.group({
-      link: [''],
+      link: [' '],
       contentAmount: [0],
       name: [resource.resource],
       resource: [resource._id],
@@ -61,7 +61,7 @@ export class AdminComponent implements OnInit {
         return {
           resource: resource.resource,
           link: resource.link,
-          contentAmount: resource.contentAmount
+          contentAmount: +resource.contentAmount
         };
       })
     };
