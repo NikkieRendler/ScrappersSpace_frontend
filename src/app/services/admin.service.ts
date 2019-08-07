@@ -4,6 +4,28 @@ import gql from 'graphql-tag';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { Resource } from '../components/admin/admin-interfaces';
+import { CompanyData } from '../components/admin/admin-interfaces';
+
+const CompanyMutationQuery = (CompanyToAdd: CompanyData) => {
+  return gql`
+mutation ($name: String!, $registrationCountry: String,
+  $companyType: String, $motto: String, $description: String, $resources: Array!) {
+  addCompany(
+    name: $name,
+    registrationCountry: $registrationCountry,
+    companyType: $companyType,
+    motto: $motto,
+    description: $description,
+    resources: $resources
+  )
+  {
+    registrationCountry
+    companyType
+    motto
+    description
+  }
+}`;
+};
 
 const adminCompanyResources = gql`{
   getCompanyLinkTypes {
@@ -25,7 +47,22 @@ export class AdminService {
   getResources(): Observable<Resource[]> {
     return this.apollo.watchQuery<any>({
       query: adminCompanyResources
-    }).valueChanges.pipe(map(({ data }) => data.getCompanyLinkTypes))
+    }).valueChanges.pipe(map(({ data }) => data.getCompanyLinkTypes));
+  }
+
+  addCompany(companyData: CompanyData): Observable<CompanyData> {
+    console.log("TCL: companyData", companyData);
+    return this.apollo.mutate({
+      mutation: CompanyMutationQuery(companyData),
+      variables: {
+        name: companyData.name,
+        registrationCountry: companyData.registrationCountry,
+        companyType: companyData.companyType,
+        motto: companyData.motto,
+        description: companyData.description,
+        resources: companyData.resources
+      }
+    });
   }
 
 }

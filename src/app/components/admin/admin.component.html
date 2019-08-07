@@ -1,5 +1,5 @@
 <div class="admin-wrapper">
-    <form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" (ngSubmit)="submitForm(validateForm.value)">
 
         <nz-form-item>
             <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>Company Name</nz-form-label>
@@ -47,17 +47,16 @@
             </nz-form-control>
         </nz-form-item>
 
-        <!-- <div > -->
         <form *ngFor="let group of resourcesFormArray.controls" nz-form fxLayout [formGroup]="group">
             <div fxLayout style="align-self: center; width: 130px">
                 <img style="width: 20px; height: 20px; margin: 0px 3px" [src]="group.controls.icon.value" alt="">
                 <div style="margin: 0px 3px">{{group.controls.name.value}}</div>
             </div>
             <nz-form-item style="width: 15%">
-                <nz-form-label nzFor="amount">Amount</nz-form-label>
+                <nz-form-label nzFor="contentAmount">Amount</nz-form-label>
                 <nz-form-control nzErrorTip="Please input your Password!">
                     <nz-input-group>
-                        <input formControlName="amount" nz-input placeholder="amount" />
+                        <input formControlName="contentAmount" nz-input placeholder="contentAmount" />
                     </nz-input-group>
                 </nz-form-control>
             </nz-form-item>
@@ -70,10 +69,7 @@
                 </nz-form-control>
             </nz-form-item>
         </form>
-        <!-- <div>{{group.controls.amount.value}}</div>
-            <div>{{group.controls.link.value}}</div> -->
-
-        <!-- </div> -->
+        
 
 
         <nz-form-item style="margin-top: 20px">

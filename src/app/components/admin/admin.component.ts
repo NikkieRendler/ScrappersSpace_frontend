@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
 import { AdminService } from 'src/app/services/admin.service';
-import { Resource } from './admin-interfaces';
+import { Resource, CompanyData } from './admin-interfaces';
 
 @Component({
   selector: 'app-admin',
@@ -10,7 +10,6 @@ import { Resource } from './admin-interfaces';
 })
 export class AdminComponent implements OnInit {
   resourcesList: Resource[] = [];
-  listOfControl: Array<{ id: number; controlInstance: string }> = [];
   validateForm: FormGroup;
   resourcesFormArray: FormArray;
   constructor(private fb: FormBuilder, private service: AdminService) {
@@ -25,7 +24,6 @@ export class AdminComponent implements OnInit {
       this.resourcesList.map(resource => {
         this.addField(resource);
       });
-      console.log(this.resourcesFormArray);
     });
 
     this.validateForm = this.fb.group({
@@ -44,17 +42,32 @@ export class AdminComponent implements OnInit {
   addField(resource: Resource): void {
     const newGroup = this.fb.group({
       link: [''],
-      amount: [0],
-      id: [resource._id],
+      contentAmount: [0],
       name: [resource.resource],
+      resource: [resource._id],
       icon: [resource.icon]
     });
     this.resourcesFormArray.push(newGroup);
   }
 
-  submitForm(): void {
-    console.log(this.validateForm);
-
+  submitForm(data): void {
+    const CompanyToAdd = {
+      name: data.name,
+      registrationCountry: data.registrationCountry,
+      companyType: data.companyType,
+      description: data.description,
+      motto: data.motto,
+      resources: data.resources.value.map((resource: Resource) => {
+        return {
+          resource: resource.resource,
+          link: resource.link,
+          contentAmount: resource.contentAmount
+        };
+      })
+    };
+    this.service.addCompany(CompanyToAdd).subscribe(res => {
+      console.log(res);
+    });
   }
 
 }

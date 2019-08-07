@@ -1,6 +1,17 @@
 export interface Resource {
-    icon: string
-    resource: string
-    type: string
+    icon: string;
+    link: string;
+    resource: string;
+    type: string;
     _id: string;
+    contentAmount;
+}
+
+export interface CompanyData {
+    name: string;
+    registrationCountry: string;
+    companyType: string;
+    motto: string;
+    description: string;
+    resources: Resource[];
 }
