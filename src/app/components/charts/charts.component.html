@@ -1,14 +1,17 @@
 <div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="30px">
-    <div fxLayout *ngFor="let chart of charts">
-        <div fxLayout="column" fxFlex="80">
-            <chart [type]="chart.type" [data]="chart.data" [options]="chart.options" style="height: 550px"></chart>
-            <div style="
-            color: gray; 
-            padding-right: 50px; 
-            align-self: flex-end;">
-                Последнее обновление: {{chart.lastUpdate | date }}
-            </div>
+    <div fxLayout *ngFor="let chart of charts" style="height: 550px">
+        <div *ngIf="loading; else chartsAreLoaded" fxLayout="column" fxFlex="80">
+            <nz-skeleton [nzActive]="true"></nz-skeleton>
+            <nz-skeleton [nzActive]="true"></nz-skeleton>
         </div>
+        <ng-template #chartsAreLoaded>
+            <div fxLayout="column" fxFlex="80">
+                <chart [type]="chart.type" [data]="chart.data" [options]="chart.options" style="height: 550px"></chart>
+                <div style="color: gray; padding-right: 50px; align-self: flex-end;">
+                    Последнее обновление: {{chart.lastUpdate | date }}
+                </div>
+            </div>
+        </ng-template>
         <div fxFlex="20" fxLayout="column" fxLayoutAlign="center center">
             <div>Стройка v0.3</div>
         </div>

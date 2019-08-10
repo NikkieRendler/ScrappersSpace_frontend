@@ -11,8 +11,9 @@ import {
   FreelanceVacanciesQueryData
 } from './charts-interfaces';
 import { StatisticsService } from 'src/app/services/statistics.service';
-import { pipe, combineLatest } from 'rxjs';
+import { pipe, combineLatest, concat, forkJoin } from 'rxjs';
 import { Router } from '@angular/router';
+import { concatMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-charts',
@@ -22,8 +23,9 @@ import { Router } from '@angular/router';
 
 export class ChartsComponent implements OnInit, OnDestroy {
 
+  loading = true;
 
-  charts: Chart[] = [];
+  charts: Chart[] = [null, null, null, null];
   vacanciesColors: string[] = [
     'rgba(50, 150, 200, .6)',
     'rgba(150, 200, 50, .6)',
@@ -34,33 +36,6 @@ export class ChartsComponent implements OnInit, OnDestroy {
     'rgba(55, 160, 0, 0.6)'
   ]
   type = 'horizontalBar';
-  options: Options = {
-    title: {
-      display: true,
-      text: ''
-    },
-    responsive: true,
-    maintainAspectRatio: false,
-    layout: {
-      padding: {
-        left: 50,
-        right: 50,
-        top: 0,
-        bottom: 0
-      }
-    },
-    scales: {
-      xAxes: [{
-        ticks: {
-          beginAtZero: true
-        },
-        stacked: true
-      }],
-      yAxes: [{
-        stacked: true
-      }]
-    }
-  };
   constructor(private service: StatisticsService, public router: Router) {
 
   }
@@ -73,12 +48,9 @@ export class ChartsComponent implements OnInit, OnDestroy {
         this.service.getVacancies('backend'),
         this.service.getVacancies('database'))
         .subscribe(pipe((data: VacanciesQueryData[]) => {
-          this.clearChartList();
           data.map(item => {
-            setTimeout(() => {
-              this.setChartPosition(item);
-              this.createVacanciesChart(this.sortVacanciesData(item.data), item.technologyType, item.createdAt, item.position);
-            }, 100);
+            this.createVacanciesChart(this.sortVacanciesData(item.data), item.technologyType, item.createdAt, this.setChartPosition(item));
+            this.displayChartsOnLoad();
           });
         }));
     };
@@ -89,12 +61,9 @@ export class ChartsComponent implements OnInit, OnDestroy {
         this.service.getRelocateVacancies('backend'),
         this.service.getRelocateVacancies('database'))
         .subscribe(pipe((data: VacanciesQueryData[]) => {
-          this.clearChartList();
           data.map(item => {
-            setTimeout(() => {
-              this.setChartPosition(item);
-              this.createVacanciesChart(this.sortVacanciesData(item.data), item.technologyType, item.createdAt, item.position);
-            }, 100);
+            this.createVacanciesChart(this.sortVacanciesData(item.data), item.technologyType, item.createdAt, this.setChartPosition(item));
+            this.displayChartsOnLoad();
           });
         }));
     };
@@ -104,23 +73,23 @@ export class ChartsComponent implements OnInit, OnDestroy {
         this.service.getFreelanceVacancies('frontend'),
         this.service.getFreelanceVacancies('backend'),
         this.service.getFreelanceVacancies('database'))
-        .subscribe(pipe((data: FreelanceVacanciesQueryData[]) => {
-          this.clearChartList();
-          data.map(item => {
-            setTimeout(() => {
-              this.setChartPosition(item);
-              this.createFreelanceVacanciesChart(this.sortFreelanceVacanciesData(item.data), item.technologyType, item.createdAt, item.position);
-            }, 100);
-          });
-        }));
+        .subscribe(pipe(
+          (data: FreelanceVacanciesQueryData[]) => {
+            data.map(item => {
+              this.createFreelanceVacanciesChart(this.sortFreelanceVacanciesData(item.data), item.technologyType, item.createdAt, this.setChartPosition(item));
+              this.displayChartsOnLoad();
+            });
+          }));
     }
   }
 
   ngOnDestroy() {
   }
 
-  clearChartList() {
-    this.charts.length = 0;
+  displayChartsOnLoad() {
+    if (!this.charts.some(chart => chart === null)) {
+      this.loading = false;
+    }
   }
 
   sortVacanciesData(technologies: Technology[]) {
@@ -144,18 +113,16 @@ export class ChartsComponent implements OnInit, OnDestroy {
   }
 
   createVacanciesChart = (dataForNewChart: Technology[], technologyType: string, createdAt: string, position?: number) => {
-    const data: ChartData = { labels: [], datasets: [] };
-    const resourcesNames: string[] = this.setResourcesNames(dataForNewChart[0].numberOfVacancies);
-    const datasetsTemplates = this.setVacanciesDatasetsTemplates(resourcesNames);
-    const options = this.options;
-    options.title = this.titleChart(technologyType);
+    let data: ChartData = { labels: [], datasets: [] };
+    let resourcesNames: string[] = this.setResourcesNames(dataForNewChart[0].numberOfVacancies);
+    let datasetsTemplates = this.setVacanciesDatasetsTemplates(resourcesNames);
+    const options = this.setOptions(technologyType);
     dataForNewChart.map(technology => {
       data.labels.push(decodeURIComponent(technology.technologyName));
       data.datasets = this.setVacanciesDatasets(technology, datasetsTemplates);
     });
-    const newChart = { type: this.type, data: data, options: options, lastUpdate: createdAt };
-    this.charts.push(newChart)
-
+    let newChart = { type: this.type, data: data, options: options, lastUpdate: createdAt };
+    this.charts.splice(position, 1, newChart)
   }
 
 
@@ -163,20 +130,47 @@ export class ChartsComponent implements OnInit, OnDestroy {
     const data: ChartData = { labels: [], datasets: [] };
     const resourcesNames: string[] = ['UpWork'];
     const datasetsTemplates = this.setFreelanceVacanciesDatasetsTemplates(resourcesNames);
-    const options = this.options;
-    options.title = this.titleChart(technologyType);
+    const options = this.setOptions(technologyType);
     dataForNewChart.map(technology => {
       data.labels.push(decodeURIComponent(technology.technologyName));
+      data.datasets = this.setFreelanceVacanciesDatasets(dataForNewChart, datasetsTemplates);
     });
-    data.datasets = this.setFreelanceVacanciesDatasets(dataForNewChart, datasetsTemplates);
-    this.charts.push({ type: this.type, data: data, options: options, lastUpdate: createdAt })
+    const newChart = { type: this.type, data: data, options: options, lastUpdate: createdAt };
+    this.charts.splice(position, 1, newChart)
   }
 
   setResourcesNames(firstItemResources: TechnologyResourceData[]) {
     return firstItemResources.map(entry => {
       return entry.resource;
     });
+  }
 
+  setOptions(technologyType) {
+    const options: Options = {
+      title: this.titleChart(technologyType),
+      responsive: true,
+      maintainAspectRatio: false,
+      layout: {
+        padding: {
+          left: 50,
+          right: 50,
+          top: 0,
+          bottom: 0
+        }
+      },
+      scales: {
+        xAxes: [{
+          ticks: {
+            beginAtZero: true
+          },
+          stacked: true
+        }],
+        yAxes: [{
+          stacked: true
+        }]
+      }
+    };
+    return options;
   }
 
   setVacanciesDatasetsTemplates(resourcesNames): Dataset[] {

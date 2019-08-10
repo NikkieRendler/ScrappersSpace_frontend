@@ -83,7 +83,6 @@ export class StatisticsService {
     return this.apollo.watchQuery<any>({
       query: RelocateVacanciesQuery(dataType)
     }).valueChanges.pipe(map(({ data }) => {
-      console.log("TCL: StatisticsService -> constructor -> data", data);
       return data.getRelocateNumberOfVacsByType;
     }));
   }
