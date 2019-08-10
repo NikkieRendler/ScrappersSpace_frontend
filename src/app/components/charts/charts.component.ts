@@ -81,6 +81,19 @@ export class ChartsComponent implements OnInit, OnDestroy {
             });
           }));
     }
+    if (this.router.url === "/startups") {
+      combineLatest(
+        this.service.getStartupsVacancies('programmingLanguage'),
+        this.service.getStartupsVacancies('frontend'),
+        this.service.getStartupsVacancies('backend'),
+        this.service.getStartupsVacancies('database'))
+        .subscribe(pipe((data: VacanciesQueryData[]) => {
+          data.map(item => {
+            this.createVacanciesChart(this.sortVacanciesData(item.data), item.technologyType, item.createdAt, this.setChartPosition(item));
+            this.displayChartsOnLoad();
+          });
+        }));
+    };
   }
 
   ngOnDestroy() {

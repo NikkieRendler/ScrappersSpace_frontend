@@ -6,7 +6,8 @@ import { VacanciesQueryData, FreelanceVacanciesQueryData, QueryData } from '../c
 import gql from 'graphql-tag';
 
 function VacanciesQuery(technologyType: string) {
-  return gql`{
+  return gql`
+  {
     getTechnologiesListByType(technologyType: "${technologyType}") {
       technologyType
       createdAt
@@ -23,7 +24,8 @@ function VacanciesQuery(technologyType: string) {
 };
 
 function RelocateVacanciesQuery(technologyType: string) {
-  return gql`{
+  return gql`
+  {
     getRelocateNumberOfVacsByType(technologyType: "${technologyType}") {
       technologyType
       createdAt
@@ -40,7 +42,8 @@ function RelocateVacanciesQuery(technologyType: string) {
 };
 
 function FreelanceVacanciesQuery(technologyType: string) {
-  return gql`{
+  return gql`
+  {
     getNumberOfFreelanceJobsByTechnologyType(technologyType: "${technologyType}") {
       technologyType
       createdAt
@@ -52,6 +55,26 @@ function FreelanceVacanciesQuery(technologyType: string) {
   }
   `;
 };
+
+function StartupsVacanciesQuery(technologyType: string) {
+  return gql`
+  {
+    getNumberOfStartupJobsByTechnologyType(technologyType: "${technologyType}"){
+      createdAt 
+      technologyType
+      data {
+        technologyName
+        total
+        numberOfVacancies {
+          resource
+          totalNumberOfVacancies
+        }
+      }
+    }
+  
+  }
+  `
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -84,6 +107,14 @@ export class StatisticsService {
       query: RelocateVacanciesQuery(dataType)
     }).valueChanges.pipe(map(({ data }) => {
       return data.getRelocateNumberOfVacsByType;
+    }));
+  }
+
+  getStartupsVacancies(dataType): Observable<VacanciesQueryData> {
+    return this.apollo.watchQuery<any>({
+      query: StartupsVacanciesQuery(dataType)
+    }).valueChanges.pipe(map(({ data }) => {
+      return data.getNumberOfStartupJobsByTechnologyType;
     }));
   }
 }

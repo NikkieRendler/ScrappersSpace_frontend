@@ -18,6 +18,10 @@ const routes: Routes = [
     component: ChartsComponent
   },
   {
+    path: 'startups',
+    component: ChartsComponent
+  },
+  {
     path: 'companies',
     component: CompaniesComponent
   },
