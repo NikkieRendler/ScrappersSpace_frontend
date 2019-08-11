@@ -10,6 +10,7 @@ const CompaniesQuery = gql`
   getCompaniesList {
     _id
     name
+    logo
     registrationCountry
     companyType
     motto
