@@ -9,6 +9,7 @@ export interface Resource {
 
 export interface CompanyData {
     name: string;
+    logo: string;
     registrationCountry: string;
     companyType: string;
     motto: string;

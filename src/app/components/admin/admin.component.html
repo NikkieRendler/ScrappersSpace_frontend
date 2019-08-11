@@ -11,6 +11,15 @@
         </nz-form-item>
 
         <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="logo" nzRequired>Logo</nz-form-label>
+            <nz-form-control>
+                <nz-input-group>
+                    <input formControlName="logo" nz-input placeholder="Logo" />
+                </nz-input-group>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
             <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="regirationCountry" nzRequired>Registration Country
             </nz-form-label>
             <nz-form-control>

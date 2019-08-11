@@ -28,6 +28,7 @@ export class AdminComponent implements OnInit {
 
     this.validateForm = this.fb.group({
       name: [null, [Validators.required]],
+      logo: [null, [Validators.required]],
       registrationCountry: [null, [Validators.required]],
       companyType: [null, [Validators.required]],
       motto: [null, [Validators.required]],
@@ -41,7 +42,7 @@ export class AdminComponent implements OnInit {
 
   addField(resource: Resource): void {
     const newGroup = this.fb.group({
-      link: [' '],
+      link: [null],
       contentAmount: [0],
       name: [resource.resource],
       resource: [resource._id],
@@ -53,16 +54,19 @@ export class AdminComponent implements OnInit {
   submitForm(data): void {
     const CompanyToAdd = {
       name: data.name,
+      logo: data.logo,
       registrationCountry: data.registrationCountry,
       companyType: data.companyType,
       description: data.description,
       motto: data.motto,
-      resources: data.resources.value.map((resource: Resource) => {
-        return {
-          resource: resource.resource,
-          link: resource.link,
-          contentAmount: +resource.contentAmount
-        };
+      resources: data.resources.value.forEach((resource: Resource) => {
+        if (resource.link !== null && resource.link !== '') {
+          return {
+            resource: resource.resource,
+            link: resource.link,
+            contentAmount: +resource.contentAmount
+          };
+        }
       })
     };
     this.service.addCompany(CompanyToAdd).subscribe(res => {

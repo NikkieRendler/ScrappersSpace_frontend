@@ -9,10 +9,11 @@ import { CompanyData } from '../components/admin/admin-interfaces';
 
 
 const CompanyMutationQuery = gql`
-mutation ($name: String!, $registrationCountry: String,
+mutation ($name: String!, $logo: String!, $registrationCountry: String,
   $companyType: String, $motto: String, $description: String, $resources: [inputResource!]) {
   addCompany(
     name: $name,
+    logo: $logo,
     registrationCountry: $registrationCountry,
     companyType: $companyType,
     motto: $motto,
@@ -57,6 +58,7 @@ export class AdminService {
       mutation: CompanyMutationQuery,
       variables: {
         name: companyData.name,
+        logo: companyData.logo,
         registrationCountry: companyData.registrationCountry,
         companyType: companyData.companyType,
         motto: companyData.motto,
