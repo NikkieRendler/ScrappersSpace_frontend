@@ -8,7 +8,10 @@ import {
   TechnologyResourceData,
   VacanciesQueryData,
   FreelanceTechnologyJobs,
-  FreelanceVacanciesQueryData
+  FreelanceVacanciesQueryData,
+  TechnologyByExperience,
+  TechnologyByExperienceResourceData,
+  SalariesQueryData
 } from './charts-interfaces';
 import { StatisticsService } from 'src/app/services/statistics.service';
 import { pipe, combineLatest, concat, forkJoin } from 'rxjs';
@@ -22,10 +25,10 @@ import { concatMap } from 'rxjs/operators';
 })
 
 export class ChartsComponent implements OnInit, OnDestroy {
-
+  currentRoute: string;
   loading = true;
 
-  charts: Chart[] = [null, null, null, null];
+  charts: Chart[] = [null, null, null];
   vacanciesColors: string[] = [
     'rgba(50, 150, 200, .6)',
     'rgba(150, 200, 50, .6)',
@@ -41,6 +44,7 @@ export class ChartsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.currentRoute = this.router.url;
     if (this.router.url === "/vacancies") {
       combineLatest(
         this.service.getVacancies('programmingLanguage'),
@@ -94,6 +98,18 @@ export class ChartsComponent implements OnInit, OnDestroy {
           });
         }));
     };
+    if (this.router.url === "/salaries") {
+      combineLatest(
+        this.service.getSalaries('Junior Software Engineer'),
+        this.service.getSalaries('Software Engineer'),
+        this.service.getSalaries('Senior Software Engineer'))
+        .subscribe(pipe((data: SalariesQueryData[]) => {
+          data.map(item => {
+            this.createSalariesChart(this.sortSalariesData(item.data), item.rank, item.createdAt, this.setSalariesChartPosition(item));
+            this.displayChartsOnLoad();
+          });
+        }));
+    };
   }
 
   ngOnDestroy() {
@@ -119,6 +135,37 @@ export class ChartsComponent implements OnInit, OnDestroy {
     });
   }
 
+  sortSalariesData(technologies: TechnologyByExperience[]) {
+    return technologies = technologies.sort((techOne, techTwo) => {
+      let techTwoAverage = 0;
+      let techTwoNonZeroResources = techTwo.salary.filter(resource => resource.amount !== 0)
+      techTwoNonZeroResources.map(resource => {
+        techTwoAverage += resource.amount;
+      });
+      techTwoAverage = techTwoAverage / techTwoNonZeroResources.length;
+
+      let techOneAverage = 0;
+      let techOneNonZeroResources = techOne.salary.filter(resource => resource.amount !== 0)
+      techOneNonZeroResources.map(resource => {
+        techOneAverage += resource.amount;
+      });
+      techOneAverage = techOneAverage / techOneNonZeroResources.length;
+      return techTwoAverage - techOneAverage;
+    });
+  }
+
+  // sortSalariesData(technologies: TechnologyByExperience[]) {
+  //   return technologies = technologies.sort((techOne, techTwo) => {
+  //     let techTwoLarger = techTwo.salary.sort((resource1, resource2) => {
+  //       return resource2.amount - resource1.amount
+  //     });
+  //     let techOneLarger = techOne.salary.sort((resource1, resource2) => {
+  //       return resource2.amount - resource1.amount
+  //     });
+  //     return techTwoLarger[0].amount - techOneLarger[0].amount;
+  //   });
+  // }
+
   sortFreelanceVacanciesData(technologies: FreelanceTechnologyJobs[]) {
     return technologies = technologies.sort((techOne, techTwo) => {
       return techTwo.numberOfJobs - techOne.numberOfJobs;
@@ -138,6 +185,20 @@ export class ChartsComponent implements OnInit, OnDestroy {
     this.charts.splice(position, 1, newChart)
   }
 
+  createSalariesChart = (dataForNewChart: TechnologyByExperience[], rank: string, createdAt: string, position?: number) => {
+    let data: ChartData = { labels: [], datasets: [] };
+    let resourcesNames: string[] = this.setSalariesResourcesNames(dataForNewChart[0].salary);
+    let datasetsTemplates = this.setVacanciesDatasetsTemplates(resourcesNames);
+    const options = this.setSalariesOptions(rank);
+    dataForNewChart.map(technology => {
+      if (!technology.salary.some(resource => resource.amount === 0)) {
+        data.labels.push(decodeURIComponent(technology.technologyName));
+        data.datasets = this.setSalariesDatasets(technology, datasetsTemplates);
+      }
+    });
+    let newChart = { type: this.type, data: data, options: options, lastUpdate: createdAt };
+    this.charts.splice(position, 1, newChart)
+  }
 
   createFreelanceVacanciesChart(dataForNewChart: FreelanceTechnologyJobs[], technologyType: string, createdAt: string, position?: number) {
     const data: ChartData = { labels: [], datasets: [] };
@@ -152,9 +213,16 @@ export class ChartsComponent implements OnInit, OnDestroy {
     this.charts.splice(position, 1, newChart)
   }
 
-  setResourcesNames(firstItemResources: TechnologyResourceData[]) {
+  setResourcesNames(firstItemResources: TechnologyResourceData[]): string[] {
     return firstItemResources.map(entry => {
-      return entry.resource;
+      return entry.resource
+    });
+  }
+
+
+  setSalariesResourcesNames(firstItemResources: TechnologyByExperienceResourceData[]): string[] {
+    return firstItemResources.map(entry => {
+      return entry.resource
     });
   }
 
@@ -186,6 +254,30 @@ export class ChartsComponent implements OnInit, OnDestroy {
     return options;
   }
 
+  setSalariesOptions(rank) {
+    const options: Options = {
+      title: this.titleChart(rank),
+      responsive: true,
+      maintainAspectRatio: false,
+      layout: {
+        padding: {
+          left: 50,
+          right: 50,
+          top: 0,
+          bottom: 0
+        }
+      },
+      scales: {
+        xAxes: [{
+          ticks: {
+            beginAtZero: true
+          },
+        }],
+      }
+    };
+    return options;
+  }
+
   setVacanciesDatasetsTemplates(resourcesNames): Dataset[] {
     const datasetsTemplates: Dataset[] = [];
     for (let index = 0; index < resourcesNames.length; index++) {
@@ -211,6 +303,15 @@ export class ChartsComponent implements OnInit, OnDestroy {
     return templates;
   }
 
+  setSalariesDatasets(technology: TechnologyByExperience, templates: Dataset[]): Dataset[] {
+    technology.salary.forEach(entry => {
+      templates[technology.salary.indexOf(entry)].data.push(
+        technology.salary[technology.salary.indexOf(entry)].amount
+      );
+    });
+    return templates;
+  }
+
   setFreelanceVacanciesDatasets(technologies: FreelanceTechnologyJobs[], templates: Dataset[]): Dataset[] {
     technologies.map(technology => {
       templates[0].data.push(technology.numberOfJobs);
@@ -227,7 +328,9 @@ export class ChartsComponent implements OnInit, OnDestroy {
           ? { text: 'Бекенд технологии', display: true }
           : name === 'database'
             ? { text: 'Базы данных', display: true }
-            : { text: 'Вакансии', display: true };
+            : name === 'Software Engineer'
+              ? { text: 'Middle Software Engineer', display: true }
+              : { text: name, display: true };
   }
 
   setChartPosition(chartData: VacanciesQueryData | FreelanceVacanciesQueryData) {
@@ -236,6 +339,16 @@ export class ChartsComponent implements OnInit, OnDestroy {
       : chartData.technologyType === 'frontend'
         ? 1
         : chartData.technologyType === 'backend'
+          ? 2
+          : 3;
+  }
+
+  setSalariesChartPosition(chartData: SalariesQueryData) {
+    return chartData.rank === 'Junior Software Engineer'
+      ? 0
+      : chartData.rank === 'Software Engineer'
+        ? 1
+        : chartData.rank === 'Senior Software Engineer'
           ? 2
           : 3;
   }

@@ -10,6 +10,13 @@ export interface VacanciesQueryData {
   position?: number;
 }
 
+export interface SalariesQueryData {
+  rank: string;
+  createdAt: string;
+  data: TechnologyByExperience[];
+  position?: number;
+}
+
 export interface FreelanceVacanciesQueryData {
   technologyType: string;
   createdAt: string;
@@ -29,7 +36,7 @@ export interface Chart {
 }
 
 export interface ChartData {
-  labels: Array<string>;
+  labels: string[];
   datasets: Dataset[];
 }
 
@@ -43,18 +50,29 @@ export interface Options {
 
 export interface Dataset {
   label: string;
-  data: Array<number>;
+  data: number[];
   backgroundColor: string;
 }
 
 export interface Technology {
   technologyName: string;
-  numberOfVacancies: Array<TechnologyResourceData>
+  numberOfVacancies: TechnologyResourceData[];
   technologyType: string;
 }
 
 export interface TechnologyResourceData {
   resource: string
   totalNumberOfVacancies: number;
+}
+
+export interface TechnologyByExperience {
+  technologyName: string;
+  salary: TechnologyByExperienceResourceData[];
+  rank: string;
+}
+
+export interface TechnologyByExperienceResourceData {
+  resource: string
+  amount: number;
 }
 

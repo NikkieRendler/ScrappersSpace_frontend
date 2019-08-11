@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { VacanciesQueryData, FreelanceVacanciesQueryData, QueryData } from '../components/charts/charts-interfaces';
+import { VacanciesQueryData, FreelanceVacanciesQueryData, QueryData, SalariesQueryData } from '../components/charts/charts-interfaces';
 import gql from 'graphql-tag';
 
 function VacanciesQuery(technologyType: string) {
@@ -75,6 +75,24 @@ function StartupsVacanciesQuery(technologyType: string) {
   }
   `
 }
+function SalariesQuery(experience: string) {
+  return gql`
+  {
+    getSalaryByExperience(rank: "${experience}") {
+      createdAt
+      rank
+      data {
+        technologyName
+        total
+        salary {
+          resource
+          amount
+        }
+      }
+    }
+  }
+  `
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -115,6 +133,14 @@ export class StatisticsService {
       query: StartupsVacanciesQuery(dataType)
     }).valueChanges.pipe(map(({ data }) => {
       return data.getNumberOfStartupJobsByTechnologyType;
+    }));
+  }
+
+  getSalaries(experience): Observable<SalariesQueryData> {
+    return this.apollo.watchQuery<any>({
+      query: SalariesQuery(experience)
+    }).valueChanges.pipe(map(({ data }) => {
+      return data.getSalaryByExperience;
     }));
   }
 }

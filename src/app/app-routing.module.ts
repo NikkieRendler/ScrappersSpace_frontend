@@ -10,6 +10,10 @@ const routes: Routes = [
     component: ChartsComponent
   },
   {
+    path: 'salaries',
+    component: ChartsComponent
+  },
+  {
     path: 'freelance',
     component: ChartsComponent
   },

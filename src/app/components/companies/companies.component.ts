@@ -8,16 +8,19 @@ import { CompanyData } from '../admin/admin-interfaces';
   styleUrls: ['./companies.component.scss']
 })
 export class CompaniesComponent implements OnInit {
-
-  companiesList: CompanyData[];
+  loading = true;
+  companiesList: CompanyData[] = [null, null, null];
 
   constructor(private service: CompaniesService) { }
 
   ngOnInit() {
     this.service.getCompanies().subscribe(data => {
-      this.companiesList = data;
-      console.log("TCL: CompaniesComponent -> ngOnInit -> this.companiesList", this.companiesList)
-
+      data.map((company, index) => {
+        this.companiesList.splice(index, 1, company)
+      })
+      if (!this.companiesList.some(company => company === null)) {
+        this.loading = false;
+      }
     })
   }
 

@@ -1,19 +1,30 @@
-<div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="30px">
-    <div fxLayout *ngFor="let chart of charts" style="height: 550px">
-        <div *ngIf="loading; else chartsAreLoaded" fxLayout="column" fxFlex="80">
-            <nz-skeleton [nzActive]="true"></nz-skeleton>
-            <nz-skeleton [nzActive]="true"></nz-skeleton>
+<div nz-col>
+    <div nz-row *ngFor="let chart of charts" style="margin-bottom: 60px" [ngClass]="(currentRoute ==='/salaries') ? 'salariesChart' : 'vacanciesChart'">
+        <div *ngIf="loading; else chartsAreLoaded" nz-col nzSpan="20">
+            <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 10 }"></nz-skeleton>
         </div>
         <ng-template #chartsAreLoaded>
-            <div fxLayout="column" fxFlex="80">
-                <chart [type]="chart.type" [data]="chart.data" [options]="chart.options" style="height: 550px"></chart>
-                <div style="color: gray; padding-right: 50px; align-self: flex-end;">
+            <div nz-col nzType="flex" nzSpan="20">
+                <chart [type]="chart.type" [data]="chart.data" [options]="chart.options" [ngClass]="(currentRoute ==='/salaries') ? 'salariesChart' : 'vacanciesChart'">
+                </chart>
+                <div *ngIf="currentRoute !== '/salaries'; else salariesExplanation" nz-row nzType="flex" nzJustify="end"
+                    nzAlign="middle" style="color: gray; padding-right: 50px;">
                     Последнее обновление: {{chart.lastUpdate | date }}
                 </div>
+                <ng-template #salariesExplanation>
+                    <div nz-row nzType="flex" nzJustify="space-between" nzAlign="middle" style="color: gray; padding-right: 50px;">
+                        <div style="margin-left: 120px;">
+                            *Данные сопоставляются по среднему значению между ресурсами
+                        </div>
+                        <div>
+                            Последнее обновление: {{chart.lastUpdate | date }}
+                        </div>
+                    </div>
+                </ng-template>
             </div>
         </ng-template>
-        <div fxFlex="20" fxLayout="column" fxLayoutAlign="center center">
-            <div>Стройка v0.5</div>
+        <div nz-row nzType="flex" nzJustify="center" nzAlign="middle" nzSpan="4" style="height: 100%;">
+            <div>Стройка v0.6</div>
         </div>
     </div>
 
