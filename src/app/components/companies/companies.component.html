@@ -9,7 +9,7 @@
                     <nz-card-meta></nz-card-meta>
                 </nz-card>
                 <ng-template #coverTemplate>
-                    <img style="width: 250px; height: 250px;" src="assets/images/logo.png" />
+                    <img style="width: 250px; height: 250px;" [src]="company.logo" />
                 </ng-template>
                 <ng-template #links>
                     <div nz-row nzType="flex" nzJustify="start">
