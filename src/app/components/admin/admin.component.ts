@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
 import { AdminService } from 'src/app/services/admin.service';
 import { Resource, CompanyData } from './admin-interfaces';
+import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-admin',
@@ -12,7 +13,7 @@ export class AdminComponent implements OnInit {
   resourcesList: Resource[] = [];
   validateForm: FormGroup;
   resourcesFormArray: FormArray;
-  constructor(private fb: FormBuilder, private service: AdminService) {
+  constructor(private fb: FormBuilder, private service: AdminService, private message: NzMessageService) {
 
   }
 
@@ -70,7 +71,10 @@ export class AdminComponent implements OnInit {
       })
     };
     this.service.addCompany(CompanyToAdd).subscribe(res => {
-      console.log(res);
+      if (res) {
+        this.message.create('success', 'Company added');
+        this.validateForm.reset();
+      }
     });
   }
 
