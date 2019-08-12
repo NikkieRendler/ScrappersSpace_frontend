@@ -41,11 +41,22 @@ export interface ChartData {
 }
 
 export interface Options {
-  title: { text: string, display: boolean };
+  title: OptionsTitle;
   responsive: boolean;
   maintainAspectRatio: boolean;
   layout: {};
   scales: {};
+  legend?: {
+    labels?: {
+      fontSize: number;
+    }
+  };
+}
+
+export interface OptionsTitle {
+  text: string;
+  display: boolean;
+  fontSize?: number;
 }
 
 export interface Dataset {
@@ -61,7 +72,7 @@ export interface Technology {
 }
 
 export interface TechnologyResourceData {
-  resource: string
+  resource: string;
   totalNumberOfVacancies: number;
 }
 
@@ -72,7 +83,7 @@ export interface TechnologyByExperience {
 }
 
 export interface TechnologyByExperienceResourceData {
-  resource: string
+  resource: string;
   amount: number;
 }
 

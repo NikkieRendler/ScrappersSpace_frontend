@@ -11,7 +11,8 @@ import {
   FreelanceVacanciesQueryData,
   TechnologyByExperience,
   TechnologyByExperienceResourceData,
-  SalariesQueryData
+  SalariesQueryData,
+  OptionsTitle
 } from './charts-interfaces';
 import { StatisticsService } from 'src/app/services/statistics.service';
 import { pipe, combineLatest, concat, forkJoin } from 'rxjs';
@@ -243,6 +244,11 @@ export class ChartsComponent implements OnInit, OnDestroy {
           bottom: 0
         }
       },
+      legend: {
+        labels: {
+          fontSize: 14
+        }
+      },
       scales: {
         xAxes: [{
           ticks: {
@@ -269,6 +275,11 @@ export class ChartsComponent implements OnInit, OnDestroy {
           right: 50,
           top: 0,
           bottom: 0
+        }
+      },
+      legend: {
+        labels: {
+          fontSize: 14
         }
       },
       scales: {
@@ -323,18 +334,18 @@ export class ChartsComponent implements OnInit, OnDestroy {
     return templates;
   }
 
-  titleChart(name) {
+  titleChart(name: string): OptionsTitle {
     return name === 'frontend'
-      ? { text: 'Фронтенд технологии', display: true }
+      ? { text: 'Фронтенд технологии', display: true, fontSize: 16 }
       : name === 'programmingLanguage'
-        ? { text: 'Языки программирования', display: true }
+        ? { text: 'Языки программирования', display: true, fontSize: 16 }
         : name === 'backend'
-          ? { text: 'Бекенд технологии', display: true }
+          ? { text: 'Бекенд технологии', display: true, fontSize: 16 }
           : name === 'database'
-            ? { text: 'Базы данных', display: true }
+            ? { text: 'Базы данных', display: true, fontSize: 16 }
             : name === 'Software Engineer'
-              ? { text: 'Middle Software Engineer', display: true }
-              : { text: name, display: true };
+              ? { text: 'Middle Software Engineer', display: true, fontSize: 16 }
+              : { text: name, display: true, fontSize: 16 };
   }
 
   setChartPosition(chartData: VacanciesQueryData | FreelanceVacanciesQueryData) {
