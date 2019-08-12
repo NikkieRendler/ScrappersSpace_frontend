@@ -17,7 +17,7 @@ import {
 import { StatisticsService } from 'src/app/services/statistics.service';
 import { pipe, combineLatest, concat, forkJoin } from 'rxjs';
 import { Router } from '@angular/router';
-import { concatMap } from 'rxjs/operators';
+import { distanceInWords } from 'date-fns';
 
 @Component({
   selector: 'app-charts',
@@ -28,6 +28,7 @@ import { concatMap } from 'rxjs/operators';
 export class ChartsComponent implements OnInit, OnDestroy {
   currentRoute: string;
   loading = true;
+  time = distanceInWords(new Date(), new Date());
 
   charts: Chart[] = [null, null, null];
   vacanciesColors: string[] = [
@@ -159,18 +160,6 @@ export class ChartsComponent implements OnInit, OnDestroy {
     });
   }
 
-  // sortSalariesData(technologies: TechnologyByExperience[]) {
-  //   return technologies = technologies.sort((techOne, techTwo) => {
-  //     let techTwoLarger = techTwo.salary.sort((resource1, resource2) => {
-  //       return resource2.amount - resource1.amount
-  //     });
-  //     let techOneLarger = techOne.salary.sort((resource1, resource2) => {
-  //       return resource2.amount - resource1.amount
-  //     });
-  //     return techTwoLarger[0].amount - techOneLarger[0].amount;
-  //   });
-  // }
-
   sortFreelanceVacanciesData(technologies: FreelanceTechnologyJobs[]) {
     return technologies = technologies.sort((techOne, techTwo) => {
       return techTwo.numberOfJobs - techOne.numberOfJobs;
@@ -238,8 +227,6 @@ export class ChartsComponent implements OnInit, OnDestroy {
       maintainAspectRatio: false,
       layout: {
         padding: {
-          left: 50,
-          right: 50,
           top: 0,
           bottom: 0
         }
@@ -271,8 +258,6 @@ export class ChartsComponent implements OnInit, OnDestroy {
       maintainAspectRatio: false,
       layout: {
         padding: {
-          left: 50,
-          right: 50,
           top: 0,
           bottom: 0
         }

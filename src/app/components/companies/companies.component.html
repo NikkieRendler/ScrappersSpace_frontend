@@ -1,28 +1,32 @@
 <div class="companies-wrapper">
-    <div *ngFor="let company of companiesList" style="margin-bottom: 60px">
+    <div *ngFor="let company of companiesList" style="margin-bottom: 60px; padding: 2px">
         <div *ngIf="loading; else companiesLoaded">
             <nz-skeleton [nzAvatar]="true" [nzParagraph]="{ rows: 10 }" [nzActive]="true"></nz-skeleton>
         </div>
         <ng-template #companiesLoaded>
-            <div nz-row nzType="flex" nzJustify="start" nzAlign="top">
-                <nz-card nzSpan="5" [nzCover]="coverTemplate" [nzActions]="[links]">
-                    <nz-card-meta></nz-card-meta>
+            <div nz-row nzType="flex" nzJustify="center" nzAlign="top">
+                <nz-card nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="7" nzXl="7" [nzCover]="coverTemplate"
+                    [nzBodyStyle]="{padding: 0}" [nzActions]="[links]">
                 </nz-card>
                 <ng-template #coverTemplate>
-                    <img style="width: 250px; height: 250px;" [src]="company.logo" />
+                    <div style="max-width: 250px;" nz-row nzType="flex" nzJustify="center" nzAlign="middle"
+                        style="height: 250px; background-color: #f0f0f0">
+                        <img style="max-width: 200px" [src]="company.logo" />
+                    </div>
                 </ng-template>
                 <ng-template #links>
                     <div nz-row nzType="flex" nzJustify="start">
                         <div *ngFor="let resource of company.resources">
-                            <a [href]="resource.link">
-                                <button nz-button nzShape="circle">
+                            <a [href]="resource.link" style="padding: 5px">
+                                <button nz-popover nz-button nzTitle="{{resource.resource.toUpperCase()}}"
+                                    nzContent="{{resource.link}}" nzShape="circle" nzPlacement="rightTop">
                                     <img [src]="resource.icon" style="width: 100%; height: 100%; border-radius: 50%">
                                 </button>
                             </a>
                         </div>
                     </div>
                 </ng-template>
-                <div nz-col nzSpan="17">
+                <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="17" nzXl="17">
                     <nz-descriptions [nzColumn]="{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }" nzBordered>
                         <nz-descriptions-item nzTitle="Company">
                             <b>{{company.name}}</b>
