@@ -53,6 +53,16 @@ export class AdminComponent implements OnInit {
   }
 
   submitForm(data): void {
+    const presentResources = [];
+    data.resources.value.forEach((resource: Resource) => {
+      if (resource.link !== null && resource.link !== '') {
+        presentResources.push({
+          resource: resource.resource,
+          link: resource.link,
+          contentAmount: +resource.contentAmount
+        });
+      }
+    });
     const CompanyToAdd = {
       name: data.name,
       logo: data.logo,
@@ -60,20 +70,13 @@ export class AdminComponent implements OnInit {
       companyType: data.companyType,
       description: data.description,
       motto: data.motto,
-      resources: data.resources.value.forEach((resource: Resource) => {
-        if (resource.link !== null && resource.link !== '') {
-          return {
-            resource: resource.resource,
-            link: resource.link,
-            contentAmount: +resource.contentAmount
-          };
-        }
-      })
+      resources: presentResources
     };
     this.service.addCompany(CompanyToAdd).subscribe(res => {
       if (res) {
         this.message.create('success', 'Company added');
         this.validateForm.reset();
+        this.resourcesFormArray.reset();
       }
     });
   }

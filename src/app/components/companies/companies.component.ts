@@ -16,12 +16,12 @@ export class CompaniesComponent implements OnInit {
   ngOnInit() {
     this.service.getCompanies().subscribe(data => {
       data.map((company, index) => {
-        this.companiesList.splice(index, 1, company)
-      })
+        this.companiesList.splice(index, 1, company);
+      });
       if (!this.companiesList.some(company => company === null)) {
         this.loading = false;
       }
-    })
+    });
   }
 
 }

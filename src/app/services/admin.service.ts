@@ -53,7 +53,6 @@ export class AdminService {
   }
 
   addCompany(companyData: CompanyData): Observable<CompanyData> {
-    console.log("TCL: companyData", companyData);
     return this.apollo.mutate({
       mutation: CompanyMutationQuery,
       variables: {
