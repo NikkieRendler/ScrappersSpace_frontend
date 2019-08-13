@@ -2,6 +2,10 @@
     line-height: 64px;
 }
 
+nz-header {
+    padding: 0 !important;
+}
+
 .logo {
     background-image: url('../assets/images/logo.png');
     background-size: 100% 100%;
@@ -13,3 +17,33 @@
 nz-content {
     padding: 5% 5%;
 }
+
+.mobile-menu-button {
+    height: 100%; 
+    width: 100px;
+    text-align: center;
+    border: none;
+}
+
+.mobile-menu-item {
+    padding: 15px;
+    font-size: 24px;
+    color: whitesmoke;
+}
+
+@media screen and (max-width: 750px) {
+    .default-header {
+        display: none
+    }
+    .mobile-header {
+        display: flex;
+    }
+  }
+  @media screen and (min-width: 751px) {
+    .default-header {
+        display: flex
+    }
+    .mobile-header {
+        display: none;
+    }
+  }

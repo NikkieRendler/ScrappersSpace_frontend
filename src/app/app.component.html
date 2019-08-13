@@ -1,12 +1,40 @@
 <nz-layout>
-    <nz-header nz-menu nzTheme="dark" nzMode="horizontal">
+    <nz-header class="default-header" nz-menu nzTheme="dark" nzMode="horizontal">
         <div nz-menu-item class="logo"></div>
-        <a [routerLink]="['/vacancies']" nz-menu-item>Вакансии</a>
-        <a [routerLink]="['/salaries']" nz-menu-item>Зарплаты</a>
-        <a [routerLink]="['/freelance']" nz-menu-item>Фриланс</a>
-        <a [routerLink]="['/relocate']" nz-menu-item>Релокейт</a>
-        <a [routerLink]="['/startups']" nz-menu-item>Стартапы</a>
-        <a [routerLink]="['/companies']" nz-menu-item>Компании</a>
+        <a [routerLink]="['/vacancies']" nz-menu-item nzMatchRouter>Вакансии</a>
+        <a [routerLink]="['/salaries']" nz-menu-item nzMatchRouter>Зарплаты</a>
+        <a [routerLink]="['/freelance']" nz-menu-item nzMatchRouter>Фриланс</a>
+        <a [routerLink]="['/relocate']" nz-menu-item nzMatchRouter>Релокейт</a>
+        <a [routerLink]="['/startups']" nz-menu-item nzMatchRouter>Стартапы</a>
+        <a [routerLink]="['/companies']" nz-menu-item nzMatchRouter>Компании</a>
+    </nz-header>
+    <nz-header class="mobile-header" nz-menu nzTheme="dark" nzMode="horizontal" nz-row nzType="flex" nzJustify="space-between"
+        nzAlign="middle">
+        <div nz-menu-item class="logo"></div>
+        <button nz-button nzGhost nz-dropdown [nzDropdownMenu]="mobileMenu" [nzPlacement]="position" class="mobile-menu-button">
+            <i style="color: #fff" nz-icon nzType="menu" nzTheme="outline"></i>
+        </button>
+        <nz-dropdown-menu #mobileMenu="nzDropdownMenu">
+            <ul style="background: #001529;" nz-menu>
+                <li [routerLink]="['/vacancies']" nz-menu-item class="mobile-menu-item">Вакансии</li>
+                <li [routerLink]="['/salaries']" nz-menu-item class="mobile-menu-item">Зарплаты</li>
+                <li [routerLink]="['/freelance']" nz-menu-item class="mobile-menu-item">Фриланс</li>
+                <li [routerLink]="['/relocate']" nz-menu-item class="mobile-menu-item">Релокейт</li>
+                <li [routerLink]="['/startups']" nz-menu-item class="mobile-menu-item">Стартапы</li>
+                <li [routerLink]="['/companies']" nz-menu-item class="mobile-menu-item">Компании</li>
+            </ul>
+        </nz-dropdown-menu>
+        <!-- <div nz-submenu nzPlacement="bottomRight" [nzTitle]="mobileMenu" nzTheme="dark" nzMode="vertical">
+            <a [routerLink]="['/vacancies']" nz-menu-item>Вакансии</a>
+            <a [routerLink]="['/salaries']" nz-menu-item>Зарплаты</a>
+            <a [routerLink]="['/freelance']" nz-menu-item>Фриланс</a>
+            <a [routerLink]="['/relocate']" nz-menu-item>Релокейт</a>
+            <a [routerLink]="['/startups']" nz-menu-item>Стартапы</a>
+            <a [routerLink]="['/companies']" nz-menu-item>Компании</a>
+        </div> -->
+        <!-- <ng-template #mobileMenu>
+            <i style="color: #fff" nz-icon nzType="menu" nzTheme="outline"></i>
+        </ng-template> -->
     </nz-header>
     <nz-layout>
         <nz-content>
