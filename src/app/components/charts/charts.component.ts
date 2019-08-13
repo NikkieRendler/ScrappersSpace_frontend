@@ -52,7 +52,8 @@ export class ChartsComponent implements OnInit, OnDestroy {
         this.service.getVacancies('programmingLanguage'),
         this.service.getVacancies('frontend'),
         this.service.getVacancies('backend'),
-        this.service.getVacancies('database'))
+        this.service.getVacancies('database'),
+        this.service.getVacancies('other'))
         .subscribe(pipe((data: VacanciesQueryData[]) => {
           data.map(item => {
             this.createVacanciesChart(this.sortVacanciesData(item.data), item.technologyType, item.createdAt, this.setChartPosition(item));
@@ -321,16 +322,18 @@ export class ChartsComponent implements OnInit, OnDestroy {
 
   titleChart(name: string): OptionsTitle {
     return name === 'frontend'
-      ? { text: 'Фронтенд технологии', display: true, fontSize: 16 }
+      ? { text: 'Фронтенд технологии', display: true, fontSize: 15 }
       : name === 'programmingLanguage'
-        ? { text: 'Языки программирования', display: true, fontSize: 16 }
+        ? { text: 'Языки программирования', display: true, fontSize: 15 }
         : name === 'backend'
-          ? { text: 'Бекенд технологии', display: true, fontSize: 16 }
+          ? { text: 'Бекенд технологии', display: true, fontSize: 15 }
           : name === 'database'
-            ? { text: 'Базы данных', display: true, fontSize: 16 }
+            ? { text: 'Базы данных', display: true, fontSize: 15 }
             : name === 'Software Engineer'
-              ? { text: 'Middle Software Engineer', display: true, fontSize: 16 }
-              : { text: name, display: true, fontSize: 16 };
+              ? { text: 'Middle Software Engineer', display: true, fontSize: 15 }
+              : name === 'other'
+                ? { text: 'Другое', display: true, fontSize: 15 }
+                : { text: name, display: true, fontSize: 15 };
   }
 
   setChartPosition(chartData: VacanciesQueryData | FreelanceVacanciesQueryData) {
