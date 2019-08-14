@@ -48,7 +48,8 @@
         </div>
     </div>
 
-    <h3 *ngIf="currentRoute === '/freelance'" nz-title nzType="secondary" style="margin-top: 50px">Фрилансеры</h3>
+    <div *ngIf="currentRoute === '/freelance'">
+    <h3 nz-title nzType="secondary" style="margin-top: 50px">Фрилансеры</h3>
     <div nz-row nzType="flex" nzJustify="space-between" nzAlign="middle" *ngFor="let chart of freelanceWorkersCharts"
         [ngClass]="(currentRoute ==='/salaries') ? 'salariesChart' : 'vacanciesChart'">
         <div *ngIf="freelanceWorkersLoading; else freelanceWorkersCharts" nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="19" nzXl="19">
@@ -96,5 +97,6 @@
             </nz-card>
         </div>
     </div>
+</div>
 
 </div>
