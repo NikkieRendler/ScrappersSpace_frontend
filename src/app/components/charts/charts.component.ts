@@ -12,7 +12,10 @@ import {
   TechnologyByExperience,
   TechnologyByExperienceResourceData,
   SalariesQueryData,
-  OptionsTitle
+  OptionsTitle,
+  FreelanceWorkersQueryData,
+  FreelanceWorkers,
+  FreelanceWorkersResourceData
 } from './charts-interfaces';
 import { StatisticsService } from 'src/app/services/statistics.service';
 import { pipe, combineLatest, concat, forkJoin } from 'rxjs';
@@ -28,9 +31,11 @@ import { distanceInWords } from 'date-fns';
 export class ChartsComponent implements OnInit, OnDestroy {
   currentRoute: string;
   loading = true;
+  freelanceWorkersLoading = true;
   time = distanceInWords(new Date(), new Date());
 
   charts: Chart[] = [null, null, null];
+  freelanceWorkersCharts: Chart[] = [null, null, null];
   vacanciesColors: string[] = [
     'rgba(50, 150, 200, .6)',
     'rgba(150, 200, 50, .6)',
@@ -91,6 +96,22 @@ export class ChartsComponent implements OnInit, OnDestroy {
               this.displayChartsOnLoad();
             });
           }));
+      combineLatest(
+        this.service.getFreelanceWorkers('programmingLanguage'),
+        this.service.getFreelanceWorkers('frontend'),
+        this.service.getFreelanceWorkers('backend'),
+        this.service.getFreelanceWorkers('database'))
+        .subscribe(pipe(
+          (data: FreelanceWorkersQueryData[]) => {
+            data.map(item => {
+              this.createFreelanceWorkersChart(
+                this.sortFreelanceWorkersData(item.data),
+                item.technologyType,
+                item.createdAt,
+                this.setChartPosition(item));
+              this.displayFreelanceWorkersChartsOnLoad();
+            });
+          }));
     }
     if (this.router.url === '/startups') {
       combineLatest(
@@ -125,6 +146,12 @@ export class ChartsComponent implements OnInit, OnDestroy {
   displayChartsOnLoad() {
     if (!this.charts.some(chart => chart === null)) {
       this.loading = false;
+    }
+  }
+
+  displayFreelanceWorkersChartsOnLoad() {
+    if (!this.freelanceWorkersCharts.some(chart => chart === null)) {
+      this.freelanceWorkersLoading = false;
     }
   }
 
@@ -164,6 +191,12 @@ export class ChartsComponent implements OnInit, OnDestroy {
   sortFreelanceVacanciesData(technologies: FreelanceTechnologyJobs[]) {
     return technologies = technologies.sort((techOne, techTwo) => {
       return techTwo.numberOfJobs - techOne.numberOfJobs;
+    });
+  }
+
+  sortFreelanceWorkersData(technologies: FreelanceWorkers[]) {
+    return technologies.sort((techOne, techTwo) => {
+      return +techTwo.total - +techOne.total;
     });
   }
 
@@ -208,6 +241,19 @@ export class ChartsComponent implements OnInit, OnDestroy {
     this.charts.splice(position, 1, newChart);
   }
 
+  createFreelanceWorkersChart = (dataForNewChart: FreelanceWorkers[], technologyType: string, createdAt: string, position?: number) => {
+    const data: ChartData = { labels: [], datasets: [] };
+    const resourcesNames: string[] = this.setFreelanceWorkersResourcesNames(dataForNewChart[0].numberOfFreelancers);
+    const datasetsTemplates = this.setVacanciesDatasetsTemplates(resourcesNames);
+    const options = this.setOptions(technologyType);
+    dataForNewChart.map(technology => {
+      data.labels.push(decodeURIComponent(technology.technologyName));
+      data.datasets = this.setFreelanceWorkersDatasets(technology, datasetsTemplates);
+    });
+    const newChart = { type: this.type, data, options, lastUpdate: createdAt };
+    this.freelanceWorkersCharts.splice(position, 1, newChart);
+  }
+
   setResourcesNames(firstItemResources: TechnologyResourceData[]): string[] {
     return firstItemResources.map(entry => {
       return entry.resource;
@@ -218,6 +264,12 @@ export class ChartsComponent implements OnInit, OnDestroy {
   setSalariesResourcesNames(firstItemResources: TechnologyByExperienceResourceData[]): string[] {
     return firstItemResources.map(entry => {
       return entry.resource;
+    });
+  }
+
+  setFreelanceWorkersResourcesNames(firstItemResources: FreelanceWorkersResourceData[]): string[] {
+    return firstItemResources.map(entry => {
+      return entry.earnings === 'atLeastOneDollar' ? 'C заработком' : 'Без заработка';
     });
   }
 
@@ -320,6 +372,15 @@ export class ChartsComponent implements OnInit, OnDestroy {
     return templates;
   }
 
+  setFreelanceWorkersDatasets(technology: FreelanceWorkers, templates: Dataset[]): Dataset[] {
+    technology.numberOfFreelancers.forEach(entry => {
+      templates[technology.numberOfFreelancers.indexOf(entry)].data.push(
+        technology.numberOfFreelancers[technology.numberOfFreelancers.indexOf(entry)].totalNumberOfFreelancers
+      );
+    });
+    return templates;
+  }
+
   titleChart(name: string): OptionsTitle {
     return name === 'frontend'
       ? { text: 'Фронтенд технологии', display: true, fontSize: 15 }
@@ -336,7 +397,7 @@ export class ChartsComponent implements OnInit, OnDestroy {
                 : { text: name, display: true, fontSize: 15 };
   }
 
-  setChartPosition(chartData: VacanciesQueryData | FreelanceVacanciesQueryData) {
+  setChartPosition(chartData: VacanciesQueryData | FreelanceVacanciesQueryData | FreelanceWorkersQueryData) {
     return chartData.technologyType === 'programmingLanguage'
       ? 0
       : chartData.technologyType === 'frontend'

@@ -24,10 +24,18 @@ export interface FreelanceVacanciesQueryData {
   position?: number;
 }
 
+export interface FreelanceWorkersQueryData {
+  technologyType: string;
+  createdAt: string;
+  data: FreelanceWorkers[];
+  position?: number;
+}
+
 export interface FreelanceTechnologyJobs {
   technologyName: string;
   numberOfJobs: number;
 }
+
 export interface Chart {
   type: string;
   data: ChartData;
@@ -71,9 +79,21 @@ export interface Technology {
   technologyType: string;
 }
 
+export interface FreelanceWorkers {
+  technologyName: string;
+  numberOfFreelancers: FreelanceWorkersResourceData[];
+  total: string;
+}
+
 export interface TechnologyResourceData {
   resource: string;
   totalNumberOfVacancies: number;
+}
+
+export interface FreelanceWorkersResourceData {
+  earnings: string;
+  totalNumberOfFreelancers: number;
+
 }
 
 export interface TechnologyByExperience {

@@ -47,4 +47,52 @@
         </div>
     </div>
 
+    <div nz-row nzType="flex" nzJustify="space-between" nzAlign="middle" *ngFor="let chart of freelanceWorkersCharts"
+        [ngClass]="(currentRoute ==='/salaries') ? 'salariesChart' : 'vacanciesChart'">
+        <div *ngIf="freelanceWorkersLoading; else freelanceWorkersCharts" nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="19" nzXl="19">
+            <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 10 }"></nz-skeleton>
+        </div>
+        <ng-template #freelanceWorkersCharts>
+            <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="19" nzXl="19">
+                <chart [type]="chart.type" [data]="chart.data" [options]="chart.options"
+                    [ngClass]="(currentRoute ==='/salaries') ? 'salariesChart' : 'vacanciesChart'">
+                </chart>
+                <div *ngIf="currentRoute !== '/salaries'; else salariesExplanation" nz-row nzType="flex" nzJustify="end"
+                    nzAlign="middle" style="color: gray; padding-right: 50px;">
+                    Последнее обновление: {{chart.lastUpdate | date }}
+                </div>
+                <ng-template #salariesExplanation>
+                    <div nz-row nzType="flex" nzJustify="space-between" nzAlign="middle"
+                        style="color: gray; padding-right: 50px;">
+                        <div style="margin-left: 120px;">
+                            *Данные сопоставляются по среднему значению между ресурсами
+                        </div>
+                        <div>
+                            Последнее обновление: {{chart.lastUpdate | date }}
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+        </ng-template>
+        <div style="margin: 10px 0px 50px; height: 100%" nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="5" nzXl="5">
+            <nz-card style="height: 100%; width: 100%">
+                <p>Стройка v0.7</p>
+                <nz-comment nzAuthor="Nei Matros" [nzDatetime]="time">
+                    <nz-comment-content>
+                        <p>
+                            А я вот не матрос
+                        </p>
+                    </nz-comment-content>
+                </nz-comment>
+                <nz-comment nzAuthor="John Galt" [nzDatetime]="time">
+                    <nz-comment-content>
+                        <p>
+                            А кто это у нас тут парсит?
+                        </p>
+                    </nz-comment-content>
+                </nz-comment>
+            </nz-card>
+        </div>
+    </div>
+
 </div>

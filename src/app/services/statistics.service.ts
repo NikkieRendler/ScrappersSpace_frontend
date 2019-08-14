@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { VacanciesQueryData, FreelanceVacanciesQueryData, QueryData, SalariesQueryData } from '../components/charts/charts-interfaces';
+import { VacanciesQueryData, FreelanceVacanciesQueryData, QueryData, SalariesQueryData, FreelanceWorkersQueryData } from '../components/charts/charts-interfaces';
 import gql from 'graphql-tag';
 
 function VacanciesQuery(technologyType: string) {
@@ -55,6 +55,25 @@ function FreelanceVacanciesQuery(technologyType: string) {
   }
   `;
 };
+
+function FreelanceWorkersQuery(technologyType: string) {
+  return gql`
+  {
+    getNumberOfFreelancersByTechnologyType(technologyType: "${technologyType}") {
+      technologyType
+      createdAt
+      data {
+        technologyName
+        total
+        numberOfFreelancers {
+          earnings
+          totalNumberOfFreelancers
+        }
+      }
+    }
+  }
+  `
+}
 
 function StartupsVacanciesQuery(technologyType: string) {
   return gql`
@@ -117,6 +136,14 @@ export class StatisticsService {
       query: FreelanceVacanciesQuery(dataType)
     }).valueChanges.pipe(map(({ data }) => {
       return data.getNumberOfFreelanceJobsByTechnologyType;
+    }));
+  }
+
+  getFreelanceWorkers(dataType): Observable<FreelanceWorkersQueryData> {
+    return this.apollo.watchQuery<any>({
+      query: FreelanceWorkersQuery(dataType)
+    }).valueChanges.pipe(map(({ data }) => {
+      return data.getNumberOfFreelancersByTechnologyType;
     }));
   }
 
