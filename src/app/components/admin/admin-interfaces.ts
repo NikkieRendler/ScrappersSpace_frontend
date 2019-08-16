@@ -1,12 +1,3 @@
-export interface Resource {
-    icon: string;
-    link: string;
-    resource: string;
-    type: string;
-    _id: string;
-    contentAmount;
-}
-
 export interface CompanyData {
     name: string;
     logo: string;
@@ -15,4 +6,14 @@ export interface CompanyData {
     motto: string;
     description: string;
     resources: Resource[];
+    resourcesByTypes?: any[];
+}
+
+export interface Resource {
+    icon: string;
+    link: string;
+    resource: string;
+    type: string;
+    _id: string;
+    contentAmount;
 }

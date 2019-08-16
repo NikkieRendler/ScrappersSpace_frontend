@@ -30,6 +30,18 @@ export class CompaniesComponent implements OnInit {
 
     this.service.getCompanies().subscribe(data => {
       data.map((company, index) => {
+        // company.resourcesByTypes = [];
+        // const resourceNames = [];
+        // company.resources.map(resource => {
+        //   if (!resourceNames.includes(resource.type)) {
+        //     resourceNames.push(resource.type);
+        //   }
+        // });
+        // resourceNames.forEach(resourceName => {
+        //   company.resourcesByTypes.push({ type: resourceName, resources: [] });
+        // });
+        // console.log(company.name, company.resourcesByTypes);
+
         this.companiesList.splice(index, 1, company);
       });
       if (!this.companiesList.some(company => company === null)) {
