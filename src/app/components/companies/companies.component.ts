@@ -22,11 +22,9 @@ export class CompaniesComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   getScreenSize(event?) {
     this.innerWidth = window.innerWidth;
-    console.log("TCL: CompaniesComponent -> onResize -> this.innerWidth", this.innerWidth)
   }
   onResize(event) {
     this.innerWidth = window.innerWidth;
-    console.log("TCL: CompaniesComponent -> onResize -> this.innerWidth", this.innerWidth)
   }
   ngOnInit() {
 
@@ -36,6 +34,7 @@ export class CompaniesComponent implements OnInit {
       });
       if (!this.companiesList.some(company => company === null)) {
         this.loading = false;
+        window.scrollTo(0, 0);
       }
     });
   }

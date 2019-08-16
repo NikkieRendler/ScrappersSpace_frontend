@@ -278,12 +278,6 @@ export class ChartsComponent implements OnInit, OnDestroy {
       title: this.titleChart(technologyType),
       responsive: true,
       maintainAspectRatio: false,
-      layout: {
-        padding: {
-          top: 0,
-          bottom: 0
-        }
-      },
       legend: {
         labels: {
           fontSize: 14
@@ -309,12 +303,6 @@ export class ChartsComponent implements OnInit, OnDestroy {
       title: this.titleChart(rank),
       responsive: true,
       maintainAspectRatio: false,
-      layout: {
-        padding: {
-          top: 0,
-          bottom: 0
-        }
-      },
       legend: {
         labels: {
           fontSize: 14

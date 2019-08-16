@@ -52,7 +52,7 @@ export interface Options {
   title: OptionsTitle;
   responsive: boolean;
   maintainAspectRatio: boolean;
-  layout: {};
+  layout?: {};
   scales: {};
   legend?: {
     labels?: {

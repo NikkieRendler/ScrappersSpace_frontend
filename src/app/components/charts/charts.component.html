@@ -3,7 +3,7 @@
     <div nz-row nzType="flex" nzJustify="space-between" nzAlign="middle" *ngFor="let chart of charts"
         [ngClass]="(currentRoute ==='/salaries') ? 'salariesChart' : 'vacanciesChart'">
         <div *ngIf="loading; else chartsAreLoaded" nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="19" nzXl="19">
-            <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 10 }"></nz-skeleton>
+            <nz-skeleton style="padding-right: 20px" [nzActive]="true" [nzParagraph]="{ rows: 10 }"></nz-skeleton>
         </div>
         <ng-template #chartsAreLoaded>
             <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="19" nzXl="19">
@@ -16,8 +16,8 @@
                 </div>
                 <ng-template #salariesExplanation>
                     <div nz-row nzType="flex" nzJustify="space-between" nzAlign="middle"
-                        style="color: gray; padding-right: 50px;">
-                        <div style="margin-left: 120px;">
+                        style="color: gray; padding: 0 50px;">
+                        <div>
                             *Данные сопоставляются по среднему значению между ресурсами
                         </div>
                         <div>

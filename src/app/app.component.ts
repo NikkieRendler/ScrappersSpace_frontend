@@ -6,6 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  position='bottomRight'
+  trigger = 'click';
+  position = 'bottomRight';
+  backdrop = false;
   title = 'ScrappersSpace';
 }
