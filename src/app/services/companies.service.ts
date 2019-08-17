@@ -3,27 +3,51 @@ import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { Resource, CompanyData } from '../components/admin/admin-interfaces';
+import { Resource, CompanyDataToDisplay } from '../components/admin/admin-interfaces';
 
 const CompaniesQuery = gql`
 {
   getCompaniesList {
     _id
-    name
     logo
+    name
     registrationCountry
     companyType
     motto
     description
     resources {
-      contentAmount
-      link
-      resource
-      icon
-      type
+      ownWebsite {
+        resource
+        icon
+        type
+        link
+        contentAmount
+      }
+      socialNetwork {
+        resource
+        icon
+        type
+        link
+        contentAmount
+      }
+      info {
+        resource
+        icon
+        type
+        link
+        contentAmount
+      }
+      reviews {
+        resource
+        icon
+        type
+        link
+        contentAmount
+      }
     }
   }
-}`;
+}
+`;
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +56,7 @@ export class CompaniesService {
 
   constructor(public apollo: Apollo) { }
 
-  getCompanies(): Observable<CompanyData[]> {
+  getCompanies(): Observable<CompanyDataToDisplay[]> {
     return this.apollo.watchQuery<any>({
       query: CompaniesQuery
     }).valueChanges.pipe(map(({ data }) => {

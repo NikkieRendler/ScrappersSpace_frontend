@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
 import { AdminService } from 'src/app/services/admin.service';
-import { Resource, CompanyData } from './admin-interfaces';
+import { Resource, CompanyDataToAdd } from './admin-interfaces';
 import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({

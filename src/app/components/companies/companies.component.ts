@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CompaniesService } from 'src/app/services/companies.service';
-import { CompanyData } from '../admin/admin-interfaces';
+import { CompanyDataToDisplay } from '../admin/admin-interfaces';
 import { HostListener } from "@angular/core";
 
 
@@ -14,7 +14,7 @@ import { HostListener } from "@angular/core";
 export class CompaniesComponent implements OnInit {
   innerWidth: number;
   loading = true;
-  companiesList: CompanyData[] = [null, null, null];
+  companiesList: CompanyDataToDisplay[] = [null, null, null];
 
   constructor(private service: CompaniesService) {
     this.getScreenSize();
@@ -30,18 +30,6 @@ export class CompaniesComponent implements OnInit {
 
     this.service.getCompanies().subscribe(data => {
       data.map((company, index) => {
-        // company.resourcesByTypes = [];
-        // const resourceNames = [];
-        // company.resources.map(resource => {
-        //   if (!resourceNames.includes(resource.type)) {
-        //     resourceNames.push(resource.type);
-        //   }
-        // });
-        // resourceNames.forEach(resourceName => {
-        //   company.resourcesByTypes.push({ type: resourceName, resources: [] });
-        // });
-        // console.log(company.name, company.resourcesByTypes);
-
         this.companiesList.splice(index, 1, company);
       });
       if (!this.companiesList.some(company => company === null)) {

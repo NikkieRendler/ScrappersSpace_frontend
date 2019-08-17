@@ -2,32 +2,31 @@
     <div *ngFor="let company of companiesList" style="margin-bottom: 60px; padding: 2px">
         <div *ngIf="loading; else companiesLoaded">
             <div nz-row nzType="flex" nzJustify="center" nzAlign="top">
-                <nz-card nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="7" nzXl="7" [nzCover]="coverTemplate"
-                    [nzBodyStyle]="{padding: 0}" [nzActions]="[links]">
+                <nz-card nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="7" nzXl="7" [nzCover]="coverTemplate" [nzBodyStyle]="{padding: 0}"
+                    [nzActions]="[links]">
                 </nz-card>
                 <ng-template #coverTemplate>
-                    <div style="max-width: 250px;" nz-row nzType="flex" nzJustify="center" nzAlign="middle"
-                        style="height: 250px; background-color: #eee; border: 3px #fff solid;">
+                    <div style="max-width: 250px;" nz-row nzType="flex" nzJustify="center" nzAlign="middle" style="height: 250px; background-color: #eee; border: 3px #fff solid;">
                         <ng-template #indicatorTemplate><i nz-icon nzType="loading" style="font-size: 24px;"></i>
                         </ng-template>
                         <nz-spin nzSimple [nzIndicator]="indicatorTemplate"> </nz-spin>
                     </div>
                 </ng-template>
                 <ng-template #links>
-                    <div nz-row nzType="flex" nzJustify="start">
-                        <div style="padding: 10px">
+                    <div nz-row nzType="flex" nzJustify="center">
+                        <div class="link-icon">
                             <button nz-popover nz-button nzShape="circle">
                                 <div style="width: 100%; height: 100%; border-radius: 50%; background-color: #eee">
                                 </div>
                             </button>
                         </div>
-                        <div style="padding: 10px">
+                        <div class="link-icon">
                             <button nz-popover nz-button nzShape="circle">
                                 <div style="width: 100%; height: 100%; border-radius: 50%; background-color: #eee">
                                 </div>
                             </button>
                         </div>
-                        <div style="padding: 10px">
+                        <div class="link-icon">
                             <button nz-popover nz-button nzShape="circle">
                                 <div style="width: 100%; height: 100%; border-radius: 50%; background-color: #eee">
                                 </div>
@@ -36,8 +35,7 @@
                     </div>
                 </ng-template>
                 <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="17" nzXl="17">
-                    <nz-descriptions [nzColumn]="{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }" nzBordered
-                        [nzLayout]="innerWidth > 751 ? 'horizontal' : 'vertical'">
+                    <nz-descriptions [nzColumn]="{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }" nzBordered [nzLayout]="innerWidth > 751 ? 'horizontal' : 'vertical'">
                         <nz-descriptions-item nzTitle="Name">
                             <nz-skeleton style="min-width: 100vw;" [nzParagraph]="{ rows: 0 }" [nzActive]="true">
                             </nz-skeleton>
@@ -64,21 +62,61 @@
         </div>
         <ng-template #companiesLoaded>
             <div nz-row nzType="flex" nzJustify="center" nzAlign="top">
-                <nz-card nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="7" nzXl="7" [nzCover]="coverTemplate"
-                    [nzBodyStyle]="{padding: 0}" [nzActions]="[links]">
+                <nz-card nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="7" nzXl="7" [nzCover]="coverTemplate" [nzBodyStyle]="{padding: 0}"
+                    [nzActions]="[socialLinks, reviewsLinks, infoLinks]">
                 </nz-card>
                 <ng-template #coverTemplate>
-                    <div style="max-width: 250px;" nz-row nzType="flex" nzJustify="center" nzAlign="middle"
-                        style="height: 250px; background-color: #eee; border: 3px #fff solid;">
+                    <div style="max-width: 250px;" nz-row nzType="flex" nzJustify="center" nzAlign="middle" style="height: 250px; background-color: #eee; border: 3px #fff solid;">
                         <img style="max-width: 60%" [src]="company.logo" />
                     </div>
                 </ng-template>
-                <ng-template #links>
-                    <div nz-row nzType="flex" nzJustify="start">
-                        <div *ngFor="let resource of company.resources" style="padding: 10px">
+                <ng-template #socialLinks>
+                    <div nz-row nzType="flex" nzJustify="center">
+                        <div nz-text nzType="secondary">Social</div>
+                    </div>
+                    <div nz-row nzType="flex" nzJustify="start" class="icons-row">
+                        <div *ngFor="let resource of company.resources.socialNetwork" class="link-icon">
                             <a [href]="resource.link">
-                                <button nz-popover nz-button nzTitle="{{resource.resource.toUpperCase()}}"
-                                    nzContent="{{resource.link}}" nzShape="circle" nzPlacement="rightTop">
+                                <button nz-popover nz-button nzTitle="{{resource.resource.toUpperCase()}}" nzContent="{{resource.link}}"
+                                    nzShape="circle" nzPlacement="rightTop">
+                                    <img [src]="resource.icon" style="width: 100%; height: 100%; border-radius: 50%">
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template #reviewsLinks>
+                    <div nz-row nzType="flex" nzJustify="center">
+                        <div nz-text nzType="secondary">Reviews</div>
+                    </div>
+                    <div nz-row nzType="flex" nzJustify="start" class="icons-row">
+                        <div *ngFor="let resource of company.resources.reviews" class="link-icon">
+                            <a [href]="resource.link">
+                                <button nz-popover nz-button nzTitle="{{resource.resource.toUpperCase()}}" nzContent="{{resource.link}}"
+                                    nzShape="circle" nzPlacement="rightTop">
+                                    <img [src]="resource.icon" style="width: 100%; height: 100%; border-radius: 50%">
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template #infoLinks>
+                    <div nz-row nzType="flex" nzJustify="center">
+                        <div nz-text nzType="secondary">Info</div>
+                    </div>
+                    <div nz-row nzType="flex" nzJustify="start" class="icons-row">
+                        <div *ngFor="let resource of company.resources.info" class="link-icon">
+                            <a [href]="resource.link">
+                                <button nz-popover nz-button nzTitle="{{resource.resource.toUpperCase()}}" nzContent="{{resource.link}}"
+                                    nzShape="circle" nzPlacement="rightTop">
+                                    <img [src]="resource.icon" style="width: 100%; height: 100%; border-radius: 50%">
+                                </button>
+                            </a>
+                        </div>
+                        <div *ngFor="let resource of company.resources.ownWebsite" class="link-icon">
+                            <a [href]="resource.link">
+                                <button nz-popover nz-button nzTitle="{{resource.resource.toUpperCase()}}" nzContent="{{resource.link}}"
+                                    nzShape="circle" nzPlacement="rightTop">
                                     <img [src]="resource.icon" style="width: 100%; height: 100%; border-radius: 50%">
                                 </button>
                             </a>
@@ -86,8 +124,7 @@
                     </div>
                 </ng-template>
                 <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="17" nzXl="17">
-                    <nz-descriptions [nzColumn]="{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }" nzBordered
-                        [nzLayout]="innerWidth > 751 ? 'horizontal' : 'vertical'">
+                    <nz-descriptions [nzColumn]="{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }" nzBordered [nzLayout]="innerWidth > 751 ? 'horizontal' : 'vertical'">
                         <nz-descriptions-item nzTitle="Name">
                             <b>{{company.name}}</b>
                         </nz-descriptions-item>

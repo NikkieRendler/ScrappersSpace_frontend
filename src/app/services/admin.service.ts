@@ -3,9 +3,7 @@ import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { Resource } from '../components/admin/admin-interfaces';
-import { CompanyData } from '../components/admin/admin-interfaces';
-
+import { Resource, CompanyDataToAdd, CompanyDataToDisplay } from '../components/admin/admin-interfaces';
 
 
 const CompanyMutationQuery = gql`
@@ -52,7 +50,7 @@ export class AdminService {
     }).valueChanges.pipe(map(({ data }) => data.getCompanyLinkTypes));
   }
 
-  addCompany(companyData: CompanyData): Observable<CompanyData> {
+  addCompany(companyData: CompanyDataToAdd): Observable<CompanyDataToDisplay> {
     return this.apollo.mutate({
       mutation: CompanyMutationQuery,
       variables: {
