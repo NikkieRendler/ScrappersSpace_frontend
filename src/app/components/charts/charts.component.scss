@@ -5,3 +5,21 @@
 .salariesChart {
     min-height: 650px; 
 }
+
+.vacanciesRouteComments {
+    height: 200px; 
+    overflow: auto;
+}
+
+.salariesRouteComments {
+    height: 300px; 
+    overflow: auto;
+}
+
+.ant-form-item {
+    margin: 0 !important;
+}
+
+::ng-deep.ant-card-body {  
+    padding: 0 0 0 10px !important;
+}

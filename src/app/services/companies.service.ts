@@ -3,7 +3,7 @@ import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { Resource, CompanyDataToDisplay } from '../components/admin/admin-interfaces';
+import { CompanyDataToDisplay } from '../components/admin/admin-interfaces';
 
 const CompaniesQuery = gql`
 {

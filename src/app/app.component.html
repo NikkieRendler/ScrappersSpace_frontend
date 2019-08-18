@@ -8,11 +8,11 @@
         <a [routerLink]="['/startups']" nz-menu-item nzMatchRouter>Стартапы</a>
         <a [routerLink]="['/companies']" nz-menu-item nzMatchRouter>Компании</a>
     </nz-header>
-    <nz-header class="mobile-header" nz-menu nzTheme="dark" nzMode="horizontal" nz-row nzType="flex"
-        nzJustify="space-between" nzAlign="middle">
+    <nz-header class="mobile-header" nz-menu nzTheme="dark" nzMode="horizontal" nz-row nzType="flex" nzJustify="space-between"
+        nzAlign="middle">
         <div nz-menu-item class="logo"></div>
-        <button nz-button nzGhost nz-dropdown [nzTrigger]="trigger" [nzBackdrop]="backdrop"
-            [nzDropdownMenu]="mobileMenu" [nzPlacement]="position" class="mobile-menu-button">
+        <button nz-button nzGhost nz-dropdown [nzTrigger]="trigger" [nzBackdrop]="backdrop" [nzDropdownMenu]="mobileMenu"
+            [nzPlacement]="position" class="mobile-menu-button">
             <i style="color: #fff" nz-icon nzType="menu" nzTheme="outline"></i>
         </button>
         <nz-dropdown-menu #mobileMenu="nzDropdownMenu">
@@ -36,5 +36,8 @@
             <router-outlet></router-outlet>
         </nz-content>
     </nz-layout>
-    <nz-footer>©2019 Топ-контент рунета</nz-footer>
+    <nz-footer>
+        ©2019 Топ-контент рунета.
+        <p>Стройка v0.7</p>
+    </nz-footer>
 </nz-layout>

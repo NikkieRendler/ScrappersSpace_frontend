@@ -15,12 +15,16 @@ import {
   OptionsTitle,
   FreelanceWorkersQueryData,
   FreelanceWorkers,
-  FreelanceWorkersResourceData
+  FreelanceWorkersResourceData,
+  Comment,
+  CommentList
 } from './charts-interfaces';
 import { StatisticsService } from 'src/app/services/statistics.service';
-import { pipe, combineLatest, concat, forkJoin } from 'rxjs';
+import { pipe, combineLatest } from 'rxjs';
 import { Router } from '@angular/router';
 import { distanceInWords } from 'date-fns';
+import { CommentsService } from 'src/app/services/comments.service';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 
 @Component({
   selector: 'app-charts',
@@ -30,48 +34,79 @@ import { distanceInWords } from 'date-fns';
 
 export class ChartsComponent implements OnInit, OnDestroy {
   currentRoute: string;
-  loading = true;
+  chartsLoading = true;
+  commentsLoading = true;
   freelanceWorkersLoading = true;
   time = distanceInWords(new Date(), new Date());
 
+  commentForm: FormGroup;
+
   charts: Chart[] = [null, null, null];
   freelanceWorkersCharts: Chart[] = [null, null, null];
+  comments: Comment[][] = [null, null, null, null];
+  commentsFormsArray: FormArray;
+
   vacanciesColors: string[] = [
     'rgba(50, 150, 200, .6)',
     'rgba(150, 200, 50, .6)',
     'rgba(60, 160, 90, .6)',
-    'rgba(200, 50, 150, .6)'
+    'rgba(200, 50, 150, .6)',
+    'rgba(17, 83, 52, .6)'
   ];
   freelanceVacanciesColors: string[] = [
     'rgba(55, 160, 0, 0.6)'
   ];
   type = 'horizontalBar';
-  constructor(private service: StatisticsService, public router: Router) {
+  constructor(
+    private statisticsService: StatisticsService,
+    private commentsService: CommentsService,
+    private fb: FormBuilder,
+    public router: Router) {
 
   }
 
   ngOnInit() {
+    this.commentForm = this.fb.group({
+      name: [null, Validators.required],
+      comment: [null, Validators.required]
+    });
+
+    this.commentsFormsArray = this.fb.array([]);
+
     this.currentRoute = this.router.url;
     if (this.router.url === '/vacancies') {
       combineLatest(
-        this.service.getVacancies('programmingLanguage'),
-        this.service.getVacancies('frontend'),
-        this.service.getVacancies('backend'),
-        this.service.getVacancies('database'),
-        this.service.getVacancies('other'))
+        this.statisticsService.getVacancies('programmingLanguage'),
+        this.statisticsService.getVacancies('frontend'),
+        this.statisticsService.getVacancies('backend'),
+        this.statisticsService.getVacancies('database'),
+        this.statisticsService.getVacancies('other'))
         .subscribe(pipe((data: VacanciesQueryData[]) => {
           data.map(item => {
             this.createVacanciesChart(this.sortVacanciesData(item.data), item.technologyType, item.createdAt, this.setChartPosition(item));
             this.displayChartsOnLoad();
           });
         }));
+      combineLatest(
+        this.commentsService.getComments('general-vacancies-programmingLanguage'),
+        this.commentsService.getComments('general-vacancies-frontend'),
+        this.commentsService.getComments('general-vacancies-backend'),
+        this.commentsService.getComments('general-vacancies-database'),
+        this.commentsService.getComments('general-vacancies-other')
+      ).subscribe(pipe((data: CommentList[]) => {
+        data.map((item, index) => {
+          console.log("TCL: ChartsComponent -> ngOnInit -> item", item)
+          this.setComments(item, index);
+          this.displayCommentsOnLoad();
+        })
+      }))
     }
     if (this.router.url === '/relocate') {
       combineLatest(
-        this.service.getRelocateVacancies('programmingLanguage'),
-        this.service.getRelocateVacancies('frontend'),
-        this.service.getRelocateVacancies('backend'),
-        this.service.getRelocateVacancies('database'))
+        this.statisticsService.getRelocateVacancies('programmingLanguage'),
+        this.statisticsService.getRelocateVacancies('frontend'),
+        this.statisticsService.getRelocateVacancies('backend'),
+        this.statisticsService.getRelocateVacancies('database'))
         .subscribe(pipe((data: VacanciesQueryData[]) => {
           data.map(item => {
             this.createVacanciesChart(this.sortVacanciesData(item.data), item.technologyType, item.createdAt, this.setChartPosition(item));
@@ -81,10 +116,10 @@ export class ChartsComponent implements OnInit, OnDestroy {
     }
     if (this.router.url === '/freelance') {
       combineLatest(
-        this.service.getFreelanceVacancies('programmingLanguage'),
-        this.service.getFreelanceVacancies('frontend'),
-        this.service.getFreelanceVacancies('backend'),
-        this.service.getFreelanceVacancies('database'))
+        this.statisticsService.getFreelanceVacancies('programmingLanguage'),
+        this.statisticsService.getFreelanceVacancies('frontend'),
+        this.statisticsService.getFreelanceVacancies('backend'),
+        this.statisticsService.getFreelanceVacancies('database'))
         .subscribe(pipe(
           (data: FreelanceVacanciesQueryData[]) => {
             data.map(item => {
@@ -97,10 +132,10 @@ export class ChartsComponent implements OnInit, OnDestroy {
             });
           }));
       combineLatest(
-        this.service.getFreelanceWorkers('programmingLanguage'),
-        this.service.getFreelanceWorkers('frontend'),
-        this.service.getFreelanceWorkers('backend'),
-        this.service.getFreelanceWorkers('database'))
+        this.statisticsService.getFreelanceWorkers('programmingLanguage'),
+        this.statisticsService.getFreelanceWorkers('frontend'),
+        this.statisticsService.getFreelanceWorkers('backend'),
+        this.statisticsService.getFreelanceWorkers('database'))
         .subscribe(pipe(
           (data: FreelanceWorkersQueryData[]) => {
             data.map(item => {
@@ -115,10 +150,10 @@ export class ChartsComponent implements OnInit, OnDestroy {
     }
     if (this.router.url === '/startups') {
       combineLatest(
-        this.service.getStartupsVacancies('programmingLanguage'),
-        this.service.getStartupsVacancies('frontend'),
-        this.service.getStartupsVacancies('backend'),
-        this.service.getStartupsVacancies('database'))
+        this.statisticsService.getStartupsVacancies('programmingLanguage'),
+        this.statisticsService.getStartupsVacancies('frontend'),
+        this.statisticsService.getStartupsVacancies('backend'),
+        this.statisticsService.getStartupsVacancies('database'))
         .subscribe(pipe((data: VacanciesQueryData[]) => {
           data.map(item => {
             this.createVacanciesChart(this.sortVacanciesData(item.data), item.technologyType, item.createdAt, this.setChartPosition(item));
@@ -128,9 +163,9 @@ export class ChartsComponent implements OnInit, OnDestroy {
     }
     if (this.router.url === '/salaries') {
       combineLatest(
-        this.service.getSalaries('Junior Software Engineer'),
-        this.service.getSalaries('Software Engineer'),
-        this.service.getSalaries('Senior Software Engineer'))
+        this.statisticsService.getSalaries('Junior Software Engineer'),
+        this.statisticsService.getSalaries('Software Engineer'),
+        this.statisticsService.getSalaries('Senior Software Engineer'))
         .subscribe(pipe((data: SalariesQueryData[]) => {
           data.map(item => {
             this.createSalariesChart(this.sortSalariesData(item.data), item.rank, item.createdAt, this.setSalariesChartPosition(item));
@@ -140,12 +175,19 @@ export class ChartsComponent implements OnInit, OnDestroy {
     }
   }
 
+  submitForm(form) {
+    this.commentsService.addComment(form).subscribe(res => {
+      console.log(res);
+    })
+
+  }
+
   ngOnDestroy() {
   }
 
   displayChartsOnLoad() {
     if (!this.charts.some(chart => chart === null)) {
-      this.loading = false;
+      this.chartsLoading = false;
     }
   }
 
@@ -153,6 +195,26 @@ export class ChartsComponent implements OnInit, OnDestroy {
     if (!this.freelanceWorkersCharts.some(chart => chart === null)) {
       this.freelanceWorkersLoading = false;
     }
+  }
+
+  displayCommentsOnLoad() {
+    if (!this.comments.some(comment => comment === null)) {
+      this.commentsLoading = false;
+    }
+  }
+
+  setComments(item, index) {
+    this.comments.splice(index, 1, item.comments);
+    this.addCommentsForm(item);
+  }
+
+  addCommentsForm(commentList: CommentList) {
+    const newCommentsForm = this.fb.group({
+      username: [null, Validators.required],
+      text: [null, Validators.required],
+      commentBlockId: [commentList._id]
+    })
+    this.commentsFormsArray.push(newCommentsForm);
   }
 
   sortVacanciesData(technologies: Technology[]) {
@@ -269,7 +331,15 @@ export class ChartsComponent implements OnInit, OnDestroy {
 
   setFreelanceWorkersResourcesNames(firstItemResources: FreelanceWorkersResourceData[]): string[] {
     return firstItemResources.map(entry => {
-      return entry.earnings === 'atLeastOneDollar' ? 'C заработком' : 'Без заработка';
+      return entry.earnings === 'atLeastOneDollar'
+        ? '$1+'
+        : entry.earnings === 'atLeastHundreedDollars'
+          ? '$100+'
+          : entry.earnings === 'atLeastThousandDollars'
+            ? '$1000+'
+            : entry.earnings === 'atLeastTenThousandsDollars'
+              ? '$10000+'
+              : 'Без заработка';
     });
   }
 
@@ -392,7 +462,9 @@ export class ChartsComponent implements OnInit, OnDestroy {
         ? 1
         : chartData.technologyType === 'backend'
           ? 2
-          : 3;
+          : chartData.technologyType === 'database'
+            ? 3
+            : 4;
   }
 
   setSalariesChartPosition(chartData: SalariesQueryData) {

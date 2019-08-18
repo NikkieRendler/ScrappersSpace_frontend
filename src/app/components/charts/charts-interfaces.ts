@@ -43,6 +43,21 @@ export interface Chart {
   lastUpdate: string;
 }
 
+export interface CommentList {
+  comments: Comment[];
+  createdAt: string;
+  description: string;
+  likesCounter: number;
+  name: string;
+  _id: string;
+}
+
+export interface Comment {
+  commentBlockId: string;
+  text: string;
+  username: string;
+  _id: string;
+}
 export interface ChartData {
   labels: string[];
   datasets: Dataset[];
@@ -93,7 +108,6 @@ export interface TechnologyResourceData {
 export interface FreelanceWorkersResourceData {
   earnings: string;
   totalNumberOfFreelancers: number;
-
 }
 
 export interface TechnologyByExperience {
