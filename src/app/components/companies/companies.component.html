@@ -36,23 +36,23 @@
                 </ng-template>
                 <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="17" nzXl="17">
                     <nz-descriptions [nzColumn]="{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }" nzBordered [nzLayout]="innerWidth > 751 ? 'horizontal' : 'vertical'">
-                        <nz-descriptions-item nzTitle="Name">
+                        <nz-descriptions-item nzTitle="Название">
                             <nz-skeleton style="min-width: 100vw;" [nzParagraph]="{ rows: 0 }" [nzActive]="true">
                             </nz-skeleton>
                         </nz-descriptions-item>
-                        <nz-descriptions-item nzTitle="Registration country">
+                        <nz-descriptions-item nzTitle="Страна регистрации">
                             <nz-skeleton style="min-width: 100vw;" [nzParagraph]="{ rows: 0 }" [nzActive]="true">
                             </nz-skeleton>
                         </nz-descriptions-item>
-                        <nz-descriptions-item nzTitle="Company Type">
+                        <nz-descriptions-item nzTitle="Тип компании">
                             <nz-skeleton style="min-width: 100vw;" [nzParagraph]="{ rows: 0 }" [nzActive]="true">
                             </nz-skeleton>
                         </nz-descriptions-item>
-                        <nz-descriptions-item nzTitle="Motto">
+                        <nz-descriptions-item nzTitle="Слоган">
                             <nz-skeleton style="min-width: 100vw;" [nzParagraph]="{ rows: 0 }" [nzActive]="true">
                             </nz-skeleton>
                         </nz-descriptions-item>
-                        <nz-descriptions-item nzTitle="Description">
+                        <nz-descriptions-item nzTitle="Описание">
                             <nz-skeleton style="min-width: 100vw;" [nzParagraph]="{ rows: 0 }" [nzActive]="true">
                             </nz-skeleton>
                         </nz-descriptions-item>
@@ -67,7 +67,7 @@
                 </nz-card>
                 <ng-template #coverTemplate>
                     <div style="max-width: 250px;" nz-row nzType="flex" nzJustify="center" nzAlign="middle" style="height: 250px; background-color: #eee; border: 3px #fff solid;">
-                        <img style="max-width: 60%" [src]="company.logo" />
+                        <img style="max-width: 60%; max-height: 80%;" [src]="company.logo" />
                     </div>
                 </ng-template>
                 <ng-template #socialLinks>
@@ -125,19 +125,19 @@
                 </ng-template>
                 <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="17" nzXl="17">
                     <nz-descriptions [nzColumn]="{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }" nzBordered [nzLayout]="innerWidth > 751 ? 'horizontal' : 'vertical'">
-                        <nz-descriptions-item nzTitle="Name">
+                        <nz-descriptions-item nzTitle="Название">
                             <b>{{company.name}}</b>
                         </nz-descriptions-item>
-                        <nz-descriptions-item nzTitle="Registration country">
+                        <nz-descriptions-item nzTitle="Страна регистрации">
                             {{company.registrationCountry.toUpperCase()}}
                         </nz-descriptions-item>
-                        <nz-descriptions-item nzTitle="Company Type">
+                        <nz-descriptions-item nzTitle="Тип компании">
                             {{company.companyType}}
                         </nz-descriptions-item>
-                        <nz-descriptions-item nzTitle="Motto">
+                        <nz-descriptions-item nzTitle="Слоган">
                             {{company.motto}}
                         </nz-descriptions-item>
-                        <nz-descriptions-item nzTitle="Description">
+                        <nz-descriptions-item nzTitle="Описание">
                             {{company.description}}
                         </nz-descriptions-item>
                     </nz-descriptions>

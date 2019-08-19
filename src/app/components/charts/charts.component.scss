@@ -7,12 +7,12 @@
 }
 
 .vacanciesRouteComments {
-    height: 200px; 
+    height: 250px; 
     overflow: auto;
 }
 
 .salariesRouteComments {
-    height: 300px; 
+    height: 350px; 
     overflow: auto;
 }
 
@@ -22,4 +22,8 @@
 
 ::ng-deep.ant-card-body {  
     padding: 0 0 0 10px !important;
+}
+
+::ng-deep.ant-card-actions > li > span {
+    width: 90%
 }

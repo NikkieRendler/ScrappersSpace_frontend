@@ -95,11 +95,10 @@ export class ChartsComponent implements OnInit, OnDestroy {
         this.commentsService.getComments('general-vacancies-other')
       ).subscribe(pipe((data: CommentList[]) => {
         data.map((item, index) => {
-          console.log("TCL: ChartsComponent -> ngOnInit -> item", item)
           this.setComments(item, index);
           this.displayCommentsOnLoad();
-        })
-      }))
+        });
+      }));
     }
     if (this.router.url === '/relocate') {
       combineLatest(
@@ -175,11 +174,26 @@ export class ChartsComponent implements OnInit, OnDestroy {
     }
   }
 
-  submitForm(form) {
-    this.commentsService.addComment(form).subscribe(res => {
-      console.log(res);
-    })
+  submitForm(form, position) {
+    this.commentsService.addComment(form).subscribe((res) => {
+      const addedComment: Comment = {
+        text: res.data.addComment.text,
+        username: res.data.addComment.username,
+        commentBlockId: res.data.addComment.commentBlockId,
+        _id: res.data.addComment._id
+      };
+      this.comments[position].push(addedComment);
+    });
+    this.toggleCommentForm(position);
+  }
 
+  toggleCommentForm(position) {
+    this.commentsFormsArray.controls[position].setValue({
+      commentBlockId: this.commentsFormsArray.controls[position].value.commentBlockId,
+      text: null,
+      username: null,
+      visible: !this.commentsFormsArray.controls[position].value.visible
+    });
   }
 
   ngOnDestroy() {
@@ -212,8 +226,9 @@ export class ChartsComponent implements OnInit, OnDestroy {
     const newCommentsForm = this.fb.group({
       username: [null, Validators.required],
       text: [null, Validators.required],
-      commentBlockId: [commentList._id]
-    })
+      commentBlockId: [commentList._id],
+      visible: [false]
+    });
     this.commentsFormsArray.push(newCommentsForm);
   }
 
