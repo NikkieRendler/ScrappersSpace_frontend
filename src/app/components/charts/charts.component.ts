@@ -217,7 +217,7 @@ export class ChartsComponent implements OnInit, OnDestroy {
     }
   }
 
-  setComments(item, index) {
+  setComments(item: CommentList, index) {
     this.comments.splice(index, 1, item.comments);
     this.addCommentsForm(item);
   }

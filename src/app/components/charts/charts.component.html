@@ -1,5 +1,6 @@
 <div nz-col>
-    <h3 *ngIf="currentRoute === '/freelance'" nz-title nzType="secondary">Вакансии</h3>
+    <app-charts-description></app-charts-description>
+    <h3 style="padding-left: 70px" *ngIf="currentRoute === '/freelance'" nz-title nzType="secondary">Вакансии</h3>
     <div nz-row nzType="flex" nzJustify="space-between" nzAlign="middle" *ngFor="let chart of charts"
         [ngClass]="(currentRoute ==='/salaries') ? 'salariesChart' : 'vacanciesChart'">
         <div *ngIf="chartsLoading; else chartsAreLoaded" nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="19" nzXl="19">
@@ -10,26 +11,15 @@
                 <chart [type]="chart.type" [data]="chart.data" [options]="chart.options"
                     [ngClass]="(currentRoute ==='/salaries') ? 'salariesChart' : 'vacanciesChart'">
                 </chart>
-                <div *ngIf="currentRoute !== '/salaries'; else salariesExplanation" nz-row nzType="flex" nzJustify="end"
+                <div nz-row nzType="flex" nzJustify="end"
                     nzAlign="middle" style="color: gray; padding-right: 50px;">
                     Последнее обновление: {{chart.lastUpdate | date }}
                 </div>
-                <ng-template #salariesExplanation>
-                    <div nz-row nzType="flex" nzJustify="space-between" nzAlign="middle"
-                        style="color: gray; padding: 0 50px;">
-                        <div>
-                            *Данные сопоставляются по среднему значению между ресурсами
-                        </div>
-                        <div>
-                            Последнее обновление: {{chart.lastUpdate | date }}
-                        </div>
-                    </div>
-                </ng-template>
             </div>
         </ng-template>
-        <div style="height: 100%" nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="5" nzXl="5">
+        <div [ngClass]="(currentRoute ==='/salaries') ? 'salariesChart' : 'vacanciesChart'" style="padding-top: 60px;" nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="5" nzXl="5">
             <nz-card *ngIf="comments[charts.indexOf(chart)]" [nzActions]="[createComment]" style="width: 100%;">
-                <div [ngClass]="(currentRoute ==='/salaries') ? 'salariesRouteComments' : 'vacanciesRouteComments'">
+                <div [ngClass]="(currentRoute ==='/salaries') ? 'salariesRouteComments' : 'vacanciesRouteComments'" #commentBlock [scrollTop]="commentBlock.scrollHeight"> 
                     <div *ngIf="!commentsLoading">
                         <nz-comment *ngFor="let comment of comments[charts.indexOf(chart)]"
                             [nzAuthor]="comment.username" [nzDatetime]="time">
@@ -64,7 +54,7 @@
                             <nz-form-item>
                                 <nz-form-control>
                                     <nz-input-group>
-                                        <textarea rows="3" nz-input formControlName="text"
+                                        <textarea rows="2" nz-input formControlName="text"
                                             placeholder="Comment"></textarea>
                                     </nz-input-group>
                                 </nz-form-control>
@@ -85,7 +75,7 @@
     </div>
 
     <div *ngIf="currentRoute === '/freelance'">
-        <h3 nz-title nzType="secondary" style="margin-top: 50px">Фрилансеры</h3>
+        <h3 style="padding-left: 70px; margin-top: 50px" nz-title nzType="secondary">Фрилансеры</h3>
         <div nz-row nzType="flex" nzJustify="space-between" nzAlign="middle"
             *ngFor="let chart of freelanceWorkersCharts"
             [ngClass]="(currentRoute ==='/salaries') ? 'salariesChart' : 'vacanciesChart'">
@@ -98,21 +88,10 @@
                     <chart [type]="chart.type" [data]="chart.data" [options]="chart.options"
                         [ngClass]="(currentRoute ==='/salaries') ? 'salariesChart' : 'vacanciesChart'">
                     </chart>
-                    <div *ngIf="currentRoute !== '/salaries'; else salariesExplanation" nz-row nzType="flex"
+                    <div  nz-row nzType="flex"
                         nzJustify="end" nzAlign="middle" style="color: gray; padding-right: 50px;">
                         Последнее обновление: {{chart.lastUpdate | date }}
                     </div>
-                    <ng-template #salariesExplanation>
-                        <div nz-row nzType="flex" nzJustify="space-between" nzAlign="middle"
-                            style="color: gray; padding-right: 50px;">
-                            <div style="margin-left: 120px;">
-                                *Данные сопоставляются по среднему значению между ресурсами
-                            </div>
-                            <div>
-                                Последнее обновление: {{chart.lastUpdate | date }}
-                            </div>
-                        </div>
-                    </ng-template>
                 </div>
             </ng-template>
             <div style="margin: 10px 0px 50px; height: 100%" nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="5" nzXl="5">
