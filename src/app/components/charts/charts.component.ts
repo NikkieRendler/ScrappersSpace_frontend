@@ -112,6 +112,18 @@ export class ChartsComponent implements OnInit, OnDestroy {
             this.displayChartsOnLoad();
           });
         }));
+        combineLatest(
+          // this.commentsService.getComments('relocate-programmingLanguage'),
+          this.commentsService.getComments('relocate-general'),
+          this.commentsService.getComments('relocate-frontend'),
+          this.commentsService.getComments('relocate-backend'),
+          this.commentsService.getComments('relocate-database')
+        ).subscribe(pipe((data: CommentList[]) => {
+          data.map((item, index) => {
+            this.setComments(item, index);
+            this.displayCommentsOnLoad();
+          });
+        }));
     }
     if (this.router.url === '/freelance') {
       combineLatest(
@@ -171,6 +183,16 @@ export class ChartsComponent implements OnInit, OnDestroy {
             this.displayChartsOnLoad();
           });
         }));
+        combineLatest(
+          this.commentsService.getComments('salaries-junior'),
+          this.commentsService.getComments('salaries-middle'),
+          this.commentsService.getComments('salaries-senior'),
+        ).subscribe(pipe((data: CommentList[]) => {
+          data.map((item, index) => {
+            this.setComments(item, index);
+            this.displayCommentsOnLoad();
+          });
+        }));
     }
   }
 
@@ -206,9 +228,9 @@ export class ChartsComponent implements OnInit, OnDestroy {
       ? 'salariesRouteComments'
       : this.currentRoute === '/salaries' && !formState
         ? 'salariesRouteCommentsNoForm'
-        : this.currentRoute === '/vacancies' && formState
+        : this.currentRoute !== '/salaries' && formState
           ? 'vacanciesRouteComments'
-          : this.currentRoute === '/vacancies' && !formState
+          : this.currentRoute !== '/salaries' && !formState
             ? 'vacanciesRouteCommentsNoForm'
             : '';
   }
