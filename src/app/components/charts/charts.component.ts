@@ -50,8 +50,8 @@ export class ChartsComponent implements OnInit, OnDestroy {
     'rgba(50, 150, 200, .6)',
     'rgba(150, 200, 50, .6)',
     'rgba(60, 160, 90, .6)',
-    'rgba(200, 50, 150, .6)',
-    'rgba(17, 83, 52, .6)'
+    'rgba(255, 141, 92, .6)',
+    'rgba(255, 202, 87, .6)'
   ];
   freelanceVacanciesColors: string[] = [
     'rgba(55, 160, 0, 0.6)'
@@ -176,15 +176,19 @@ export class ChartsComponent implements OnInit, OnDestroy {
 
   submitForm(form, position) {
     this.commentsService.addComment(form).subscribe((res) => {
-      const addedComment: Comment = {
-        text: res.data.addComment.text,
-        username: res.data.addComment.username,
-        commentBlockId: res.data.addComment.commentBlockId,
-        _id: res.data.addComment._id
-      };
-      this.comments[position].push(addedComment);
+      this.addCommentOnResponse(res, position);
     });
     this.toggleCommentForm(position);
+  }
+
+  addCommentOnResponse(commentFromResponse, position) {
+    const addedComment: Comment = {
+      text: commentFromResponse.data.addComment.text,
+      username: commentFromResponse.data.addComment.username,
+      commentBlockId: commentFromResponse.data.addComment.commentBlockId,
+      _id: commentFromResponse.data.addComment._id
+    };
+    this.comments[position].push(addedComment);
   }
 
   toggleCommentForm(position) {
@@ -194,6 +198,19 @@ export class ChartsComponent implements OnInit, OnDestroy {
       username: null,
       visible: !this.commentsFormsArray.controls[position].value.visible
     });
+  }
+
+  getCommentSectionHeight(position): string {
+    const formState = this.commentsFormsArray.controls[position].value.visible;
+    return this.currentRoute === '/salaries' && formState
+      ? 'salariesRouteComments'
+      : this.currentRoute === '/salaries' && !formState
+        ? 'salariesRouteCommentsNoForm'
+        : this.currentRoute === '/vacancies' && formState
+          ? 'vacanciesRouteComments'
+          : this.currentRoute === '/vacancies' && !formState
+            ? 'vacanciesRouteCommentsNoForm'
+            : '';
   }
 
   ngOnDestroy() {

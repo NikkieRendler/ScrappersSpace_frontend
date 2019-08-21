@@ -19,7 +19,7 @@
         </ng-template>
         <div [ngClass]="(currentRoute ==='/salaries') ? 'salariesChart' : 'vacanciesChart'" style="padding-top: 60px;" nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="5" nzXl="5">
             <nz-card *ngIf="comments[charts.indexOf(chart)]" [nzActions]="[createComment]" style="width: 100%;">
-                <div [ngClass]="(currentRoute ==='/salaries') ? 'salariesRouteComments' : 'vacanciesRouteComments'" #commentBlock [scrollTop]="commentBlock.scrollHeight"> 
+                <div [ngClass]="getCommentSectionHeight(charts.indexOf(chart))" #commentBlock [scrollTop]="commentBlock.scrollHeight"> 
                     <div *ngIf="!commentsLoading">
                         <nz-comment *ngFor="let comment of comments[charts.indexOf(chart)]"
                             [nzAuthor]="comment.username" [nzDatetime]="time">
