@@ -13,7 +13,7 @@
                 </chart>
                 <div nz-row nzType="flex" nzJustify="end"
                     nzAlign="middle" style="color: gray; padding-right: 50px;">
-                    Последнее обновление: {{chart.lastUpdate | date }}
+                    Последнее обновление: {{chart.lastUpdate | date:'MMM yyyy' }}
                 </div>
             </div>
         </ng-template>
@@ -88,7 +88,7 @@
                     </chart>
                     <div  nz-row nzType="flex"
                         nzJustify="end" nzAlign="middle" style="color: gray; padding-right: 50px;">
-                        Последнее обновление: {{chart.lastUpdate | date }}
+                        Последнее обновление: {{chart.lastUpdate | date:'MMM yyyy' }}
                     </div>
                 </div>
             </ng-template>
