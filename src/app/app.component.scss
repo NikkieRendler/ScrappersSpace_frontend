@@ -7,14 +7,30 @@ nz-header {
     position: fixed;
     width: 100%;
     z-index: 100;
+    box-shadow: 0px 1px 5px #001529;
+}
+
+.logo-wrapper {
+    background: #f0f2f5;
 }
 
 .logo {
-    background-image: url('../assets/images/logo.png');
-    background-size: 100% 100%;
+    background-image: url('../assets/images/cover_transparent.png');
+    background-size: cover;
+    background-position: center;
     background-repeat: no-repeat;
     height: 100%;
-    width: 70px;
+    width: 150px;
+}
+
+.footer-logo {
+    background-image: url('../assets/images/cover_gray_text.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: left;
+    height: 100%;
+    width: 170px;
+    margin-left: -28px;
 }
 
 nz-content {
@@ -23,7 +39,7 @@ nz-content {
 
 nz-footer {
     background: #001529;
-    color: whitesmoke;
+    color: #f0f2f5;
     padding: 5% 5%;
 }
 
@@ -35,12 +51,12 @@ nz-footer {
 
 .footer-menu-item {
     padding: 5px 0;
-    color: #999;
+    color: rgba(255, 255, 255, 0.65);
 }
 
 .footer-menu-item-link {
     width: max-content;
-    color: #999;
+    color: rgba(255, 255, 255, 0.65);
 }
 
 .footer-menu-item-link:hover {
@@ -57,7 +73,7 @@ nz-footer {
 .mobile-menu-item {
     padding: 15px;
     font-size: 24px;
-    color: whitesmoke;
+    color: #f0f2f5;
 }
 
 .mobile-menu-item:active {

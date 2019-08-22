@@ -1,6 +1,8 @@
 <nz-layout>
     <nz-header class="default-header" nz-menu nzTheme="dark" nzMode="horizontal">
-        <div nz-menu-item class="logo"></div>
+        <div class="logo-wrapper">
+            <div class="logo"></div>
+        </div>
         <a [routerLink]="['/vacancies']" nz-menu-item nzMatchRouter>Вакансии</a>
         <a [routerLink]="['/salaries']" nz-menu-item nzMatchRouter>Зарплаты</a>
         <a [routerLink]="['/freelance']" nz-menu-item nzMatchRouter>Фриланс</a>
@@ -8,11 +10,11 @@
         <a [routerLink]="['/startups']" nz-menu-item nzMatchRouter>Стартапы</a>
         <a [routerLink]="['/companies']" nz-menu-item nzMatchRouter>Компании</a>
     </nz-header>
-    <nz-header class="mobile-header" nz-menu nzTheme="dark" nzMode="horizontal" nz-row nzType="flex"
-        nzJustify="space-between" nzAlign="middle">
+    <nz-header class="mobile-header" nz-menu nzTheme="dark" nzMode="horizontal" nz-row nzType="flex" nzJustify="space-between"
+        nzAlign="middle">
         <div nz-menu-item class="logo"></div>
-        <button nz-button nzGhost nz-dropdown [nzTrigger]="trigger" [nzBackdrop]="backdrop"
-            [nzDropdownMenu]="mobileMenu" [nzPlacement]="position" class="mobile-menu-button">
+        <button nz-button nzGhost nz-dropdown [nzTrigger]="trigger" [nzBackdrop]="backdrop" [nzDropdownMenu]="mobileMenu"
+            [nzPlacement]="position" class="mobile-menu-button">
             <i style="color: #fff" nz-icon nzType="menu" nzTheme="outline"></i>
         </button>
         <nz-dropdown-menu #mobileMenu="nzDropdownMenu">
@@ -41,7 +43,7 @@
         <div nz-row nzSpan="24">
             <div style="padding-right: 50px" nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="10" nzXl="10">
                 <div class="footer-menu-title">
-                    Statisfy
+                    <div class="footer-logo"></div>
                 </div>
                 <nz-divider></nz-divider>
                 <div class="footer-menu-item">
@@ -59,8 +61,7 @@
                     <nz-divider></nz-divider>
                     <div nz-col nzXs="12" nzSm="12" nzMd="12" nzLg="7" nzXl="7">
                         <div class="footer-menu-item">
-                            <a class="footer-menu-item-link" nz-row nzSpan="1"
-                                [routerLink]="['/vacancies']">Вакансии</a>
+                            <a class="footer-menu-item-link" nz-row nzSpan="1" [routerLink]="['/vacancies']">Вакансии</a>
                         </div>
                         <div class="footer-menu-item">
                             <a class="footer-menu-item-link" nz-row nzSpan="1" [routerLink]="['/salaries']">Зарплаты</a>
@@ -77,8 +78,7 @@
                             <a class="footer-menu-item-link" nz-row nzSpan="1" [routerLink]="['/startups']">Стартапы</a>
                         </div>
                         <div class="footer-menu-item">
-                            <a class="footer-menu-item-link" nz-row nzSpan="1"
-                                [routerLink]="['/companies']">Компании</a>
+                            <a class="footer-menu-item-link" nz-row nzSpan="1" [routerLink]="['/companies']">Компании</a>
                         </div>
                     </div>
                 </div>
