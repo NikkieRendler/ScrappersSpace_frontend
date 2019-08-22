@@ -189,6 +189,17 @@ export class ChartsComponent implements OnInit, OnDestroy {
             this.displayChartsOnLoad();
           });
         }));
+      combineLatest(
+        this.commentsService.getComments('startup-general'),
+        this.commentsService.getComments('startup-frontend'),
+        this.commentsService.getComments('startup-backend'),
+        this.commentsService.getComments('startup-database')
+      ).subscribe(pipe((data: CommentList[]) => {
+        data.map((item, index) => {
+          this.setComments(item, index);
+          this.displayCommentsOnLoad();
+        });
+      }));
     }
     if (this.router.url === '/salaries') {
       combineLatest(
