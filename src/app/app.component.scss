@@ -4,6 +4,9 @@
 
 nz-header {
     padding: 0 !important;
+    position: fixed;
+    width: 100%;
+    z-index: 100;
 }
 
 .logo {
@@ -16,6 +19,11 @@ nz-header {
 
 nz-content {
     padding: 5% 5%;
+}
+
+nz-footer {
+    background: #001529;
+    color: whitesmoke;
 }
 
 .mobile-menu-button {
