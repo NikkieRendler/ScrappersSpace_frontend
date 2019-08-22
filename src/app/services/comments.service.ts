@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CommentList } from '../components/charts/charts-interfaces';
 
-const GeneralVacanciesCommentsQuery = function (commentsBlockName) {
+const CommentsQuery = (commentsBlockName) => {
   return gql`
 {
   getComentsByCommentsBlockName(commentsBlockName:"${commentsBlockName}") {
@@ -22,8 +22,8 @@ const GeneralVacanciesCommentsQuery = function (commentsBlockName) {
     description
   }
 }
-`
-}
+`;
+};
 
 const AddCommentMutation = gql`
   mutation ($username: String!, $text: String!, $commentBlockId: ID!) {
@@ -38,7 +38,7 @@ const AddCommentMutation = gql`
       commentBlockId
     }
   }
-`
+`;
 
 @Injectable({
   providedIn: 'root'
@@ -49,10 +49,10 @@ export class CommentsService {
 
   getComments(commentsBlockName): Observable<CommentList> {
     return this.apollo.watchQuery<any>({
-      query: GeneralVacanciesCommentsQuery(commentsBlockName)
+      query: CommentsQuery(commentsBlockName)
     }).valueChanges.pipe(map(({ data }) => {
-      return data.getComentsByCommentsBlockName
-    }))
+      return data.getComentsByCommentsBlockName;
+    }));
   }
 
   addComment(commentData): Observable<any> {
@@ -63,7 +63,7 @@ export class CommentsService {
         text: commentData.text,
         commentBlockId: commentData.commentBlockId
       }
-    })
+    });
   }
 
 }

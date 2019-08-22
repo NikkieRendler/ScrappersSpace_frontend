@@ -36,16 +36,16 @@ export class ChartsComponent implements OnInit, OnDestroy {
   currentRoute: string;
   chartsLoading = true;
   commentsLoading = true;
+  freelanceWorkersCommentsLoading = true;
   freelanceWorkersLoading = true;
   time = distanceInWords(new Date(), new Date());
-
-  commentForm: FormGroup;
 
   charts: Chart[] = [null, null, null];
   freelanceWorkersCharts: Chart[] = [null, null, null];
   comments: Comment[][] = [null, null, null, null];
+  freelanceWorkersComments: Comment[][] = [null, null, null, null];
   commentsFormsArray: FormArray;
-
+  freelanceWorkersCommentsFormsArray: FormArray;
   vacanciesColors: string[] = [
     'rgba(50, 150, 200, .6)',
     'rgba(150, 200, 50, .6)',
@@ -66,12 +66,8 @@ export class ChartsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.commentForm = this.fb.group({
-      name: [null, Validators.required],
-      comment: [null, Validators.required]
-    });
-
     this.commentsFormsArray = this.fb.array([]);
+    this.freelanceWorkersCommentsFormsArray = this.fb.array([]);
 
     this.currentRoute = this.router.url;
     if (this.router.url === '/vacancies') {
@@ -112,18 +108,18 @@ export class ChartsComponent implements OnInit, OnDestroy {
             this.displayChartsOnLoad();
           });
         }));
-        combineLatest(
-          // this.commentsService.getComments('relocate-programmingLanguage'),
-          this.commentsService.getComments('relocate-general'),
-          this.commentsService.getComments('relocate-frontend'),
-          this.commentsService.getComments('relocate-backend'),
-          this.commentsService.getComments('relocate-database')
-        ).subscribe(pipe((data: CommentList[]) => {
-          data.map((item, index) => {
-            this.setComments(item, index);
-            this.displayCommentsOnLoad();
-          });
-        }));
+      combineLatest(
+        // this.commentsService.getComments('relocate-programmingLanguage'),
+        this.commentsService.getComments('relocate-general'),
+        this.commentsService.getComments('relocate-frontend'),
+        this.commentsService.getComments('relocate-backend'),
+        this.commentsService.getComments('relocate-database')
+      ).subscribe(pipe((data: CommentList[]) => {
+        data.map((item, index) => {
+          this.setComments(item, index);
+          this.displayCommentsOnLoad();
+        });
+      }));
     }
     if (this.router.url === '/freelance') {
       combineLatest(
@@ -158,6 +154,28 @@ export class ChartsComponent implements OnInit, OnDestroy {
               this.displayFreelanceWorkersChartsOnLoad();
             });
           }));
+      combineLatest(
+        this.commentsService.getComments('freelance-jobs-general'),
+        this.commentsService.getComments('freelance-jobs-frontend'),
+        this.commentsService.getComments('freelance-jobs-backend'),
+        this.commentsService.getComments('freelance-jobs-database')
+      ).subscribe(pipe((data: CommentList[]) => {
+        data.map((item, index) => {
+          this.setComments(item, index);
+          this.displayCommentsOnLoad();
+        });
+      }));
+      combineLatest(
+        this.commentsService.getComments('freelance-freelancers-general'),
+        this.commentsService.getComments('freelance-freelancers-frontend'),
+        this.commentsService.getComments('freelance-freelancers-backend'),
+        this.commentsService.getComments('freelance-freelancers-database')
+      ).subscribe(pipe((data: CommentList[]) => {
+        data.map((item, index) => {
+          this.setFreelanceWorkersComments(item, index);
+          this.displayFreelanceWorkersCommentsOnLoad();
+        });
+      }));
     }
     if (this.router.url === '/startups') {
       combineLatest(
@@ -183,16 +201,16 @@ export class ChartsComponent implements OnInit, OnDestroy {
             this.displayChartsOnLoad();
           });
         }));
-        combineLatest(
-          this.commentsService.getComments('salaries-junior'),
-          this.commentsService.getComments('salaries-middle'),
-          this.commentsService.getComments('salaries-senior'),
-        ).subscribe(pipe((data: CommentList[]) => {
-          data.map((item, index) => {
-            this.setComments(item, index);
-            this.displayCommentsOnLoad();
-          });
-        }));
+      combineLatest(
+        this.commentsService.getComments('salaries-junior'),
+        this.commentsService.getComments('salaries-middle'),
+        this.commentsService.getComments('salaries-senior'),
+      ).subscribe(pipe((data: CommentList[]) => {
+        data.map((item, index) => {
+          this.setComments(item, index);
+          this.displayCommentsOnLoad();
+        });
+      }));
     }
   }
 
@@ -213,12 +231,38 @@ export class ChartsComponent implements OnInit, OnDestroy {
     this.comments[position].push(addedComment);
   }
 
+  submitFreelanceWorkersForm(form, position) {
+    this.commentsService.addComment(form).subscribe((res) => {
+      this.addFreelanceWorkersCommentOnResponse(res, position);
+    });
+    this.toggleFreelanceWorkersCommentForm(position);
+  }
+
+  addFreelanceWorkersCommentOnResponse(commentFromResponse, position) {
+    const addedComment: Comment = {
+      text: commentFromResponse.data.addComment.text,
+      username: commentFromResponse.data.addComment.username,
+      commentBlockId: commentFromResponse.data.addComment.commentBlockId,
+      _id: commentFromResponse.data.addComment._id
+    };
+    this.freelanceWorkersComments[position].push(addedComment);
+  }
+
   toggleCommentForm(position) {
     this.commentsFormsArray.controls[position].setValue({
       commentBlockId: this.commentsFormsArray.controls[position].value.commentBlockId,
       text: null,
       username: null,
       visible: !this.commentsFormsArray.controls[position].value.visible
+    });
+  }
+
+  toggleFreelanceWorkersCommentForm(position) {
+    this.freelanceWorkersCommentsFormsArray.controls[position].setValue({
+      commentBlockId: this.freelanceWorkersCommentsFormsArray.controls[position].value.commentBlockId,
+      text: null,
+      username: null,
+      visible: !this.freelanceWorkersCommentsFormsArray.controls[position].value.visible
     });
   }
 
@@ -256,9 +300,20 @@ export class ChartsComponent implements OnInit, OnDestroy {
     }
   }
 
+  displayFreelanceWorkersCommentsOnLoad() {
+    if (!this.freelanceWorkersComments.some(comment => comment === null)) {
+      this.freelanceWorkersCommentsLoading = false;
+    }
+  }
+
   setComments(item: CommentList, index) {
     this.comments.splice(index, 1, item.comments);
     this.addCommentsForm(item);
+  }
+
+  setFreelanceWorkersComments(item: CommentList, index) {
+    this.freelanceWorkersComments.splice(index, 1, item.comments);
+    this.addFreelanceWorkersCommentsForm(item);
   }
 
   addCommentsForm(commentList: CommentList) {
@@ -269,6 +324,16 @@ export class ChartsComponent implements OnInit, OnDestroy {
       visible: [false]
     });
     this.commentsFormsArray.push(newCommentsForm);
+  }
+
+  addFreelanceWorkersCommentsForm(commentList: CommentList) {
+    const newCommentsForm = this.fb.group({
+      username: [null, Validators.required],
+      text: [null, Validators.required],
+      commentBlockId: [commentList._id],
+      visible: [false]
+    });
+    this.freelanceWorkersCommentsFormsArray.push(newCommentsForm);
   }
 
   sortVacanciesData(technologies: Technology[]) {

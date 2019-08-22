@@ -67,8 +67,6 @@
                             </nz-form-item>
                         </form>
                     </div>
-
-
                 </div>
             </ng-template>
         </div>
@@ -79,11 +77,11 @@
         <div nz-row nzType="flex" nzJustify="space-between" nzAlign="middle"
             *ngFor="let chart of freelanceWorkersCharts"
             [ngClass]="(currentRoute ==='/salaries') ? 'salariesChart' : 'vacanciesChart'">
-            <div *ngIf="freelanceWorkersLoading; else freelanceWorkersCharts" nz-col nzXs="24" nzSm="24" nzMd="24"
+            <div *ngIf="freelanceWorkersLoading; else freelanceWorkersChartsTemplate" nz-col nzXs="24" nzSm="24" nzMd="24"
                 nzLg="19" nzXl="19">
                 <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 10 }"></nz-skeleton>
             </div>
-            <ng-template #freelanceWorkersCharts>
+            <ng-template #freelanceWorkersChartsTemplate>
                 <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="19" nzXl="19">
                     <chart [type]="chart.type" [data]="chart.data" [options]="chart.options"
                         [ngClass]="(currentRoute ==='/salaries') ? 'salariesChart' : 'vacanciesChart'">
@@ -94,23 +92,58 @@
                     </div>
                 </div>
             </ng-template>
-            <div style="margin: 10px 0px 50px; height: 100%" nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="5" nzXl="5">
-                <nz-card style="height: 100%; width: 100%">
-                    <nz-comment nzAuthor="Nei Matros" [nzDatetime]="time">
-                        <nz-comment-content>
-                            <p>
-                                А я вот не матрос
-                            </p>
-                        </nz-comment-content>
-                    </nz-comment>
-                    <nz-comment nzAuthor="John Galt" [nzDatetime]="time">
-                        <nz-comment-content>
-                            <p>
-                                А кто это у нас тут парсит?
-                            </p>
-                        </nz-comment-content>
-                    </nz-comment>
+            <div [ngClass]="(currentRoute ==='/salaries') ? 'salariesChart' : 'vacanciesChart'" style="padding-top: 60px;" nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="5" nzXl="5">
+                <nz-card *ngIf="freelanceWorkersComments[freelanceWorkersCharts.indexOf(chart)]" [nzActions]="[createFreelanceWorkersComment]" style="width: 100%;">
+                    <div [ngClass]="getCommentSectionHeight(freelanceWorkersCharts.indexOf(chart))" #commentBlock [scrollTop]="commentBlock.scrollHeight"> 
+                        <div *ngIf="!commentsLoading">
+                            <nz-comment *ngFor="let comment of freelanceWorkersComments[freelanceWorkersCharts.indexOf(chart)]"
+                                [nzAuthor]="comment.username" [nzDatetime]="time">
+                                <nz-comment-content>
+                                    {{comment.text}}
+                                </nz-comment-content>
+                            </nz-comment>
+                        </div>
+                    </div>
                 </nz-card>
+                <ng-template #createFreelanceWorkersComment>
+                    <div>
+                        <div nz-row nzType="flex" nzJustify="start" nzAlign="middle">
+                            <button nz-button nzType="primary" (click)="toggleFreelanceWorkersCommentForm(freelanceWorkersCharts.indexOf(chart))">
+                                <i nz-icon nzType="message" nzTheme="outline"></i>
+                            </button>
+                        </div>
+                        <div nz-row nzType="flex" nzJustify="start" nzAlign="middle">
+                            <form *ngIf="freelanceWorkersCommentsFormsArray.controls[freelanceWorkersCharts.indexOf(chart)].value.visible"
+                                [id]="freelanceWorkersCommentsFormsArray.controls[freelanceWorkersCharts.indexOf(chart)].value.commentBlockId" nz-form
+                                [formGroup]="freelanceWorkersCommentsFormsArray.controls[freelanceWorkersCharts.indexOf(chart)]"
+                                (ngSubmit)="submitFreelanceWorkersForm(freelanceWorkersCommentsFormsArray.controls[freelanceWorkersCharts.indexOf(chart)].value, freelanceWorkersCharts.indexOf(chart))"
+                                style="width: 100%; text-align: left">
+                                <nz-form-item>
+                                    <nz-form-control>
+                                        <nz-input-group>
+                                            <input formControlName="username" nz-input placeholder="Name" />
+                                        </nz-input-group>
+                                    </nz-form-control>
+                                </nz-form-item>
+    
+                                <nz-form-item>
+                                    <nz-form-control>
+                                        <nz-input-group>
+                                            <textarea rows="2" nz-input formControlName="text"
+                                                placeholder="Comment"></textarea>
+                                        </nz-input-group>
+                                    </nz-form-control>
+                                </nz-form-item>
+                                <nz-form-item style="margin-top: 10px">
+                                    <nz-form-control>
+                                        <button nz-button nzType="primary"
+                                            [disabled]="!freelanceWorkersCommentsFormsArray.controls[freelanceWorkersCharts.indexOf(chart)].valid">Отправить</button>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </form>
+                        </div>
+                    </div>
+                </ng-template>
             </div>
         </div>
     </div>
