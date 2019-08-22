@@ -8,11 +8,11 @@
         <a [routerLink]="['/startups']" nz-menu-item nzMatchRouter>Стартапы</a>
         <a [routerLink]="['/companies']" nz-menu-item nzMatchRouter>Компании</a>
     </nz-header>
-    <nz-header class="mobile-header" nz-menu nzTheme="dark" nzMode="horizontal" nz-row nzType="flex" nzJustify="space-between"
-        nzAlign="middle">
+    <nz-header class="mobile-header" nz-menu nzTheme="dark" nzMode="horizontal" nz-row nzType="flex"
+        nzJustify="space-between" nzAlign="middle">
         <div nz-menu-item class="logo"></div>
-        <button nz-button nzGhost nz-dropdown [nzTrigger]="trigger" [nzBackdrop]="backdrop" [nzDropdownMenu]="mobileMenu"
-            [nzPlacement]="position" class="mobile-menu-button">
+        <button nz-button nzGhost nz-dropdown [nzTrigger]="trigger" [nzBackdrop]="backdrop"
+            [nzDropdownMenu]="mobileMenu" [nzPlacement]="position" class="mobile-menu-button">
             <i style="color: #fff" nz-icon nzType="menu" nzTheme="outline"></i>
         </button>
         <nz-dropdown-menu #mobileMenu="nzDropdownMenu">
@@ -37,7 +37,62 @@
         </nz-content>
     </nz-layout>
     <nz-footer>
-        ©2019 Топ-контент рунета.
-        <p>Стройка v0.9</p>
+
+        <div nz-row nzSpan="24">
+            <div style="padding-right: 50px" nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="10" nzXl="10">
+                <div class="footer-menu-title">
+                    Statisfy
+                </div>
+                <nz-divider></nz-divider>
+                <div class="footer-menu-item">
+                    Мы собираем данные из открытых источников и делаем их полезными.
+                    Представленная здесь статистика позволяет анализировать,
+                    сопоставлять и просто отслеживать различные изменения в составляющих элементах IT индустрии.
+                    Если вам тоже интересна польза статистических данных - свяжитесь с нами!
+                </div>
+            </div>
+            <div nz-col nzXs="12" nzSm="12" nzMd="12" nzLg="7" nzXl="7">
+                <div nz-col nzSpan="24">
+                    <div class="footer-menu-title">
+                        Разделы
+                    </div>
+                    <nz-divider></nz-divider>
+                    <div nz-col nzXs="12" nzSm="12" nzMd="12" nzLg="7" nzXl="7">
+                        <div class="footer-menu-item">
+                            <a class="footer-menu-item-link" nz-row nzSpan="1"
+                                [routerLink]="['/vacancies']">Вакансии</a>
+                        </div>
+                        <div class="footer-menu-item">
+                            <a class="footer-menu-item-link" nz-row nzSpan="1" [routerLink]="['/salaries']">Зарплаты</a>
+                        </div>
+                        <div class="footer-menu-item">
+                            <a class="footer-menu-item-link" nz-row nzSpan="1" [routerLink]="['/freelance']">Фриланс</a>
+                        </div>
+                    </div>
+                    <div nz-col nzXs="12" nzSm="12" nzMd="12" nzLg="7" nzXl="7">
+                        <div class="footer-menu-item">
+                            <a class="footer-menu-item-link" nz-row nzSpan="1" [routerLink]="['/relocate']">Релокейт</a>
+                        </div>
+                        <div class="footer-menu-item">
+                            <a class="footer-menu-item-link" nz-row nzSpan="1" [routerLink]="['/startups']">Стартапы</a>
+                        </div>
+                        <div class="footer-menu-item">
+                            <a class="footer-menu-item-link" nz-row nzSpan="1"
+                                [routerLink]="['/companies']">Компании</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div nz-col nzXs="12" nzSm="12" nzMd="12" nzLg="7" nzXl="7">
+                <div class="footer-menu-title">
+                    Контакты
+                </div>
+                <nz-divider></nz-divider>
+                <div class="footer-menu-item">
+                    <i nz-icon nzType="mail" nzTheme="outline"></i>
+                    statisfy@gmail.com
+                </div>
+            </div>
+        </div>
     </nz-footer>
 </nz-layout>

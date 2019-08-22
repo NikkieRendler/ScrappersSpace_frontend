@@ -10,4 +10,5 @@ export class AppComponent {
   position = 'bottomRight';
   backdrop = false;
   title = 'ScrappersSpace';
+  footerSelection = false;
 }
