@@ -42,8 +42,8 @@ export class ChartsComponent implements OnInit, OnDestroy {
 
   charts: Chart[] = [null, null, null];
   freelanceWorkersCharts: Chart[] = [null, null, null];
-  comments: Comment[][] = [null, null, null, null];
-  freelanceWorkersComments: Comment[][] = [null, null, null, null];
+  comments: Comment[][] = [null, null, null];
+  freelanceWorkersComments: Comment[][] = [null, null, null];
   commentsFormsArray: FormArray;
   freelanceWorkersCommentsFormsArray: FormArray;
   vacanciesColors: string[] = [
@@ -109,7 +109,6 @@ export class ChartsComponent implements OnInit, OnDestroy {
           });
         }));
       combineLatest(
-        // this.commentsService.getComments('relocate-programmingLanguage'),
         this.commentsService.getComments('relocate-general'),
         this.commentsService.getComments('relocate-frontend'),
         this.commentsService.getComments('relocate-backend'),
@@ -217,6 +216,7 @@ export class ChartsComponent implements OnInit, OnDestroy {
         this.commentsService.getComments('salaries-middle'),
         this.commentsService.getComments('salaries-senior'),
       ).subscribe(pipe((data: CommentList[]) => {
+      console.log("TCL: ChartsComponent -> ngOnInit -> data", data)
         data.map((item, index) => {
           this.setComments(item, index);
           this.displayCommentsOnLoad();
@@ -226,7 +226,9 @@ export class ChartsComponent implements OnInit, OnDestroy {
   }
 
   submitForm(form, position) {
+    console.log("TCL: ChartsComponent -> submitForm -> form", form);
     this.commentsService.addComment(form).subscribe((res) => {
+    console.log("TCL: ChartsComponent -> submitForm -> res", res);
       this.addCommentOnResponse(res, position);
     });
     this.toggleCommentForm(position);

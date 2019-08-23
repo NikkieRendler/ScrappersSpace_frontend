@@ -22,7 +22,7 @@
                 <div [ngClass]="getCommentSectionHeight(charts.indexOf(chart))" #commentBlock [scrollTop]="commentBlock.scrollHeight"> 
                     <div *ngIf="!commentsLoading">
                         <nz-comment *ngFor="let comment of comments[charts.indexOf(chart)]"
-                            [nzAuthor]="comment.username" [nzDatetime]="time">
+                            [nzAuthor]="comment.username">
                             <nz-comment-content>
                                 {{comment.text}}
                             </nz-comment-content>
@@ -97,7 +97,7 @@
                     <div [ngClass]="getCommentSectionHeight(freelanceWorkersCharts.indexOf(chart))" #commentBlock [scrollTop]="commentBlock.scrollHeight"> 
                         <div *ngIf="!commentsLoading">
                             <nz-comment *ngFor="let comment of freelanceWorkersComments[freelanceWorkersCharts.indexOf(chart)]"
-                                [nzAuthor]="comment.username" [nzDatetime]="time">
+                                [nzAuthor]="comment.username">
                                 <nz-comment-content>
                                     {{comment.text}}
                                 </nz-comment-content>
