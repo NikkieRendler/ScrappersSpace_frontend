@@ -262,7 +262,7 @@ export class ChartsComponent implements OnInit, OnDestroy {
     this.commentsFormsArray.controls[position].setValue({
       commentBlockId: this.commentsFormsArray.controls[position].value.commentBlockId,
       text: null,
-      username: null,
+      username: 'anon',
       visible: !this.commentsFormsArray.controls[position].value.visible
     });
   }
@@ -271,7 +271,7 @@ export class ChartsComponent implements OnInit, OnDestroy {
     this.freelanceWorkersCommentsFormsArray.controls[position].setValue({
       commentBlockId: this.freelanceWorkersCommentsFormsArray.controls[position].value.commentBlockId,
       text: null,
-      username: null,
+      username: 'anon',
       visible: !this.freelanceWorkersCommentsFormsArray.controls[position].value.visible
     });
   }
