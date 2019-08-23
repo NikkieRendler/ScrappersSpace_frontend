@@ -1,0 +1,14 @@
+
+Hope you enjoy your new logo, here are the people that
+made your beautiful logo happen :)
+font name: Montserrat-ExtraBold
+font link: https://fonts.google.com/specimen/Montserrat
+font author: Julieta Ulanovsky
+font author site: http://www.zkysky.com.ar/
+
+
+icon designer: Piotrek Chuchla
+icon designer link: /pchuchla
+        
+{"bg":"#D2EAF5","icon-gradient-0":"#000A68","icon-gradient-1":"#00C4EE","font":"#022239","slogan":"#16364d"}
+      
