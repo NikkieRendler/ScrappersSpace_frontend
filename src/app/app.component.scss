@@ -10,8 +10,10 @@ nz-header {
     box-shadow: 0px 1px 5px #001529;
 }
 
+
 .logo-wrapper {
     background: #f0f2f5;
+    height: 100%;
 }
 
 .logo {
@@ -34,7 +36,7 @@ nz-header {
 }
 
 nz-content {
-    padding: 5% 5%;
+    padding: 63px 5%;
 }
 
 nz-footer {
@@ -56,11 +58,11 @@ nz-footer {
 
 .footer-menu-item-link {
     width: max-content;
-    color: rgba(255, 255, 255, 0.65);
+    // color: rgba(255, 255, 255, 0.65);
 }
 
 .footer-menu-item-link:hover {
-    color: #40a9ff;
+    // color: rgb(19, 106, 186);
 }
 
 .mobile-menu-button {

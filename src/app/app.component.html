@@ -12,7 +12,9 @@
     </nz-header>
     <nz-header class="mobile-header" nz-menu nzTheme="dark" nzMode="horizontal" nz-row nzType="flex" nzJustify="space-between"
         nzAlign="middle">
-        <div nz-menu-item class="logo"></div>
+        <div class="logo-wrapper">
+            <div class="logo"></div>
+        </div>
         <button nz-button nzGhost nz-dropdown [nzTrigger]="trigger" [nzBackdrop]="backdrop" [nzDropdownMenu]="mobileMenu"
             [nzPlacement]="position" class="mobile-menu-button">
             <i style="color: #fff" nz-icon nzType="menu" nzTheme="outline"></i>

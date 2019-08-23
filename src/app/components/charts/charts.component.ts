@@ -216,7 +216,6 @@ export class ChartsComponent implements OnInit, OnDestroy {
         this.commentsService.getComments('salaries-middle'),
         this.commentsService.getComments('salaries-senior'),
       ).subscribe(pipe((data: CommentList[]) => {
-      console.log("TCL: ChartsComponent -> ngOnInit -> data", data)
         data.map((item, index) => {
           this.setComments(item, index);
           this.displayCommentsOnLoad();
@@ -226,9 +225,7 @@ export class ChartsComponent implements OnInit, OnDestroy {
   }
 
   submitForm(form, position) {
-    console.log("TCL: ChartsComponent -> submitForm -> form", form);
     this.commentsService.addComment(form).subscribe((res) => {
-    console.log("TCL: ChartsComponent -> submitForm -> res", res);
       this.addCommentOnResponse(res, position);
     });
     this.toggleCommentForm(position);
