@@ -42,8 +42,8 @@ export class ChartsComponent implements OnInit, OnDestroy {
 
   charts: Chart[] = [null, null, null];
   freelanceWorkersCharts: Chart[] = [null, null, null];
-  comments: Comment[][] = [null, null, null, null];
-  freelanceWorkersComments: Comment[][] = [null, null, null, null];
+  comments: Comment[][] = [null, null, null];
+  freelanceWorkersComments: Comment[][] = [null, null, null];
   commentsFormsArray: FormArray;
   freelanceWorkersCommentsFormsArray: FormArray;
   vacanciesColors: string[] = [
@@ -109,7 +109,6 @@ export class ChartsComponent implements OnInit, OnDestroy {
           });
         }));
       combineLatest(
-        // this.commentsService.getComments('relocate-programmingLanguage'),
         this.commentsService.getComments('relocate-general'),
         this.commentsService.getComments('relocate-frontend'),
         this.commentsService.getComments('relocate-backend'),
@@ -263,7 +262,7 @@ export class ChartsComponent implements OnInit, OnDestroy {
     this.commentsFormsArray.controls[position].setValue({
       commentBlockId: this.commentsFormsArray.controls[position].value.commentBlockId,
       text: null,
-      username: null,
+      username: 'anon',
       visible: !this.commentsFormsArray.controls[position].value.visible
     });
   }
@@ -272,7 +271,7 @@ export class ChartsComponent implements OnInit, OnDestroy {
     this.freelanceWorkersCommentsFormsArray.controls[position].setValue({
       commentBlockId: this.freelanceWorkersCommentsFormsArray.controls[position].value.commentBlockId,
       text: null,
-      username: null,
+      username: 'anon',
       visible: !this.freelanceWorkersCommentsFormsArray.controls[position].value.visible
     });
   }

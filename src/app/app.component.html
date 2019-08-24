@@ -8,13 +8,22 @@
         <a [routerLink]="['/freelance']" nz-menu-item nzMatchRouter>Фриланс</a>
         <a [routerLink]="['/relocate']" nz-menu-item nzMatchRouter>Релокейт</a>
         <a [routerLink]="['/startups']" nz-menu-item nzMatchRouter>Стартапы</a>
-        <a [routerLink]="['/companies']" nz-menu-item nzMatchRouter>Компании</a>
+        <a [routerLink]="['/companies']" nz-menu-item nzMatchRouter>
+            <nz-badge [nzCount]="betaTemplate">
+                Компании
+            </nz-badge>
+        </a>
+        <ng-template #betaTemplate>
+            <div class="ant-scroll-number-custom-component beta-badge">Beta</div>
+        </ng-template>
     </nz-header>
-    <nz-header class="mobile-header" nz-menu nzTheme="dark" nzMode="horizontal" nz-row nzType="flex" nzJustify="space-between"
-        nzAlign="middle">
-        <div nz-menu-item class="logo"></div>
-        <button nz-button nzGhost nz-dropdown [nzTrigger]="trigger" [nzBackdrop]="backdrop" [nzDropdownMenu]="mobileMenu"
-            [nzPlacement]="position" class="mobile-menu-button">
+    <nz-header class="mobile-header" nz-menu nzTheme="dark" nzMode="horizontal" nz-row nzType="flex"
+        nzJustify="space-between" nzAlign="middle">
+        <div class="logo-wrapper">
+            <div class="logo"></div>
+        </div>
+        <button nz-button nzGhost nz-dropdown [nzTrigger]="trigger" [nzBackdrop]="backdrop"
+            [nzDropdownMenu]="mobileMenu" [nzPlacement]="position" class="mobile-menu-button">
             <i style="color: #fff" nz-icon nzType="menu" nzTheme="outline"></i>
         </button>
         <nz-dropdown-menu #mobileMenu="nzDropdownMenu">
@@ -29,7 +38,16 @@
                 <li nz-menu-divider></li>
                 <li [routerLink]="['/startups']" nz-menu-item class="mobile-menu-item">Стартапы</li>
                 <li nz-menu-divider></li>
-                <li [routerLink]="['/companies']" nz-menu-item class="mobile-menu-item">Компании</li>
+                <li [routerLink]="['/companies']" nz-menu-item class="mobile-menu-item">
+                    <nz-badge [nzCount]="betaTemplate">
+                        <span style="font-size: 24px;">
+                            Компании
+                        </span>
+                    </nz-badge>
+                    <ng-template #betaTemplate>
+                        <div class="ant-scroll-number-custom-component beta-badge">Beta</div>
+                    </ng-template>
+                </li>
             </ul>
         </nz-dropdown-menu>
     </nz-header>
@@ -61,7 +79,8 @@
                     <nz-divider></nz-divider>
                     <div nz-col nzXs="12" nzSm="12" nzMd="12" nzLg="7" nzXl="7">
                         <div class="footer-menu-item">
-                            <a class="footer-menu-item-link" nz-row nzSpan="1" [routerLink]="['/vacancies']">Вакансии</a>
+                            <a class="footer-menu-item-link" nz-row nzSpan="1"
+                                [routerLink]="['/vacancies']">Вакансии</a>
                         </div>
                         <div class="footer-menu-item">
                             <a class="footer-menu-item-link" nz-row nzSpan="1" [routerLink]="['/salaries']">Зарплаты</a>
@@ -78,7 +97,8 @@
                             <a class="footer-menu-item-link" nz-row nzSpan="1" [routerLink]="['/startups']">Стартапы</a>
                         </div>
                         <div class="footer-menu-item">
-                            <a class="footer-menu-item-link" nz-row nzSpan="1" [routerLink]="['/companies']">Компании</a>
+                            <a class="footer-menu-item-link" nz-row nzSpan="1"
+                                [routerLink]="['/companies']">Компании</a>
                         </div>
                     </div>
                 </div>
@@ -90,7 +110,7 @@
                 <nz-divider></nz-divider>
                 <div class="footer-menu-item">
                     <i nz-icon nzType="mail" nzTheme="outline"></i>
-                    statisfy@gmail.com
+                    statisfy.io@gmail.com
                 </div>
             </div>
         </div>

@@ -9,21 +9,41 @@
 .vacanciesRouteComments {
     height: 263px; 
     overflow: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 15px;
+    word-break: break-word;
 }
 
 .vacanciesRouteCommentsNoForm {
     height: 393px; 
     overflow: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 15px;
+    word-break: break-word;
 }
 
 .salariesRouteComments {
     height: 363px; 
     overflow: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 15px;
+    word-break: break-word;
 }
 
 .salariesRouteCommentsNoForm {
     height: 493px; 
     overflow: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 15px;
+    word-break: break-word;
 }
 
 .ant-form-item {
@@ -31,7 +51,7 @@
 }
 
 ::ng-deep.ant-card-body {  
-    padding: 0 0 0 10px !important;
+    padding: 0 !important;
 }
 
 ::ng-deep.ant-card-actions > li > span {
