@@ -436,7 +436,7 @@ export class ChartsComponent implements OnInit, OnDestroy {
     const data: ChartData = { labels: [], datasets: [] };
     const resourcesNames: string[] = this.setFreelanceWorkersResourcesNames(dataForNewChart[0].numberOfFreelancers);
     const datasetsTemplates = this.setVacanciesDatasetsTemplates(resourcesNames);
-    const options = this.setOptions(technologyType);
+    const options = this.setFreelanceWorkersOptions(technologyType);
     dataForNewChart.map(technology => {
       data.labels.push(decodeURIComponent(technology.technologyName));
       data.datasets = this.setFreelanceWorkersDatasets(technology, datasetsTemplates);
@@ -475,6 +475,31 @@ export class ChartsComponent implements OnInit, OnDestroy {
   setOptions(technologyType) {
     const options: Options = {
       title: this.titleChart(technologyType),
+      responsive: true,
+      maintainAspectRatio: false,
+      legend: {
+        labels: {
+          fontSize: 14
+        }
+      },
+      scales: {
+        xAxes: [{
+          ticks: {
+            beginAtZero: true
+          },
+          stacked: true
+        }],
+        yAxes: [{
+          stacked: true
+        }]
+      }
+    };
+    return options;
+  }
+
+  setFreelanceWorkersOptions(technologyType) {
+    const options: Options = {
+      title: this.titleFreelanceWorkersChart(technologyType),
       responsive: true,
       maintainAspectRatio: false,
       legend: {
@@ -569,19 +594,77 @@ export class ChartsComponent implements OnInit, OnDestroy {
   }
 
   titleChart(name: string): OptionsTitle {
-    return name === 'frontend'
-      ? { text: 'Фронтенд технологии', display: true, fontSize: 15 }
-      : name === 'programmingLanguage'
-        ? { text: 'Языки программирования', display: true, fontSize: 15 }
-        : name === 'backend'
-          ? { text: 'Бекенд технологии', display: true, fontSize: 15 }
-          : name === 'database'
-            ? { text: 'Базы данных', display: true, fontSize: 15 }
-            : name === 'Software Engineer'
-              ? { text: 'Middle Software Engineer', display: true, fontSize: 15 }
+    if (this.currentRoute === '/vacancies') {
+      return name === 'frontend'
+        ? { text: 'Количество вакансий по фронтенд технологиям', display: true, fontSize: 15 }
+        : name === 'programmingLanguage'
+          ? { text: 'Количество вакансий по языкам программирования', display: true, fontSize: 15 }
+          : name === 'backend'
+            ? { text: 'Количество вакансий по бекенд технологиям', display: true, fontSize: 15 }
+            : name === 'database'
+              ? { text: 'Количество вакансий по базам данных', display: true, fontSize: 15 }
               : name === 'other'
-                ? { text: 'Другое', display: true, fontSize: 15 }
+                ? { text: 'Количество вакансий по другим специальностям', display: true, fontSize: 15 }
                 : { text: name, display: true, fontSize: 15 };
+    }
+    if (this.currentRoute === '/salaries') {
+      return name === 'Junior Software Engineer'
+        ? { text: 'Зарплаты junior специалистов по языкам программирования', display: true, fontSize: 15 }
+        : name === 'Software Engineer'
+          ? { text: 'Зарплаты middle специалистов по языкам программирования', display: true, fontSize: 15 }
+          : name === 'Senior Software Engineer'
+            ? { text: 'Зарплаты senior специалистов по языкам программирования', display: true, fontSize: 15 }
+            : { text: name, display: true, fontSize: 15 }
+    }
+    if (this.currentRoute === '/freelance') {
+      return name === 'frontend'
+        ? { text: 'Количество вакансий по фронтенд технологиям на фрилансе', display: true, fontSize: 15 }
+        : name === 'programmingLanguage'
+          ? { text: 'Количество вакансий по языкам программирования на фрилансе', display: true, fontSize: 15 }
+          : name === 'backend'
+            ? { text: 'Количество вакансий по бекенд технологиям на фрилансе', display: true, fontSize: 15 }
+            : name === 'database'
+              ? { text: 'Количество вакансий по базам данных на фрилансе', display: true, fontSize: 15 }
+              : name === 'other'
+                ? { text: 'Количество вакансий по другим специальностям на фрилансе', display: true, fontSize: 15 }
+                : { text: name, display: true, fontSize: 15 };
+    }
+    if (this.currentRoute === '/relocate') {
+      return name === 'frontend'
+        ? { text: 'Количество вакансий по фронтенд технологиям для релокейта', display: true, fontSize: 15 }
+        : name === 'programmingLanguage'
+          ? { text: 'Количество вакансий по языкам программирования для релокейта', display: true, fontSize: 15 }
+          : name === 'backend'
+            ? { text: 'Количество вакансий по бекенд технологиям для релокейта', display: true, fontSize: 15 }
+            : name === 'database'
+              ? { text: 'Количество вакансий по базам данных для релокейта', display: true, fontSize: 15 }
+              : { text: name, display: true, fontSize: 15 };
+    }
+    if (this.currentRoute === '/startups') {
+      return name === 'frontend'
+        ? { text: 'Количество вакансий по фронтенд технологиям для стартапов', display: true, fontSize: 15 }
+        : name === 'programmingLanguage'
+          ? { text: 'Количество вакансий по языкам программирования для стартапов', display: true, fontSize: 15 }
+          : name === 'backend'
+            ? { text: 'Количество вакансий по бекенд технологиям для стартапов', display: true, fontSize: 15 }
+            : name === 'database'
+              ? { text: 'Количество вакансий по базам данных для стартапов', display: true, fontSize: 15 }
+              : { text: name, display: true, fontSize: 15 };
+    }
+  }
+
+  titleFreelanceWorkersChart(name: string): OptionsTitle {
+    return name === 'frontend'
+      ? { text: 'Количество фрилансеров по фронтенд технологиям', display: true, fontSize: 15 }
+      : name === 'programmingLanguage'
+        ? { text: 'Количество фрилансеров по языкам программирования', display: true, fontSize: 15 }
+        : name === 'backend'
+          ? { text: 'Количество фрилансеров по бекенд технологиям', display: true, fontSize: 15 }
+          : name === 'database'
+            ? { text: 'Количество фрилансеров по базам данных', display: true, fontSize: 15 }
+            : name === 'other'
+              ? { text: 'Количество фрилансеров по другим специальностям', display: true, fontSize: 15 }
+              : { text: name, display: true, fontSize: 15 };
   }
 
   setChartPosition(chartData: VacanciesQueryData | FreelanceVacanciesQueryData | FreelanceWorkersQueryData) {
