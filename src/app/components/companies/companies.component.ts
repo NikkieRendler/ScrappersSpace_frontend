@@ -42,14 +42,12 @@ export class CompaniesComponent implements OnInit {
   ngOnInit() {
 
     this.service.getCompaniesLocation('Киев').subscribe(data => {
-      console.log('TCL: CompaniesComponent -> ngOnInit -> data', data);
-      data.map(company => {
+    console.log('TCL: CompaniesComponent -> ngOnInit -> data', data);
+    data.map(company => {
         company.address.map((address, index) => {
           this.markers.push({ lat: company.address[index].lat, lng: company.address[index].lng, alpha: 1, link: company.resources, name: company.name });
         });
       });
-      console.log("TCL: CompaniesComponent -> ngOnInit ->  this.markers", this.markers)
-
     });
 
     this.service.getCompanies().subscribe(data => {
