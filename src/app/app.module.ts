@@ -19,6 +19,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { CompaniesComponent } from './components/companies/companies.component';
 import { ChartsDescriptionComponent } from './components/charts/charts-description/charts-description.component';
+import { AgmCoreModule } from '@agm/core';
 
 
 registerLocaleData(localeRu, 'ru');
@@ -43,9 +44,12 @@ registerLocaleData(localeRu, 'ru');
     BrowserAnimationsModule,
     ChartModule,
     FlexLayoutModule,
-    GraphQLModule
+    GraphQLModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyCYFI7BioaNm-o-giJv4QJnXMY8tekXAGs'
+    })
   ],
-  providers: [{ provide: LOCALE_ID, useValue: "ru" }],
+  providers: [{ provide: LOCALE_ID, useValue: 'ru' }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

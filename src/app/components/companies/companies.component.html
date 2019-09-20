@@ -1,12 +1,30 @@
 <div class="companies-wrapper">
-    <div *ngFor="let company of companiesList" style="margin-bottom: 60px; padding: 2px">
+    <h3 nz-title nzType="secondary">Карта вакансий</h3>
+    <div class="map-wrapper">
+        <agm-map [latitude]='latitude' [longitude]='longitude' [mapTypeId]='mapType' [zoom]="12">
+            <agm-marker *ngFor="let marker of markers" [latitude]="marker.lat" [longitude]="marker.lng"
+                [opacity]="marker.alpha" [markerDraggable]="true" (markerClick)="selectMarker($event)">
+                <agm-info-window [maxWidth]="200" [disableAutoPan]="true">
+                    <div style="word-wrap: normal" nz-col *ngFor="let link of marker.link">
+                        <div style="font-weight: bold;">
+                            {{marker.name}}
+                        </div>
+                        <a href="{{link.link}}/vacancies">Вакансии</a>
+                    </div>
+                </agm-info-window>
+            </agm-marker>
+        </agm-map>
+    </div>
+    <h3 nz-title nzType="secondary">Компании</h3>
+    <div *ngFor="let company of companiesList" style="margin-bottom: 60px;">
         <div *ngIf="loading; else companiesLoaded">
             <div nz-row nzType="flex" nzJustify="center" nzAlign="top">
-                <nz-card nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="7" nzXl="7" [nzCover]="coverTemplate" [nzBodyStyle]="{padding: 0}"
-                    [nzActions]="[links]">
+                <nz-card nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="7" nzXl="7" [nzCover]="coverTemplate"
+                    [nzBodyStyle]="{padding: 0}" [nzActions]="[links]">
                 </nz-card>
                 <ng-template #coverTemplate>
-                    <div style="max-width: 250px;" nz-row nzType="flex" nzJustify="center" nzAlign="middle" style="height: 250px; background-color: #eee; border: 3px #fff solid;">
+                    <div style="max-width: 250px;" nz-row nzType="flex" nzJustify="center" nzAlign="middle"
+                        style="height: 250px; background-color: #eee; border: 3px #fff solid;">
                         <ng-template #indicatorTemplate><i nz-icon nzType="loading" style="font-size: 24px;"></i>
                         </ng-template>
                         <nz-spin nzSimple [nzIndicator]="indicatorTemplate"> </nz-spin>
@@ -35,7 +53,8 @@
                     </div>
                 </ng-template>
                 <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="17" nzXl="17">
-                    <nz-descriptions [nzColumn]="{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }" nzBordered [nzLayout]="innerWidth > 751 ? 'horizontal' : 'vertical'">
+                    <nz-descriptions [nzColumn]="{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }" nzBordered
+                        [nzLayout]="innerWidth > 751 ? 'horizontal' : 'vertical'">
                         <nz-descriptions-item nzTitle="Название">
                             <nz-skeleton style="min-width: 100vw;" [nzParagraph]="{ rows: 0 }" [nzActive]="true">
                             </nz-skeleton>
@@ -62,11 +81,12 @@
         </div>
         <ng-template #companiesLoaded>
             <div nz-row nzType="flex" nzJustify="center" nzAlign="top">
-                <nz-card nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="7" nzXl="7" [nzCover]="coverTemplate" [nzBodyStyle]="{padding: 0}"
-                    [nzActions]="[socialLinks, reviewsLinks, infoLinks]">
+                <nz-card nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="7" nzXl="7" [nzCover]="coverTemplate"
+                    [nzBodyStyle]="{padding: 0}" [nzActions]="[socialLinks, reviewsLinks, infoLinks]">
                 </nz-card>
                 <ng-template #coverTemplate>
-                    <div style="max-width: 250px;" nz-row nzType="flex" nzJustify="center" nzAlign="middle" style="height: 250px; background-color: #eee; border: 3px #fff solid;">
+                    <div style="max-width: 250px;" nz-row nzType="flex" nzJustify="center" nzAlign="middle"
+                        style="height: 250px; background-color: #eee; border: 3px #fff solid;">
                         <img style="max-width: 60%; max-height: 80%;" [src]="company.logo" />
                     </div>
                 </ng-template>
@@ -77,8 +97,8 @@
                     <div nz-row nzType="flex" nzJustify="start" class="icons-row">
                         <div *ngFor="let resource of company.resources.socialNetwork" class="link-icon">
                             <a [href]="resource.link">
-                                <button nz-popover nz-button nzTitle="{{resource.resource.toUpperCase()}}" nzContent="{{resource.link}}"
-                                    nzShape="circle" nzPlacement="rightTop">
+                                <button nz-popover nz-button nzTitle="{{resource.resource.toUpperCase()}}"
+                                    nzContent="{{resource.link}}" nzShape="circle" nzPlacement="rightTop">
                                     <img [src]="resource.icon" style="width: 100%; height: 100%; border-radius: 50%">
                                 </button>
                             </a>
@@ -92,8 +112,8 @@
                     <div nz-row nzType="flex" nzJustify="start" class="icons-row">
                         <div *ngFor="let resource of company.resources.reviews" class="link-icon">
                             <a [href]="resource.link">
-                                <button nz-popover nz-button nzTitle="{{resource.resource.toUpperCase()}}" nzContent="{{resource.link}}"
-                                    nzShape="circle" nzPlacement="rightTop">
+                                <button nz-popover nz-button nzTitle="{{resource.resource.toUpperCase()}}"
+                                    nzContent="{{resource.link}}" nzShape="circle" nzPlacement="rightTop">
                                     <img [src]="resource.icon" style="width: 100%; height: 100%; border-radius: 50%">
                                 </button>
                             </a>
@@ -107,16 +127,16 @@
                     <div nz-row nzType="flex" nzJustify="start" class="icons-row">
                         <div *ngFor="let resource of company.resources.info" class="link-icon">
                             <a [href]="resource.link">
-                                <button nz-popover nz-button nzTitle="{{resource.resource.toUpperCase()}}" nzContent="{{resource.link}}"
-                                    nzShape="circle" nzPlacement="rightTop">
+                                <button nz-popover nz-button nzTitle="{{resource.resource.toUpperCase()}}"
+                                    nzContent="{{resource.link}}" nzShape="circle" nzPlacement="rightTop">
                                     <img [src]="resource.icon" style="width: 100%; height: 100%; border-radius: 50%">
                                 </button>
                             </a>
                         </div>
                         <div *ngFor="let resource of company.resources.ownWebsite" class="link-icon">
                             <a [href]="resource.link">
-                                <button nz-popover nz-button nzTitle="{{resource.resource.toUpperCase()}}" nzContent="{{resource.link}}"
-                                    nzShape="circle" nzPlacement="rightTop">
+                                <button nz-popover nz-button nzTitle="{{resource.resource.toUpperCase()}}"
+                                    nzContent="{{resource.link}}" nzShape="circle" nzPlacement="rightTop">
                                     <img [src]="resource.icon" style="width: 100%; height: 100%; border-radius: 50%">
                                 </button>
                             </a>
@@ -124,7 +144,8 @@
                     </div>
                 </ng-template>
                 <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="17" nzXl="17">
-                    <nz-descriptions [nzColumn]="{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }" nzBordered [nzLayout]="innerWidth > 751 ? 'horizontal' : 'vertical'">
+                    <nz-descriptions [nzColumn]="{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }" nzBordered
+                        [nzLayout]="innerWidth > 751 ? 'horizontal' : 'vertical'">
                         <nz-descriptions-item nzTitle="Название">
                             <b>{{company.name}}</b>
                         </nz-descriptions-item>

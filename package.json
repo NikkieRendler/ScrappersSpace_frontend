@@ -12,6 +12,7 @@
   },
   "private": true,
   "dependencies": {
+    "@agm/core": "^1.0.0",
     "@angular/animations": "~8.0.3",
     "@angular/cdk": "^8.1.1",
     "@angular/cli": "^8.1.2",

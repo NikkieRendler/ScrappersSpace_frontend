@@ -18,6 +18,23 @@ export interface CompanyDataToAdd {
     resources: Resource[];
 }
 
+export interface CompanyWithLocation {
+    name: string;
+    address: Address[];
+    resources: LocationResource[];
+}
+
+export interface Address {
+    city: string;
+    lat: number;
+    lng: number;
+    street: string;
+}
+
+export interface LocationResource {
+    link: string;
+}
+
 export interface ResourceTypes {
     ownWebsite?: Resource[];
     socialNetwork?: Resource[];
