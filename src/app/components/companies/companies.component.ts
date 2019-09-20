@@ -1,8 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CompaniesService } from 'src/app/services/companies.service';
-import { CompanyDataToDisplay } from '../admin/admin-interfaces';
-import { HostListener } from "@angular/core";
+import { CompanyDataToDisplay, CompanyWithLocation } from '../admin/admin-interfaces';
+import { HostListener } from '@angular/core';
 
+interface Marker {
+  lat: number;
+  lng: number;
+  alpha: number;
+  link: any[];
+  name: string;
+}
 
 @Component({
   selector: 'app-companies',
@@ -11,10 +18,16 @@ import { HostListener } from "@angular/core";
 })
 
 
+
 export class CompaniesComponent implements OnInit {
+  latitude = 50.4340271;
+  longitude = 30.5429637;
+  markers: Marker[] = [];
+  mapType = 'roadmap';
   innerWidth: number;
   loading = true;
   companiesList: CompanyDataToDisplay[] = [null, null, null];
+  selectedMarker: { lat: any; lng: any; };
 
   constructor(private service: CompaniesService) {
     this.getScreenSize();
@@ -28,6 +41,17 @@ export class CompaniesComponent implements OnInit {
   }
   ngOnInit() {
 
+    this.service.getCompaniesLocation('Киев').subscribe(data => {
+      console.log('TCL: CompaniesComponent -> ngOnInit -> data', data);
+      data.map(company => {
+        company.address.map((address, index) => {
+          this.markers.push({ lat: company.address[index].lat, lng: company.address[index].lng, alpha: 1, link: company.resources, name: company.name });
+        });
+      });
+      console.log("TCL: CompaniesComponent -> ngOnInit ->  this.markers", this.markers)
+
+    });
+
     this.service.getCompanies().subscribe(data => {
       data.map((company, index) => {
         this.companiesList.splice(index, 1, company);
@@ -37,6 +61,13 @@ export class CompaniesComponent implements OnInit {
         window.scrollTo(0, 0);
       }
     });
+  }
+
+  selectMarker(event) {
+    this.selectedMarker = {
+      lat: event.latitude,
+      lng: event.longitude
+    };
   }
 
 }
