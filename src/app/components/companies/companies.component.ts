@@ -9,6 +9,7 @@ interface Marker {
   alpha: number;
   link: any[];
   name: string;
+  icon?: any;
 }
 
 @Component({
@@ -20,6 +21,7 @@ interface Marker {
 
 
 export class CompaniesComponent implements OnInit {
+  displayVacanciesList = [];
   latitude = 50.4340271;
   longitude = 30.5429637;
   markers: Marker[] = [];
@@ -43,8 +45,17 @@ export class CompaniesComponent implements OnInit {
 
     this.service.getCompaniesLocation('Киев').subscribe(data => {
       data.map(company => {
+        company.icon ? console.log(company) : null;
+
         company.address.map((address, index) => {
-          this.markers.push({ lat: company.address[index].lat, lng: company.address[index].lng, alpha: 1, link: company.resources, name: company.name });
+          this.markers.push({
+            lat: company.address[index].lat,
+            lng: company.address[index].lng,
+            alpha: 1,
+            link: company.resources,
+            name: company.name,
+            icon: this.checkForIcon(company)
+          });
         });
       });
     });
@@ -60,11 +71,15 @@ export class CompaniesComponent implements OnInit {
     });
   }
 
-  selectMarker(event) {
-    this.selectedMarker = {
-      lat: event.latitude,
-      lng: event.longitude
-    };
+  checkForIcon(company: CompanyWithLocation) {
+    if (company.icon) {
+      return { url: company.icon, scaledSize: { height: 25, width: 25 } };
+    }
+  }
+
+  selectMarker(event, selectedMarker: Marker) {
+    const markerToUse = this.markers.find(i => i.name === selectedMarker.name);
+    console.log("TCL: CompaniesComponent -> selectMarker -> markerToUse", markerToUse);
   }
 
 }

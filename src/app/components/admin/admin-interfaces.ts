@@ -22,6 +22,7 @@ export interface CompanyWithLocation {
     name: string;
     address: Address[];
     resources: LocationResource[];
+    icon?: string;
 }
 
 export interface Address {

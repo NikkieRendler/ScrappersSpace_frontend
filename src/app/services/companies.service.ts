@@ -62,6 +62,7 @@ const CompaniesLocationQuery = (city) => gql`
     resources {
       link
     }
+    icon
   }
 }
 `
