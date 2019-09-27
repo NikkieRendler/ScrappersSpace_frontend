@@ -1,13 +1,15 @@
 <div class="companies-wrapper">
     <h3 nz-title nzType="secondary">Карта вакансий</h3>
+    <h4 nz-title nzType="secondary">Компаний в выбранном городе: {{companiesAmount}}</h4>
     <div class="map-wrapper">
         <agm-map [latitude]='latitude' [longitude]='longitude' [mapTypeId]='mapType' [zoom]="12">
             <agm-marker *ngFor="let marker of markers" [latitude]="marker.lat" [longitude]="marker.lng"
-                    [opacity]="marker.alpha" [markerDraggable]="false" [iconUrl]="marker.icon" (markerClick)="selectMarker($event, marker)">
+                [opacity]="marker.alpha" [markerDraggable]="false" [iconUrl]="marker.icon"
+                (markerClick)="selectMarker($event, marker)">
                 <agm-info-window [maxWidth]="200" [disableAutoPan]="true">
                     <div style="word-wrap: normal" nz-col *ngFor="let link of marker.link">
                         <div style="font-weight: bold;">
-                                {{marker.name}}
+                            {{marker.name}}
                         </div>
                         <a href="{{link.link}}/vacancies">Вакансии</a>
                     </div>
@@ -15,6 +17,11 @@
             </agm-marker>
         </agm-map>
     </div>
+
+    <nz-select [(ngModel)]="selectedValue" (ngModelChange)="loadSelectedCity(selectedValue)" nzAllowClear nzPlaceHolder="Город">
+        <nz-option *ngFor="let city of citiesList" nzValue="{{city}}" nzLabel="{{city}}"></nz-option>
+    </nz-select>
+   
     <h3 nz-title nzType="secondary">Компании</h3>
     <div *ngFor="let company of companiesList" style="margin-bottom: 60px;">
         <div *ngIf="loading; else companiesLoaded">

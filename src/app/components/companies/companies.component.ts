@@ -21,10 +21,13 @@ interface Marker {
 
 
 export class CompaniesComponent implements OnInit {
+  selectedValue: string = 'Київ';
+  citiesList: string[] = [];
   displayVacanciesList = [];
   latitude = 50.4340271;
   longitude = 30.5429637;
   markers: Marker[] = [];
+  companiesAmount: number;
   mapType = 'roadmap';
   innerWidth: number;
   loading = true;
@@ -42,11 +45,31 @@ export class CompaniesComponent implements OnInit {
     this.innerWidth = window.innerWidth;
   }
   ngOnInit() {
+    this.service.getCitiesList().subscribe(data => {
+      this.citiesList = data;
+    });
 
-    this.service.getCompaniesLocation('Киев').subscribe(data => {
-      data.map(company => {
-        company.icon ? console.log(company) : null;
+    this.fetchCompaniesLocationByCity('Київ');
 
+    this.service.getCompanies().subscribe(data => {
+      data.map((company, index) => {
+        this.companiesList.splice(index, 1, company);
+      });
+      if (!this.companiesList.some(company => company === null)) {
+        this.loading = false;
+        window.scrollTo(0, 0);
+      }
+    });
+  }
+
+  loadSelectedCity(city) {
+    this.fetchCompaniesLocationByCity(city);
+  }
+
+  fetchCompaniesLocationByCity(city: string) {
+    this.service.getCompaniesLocation(city).subscribe(data => {
+      this.companiesAmount = data.amount;
+      data.companies.map(company => {
         company.address.map((address, index) => {
           this.markers.push({
             lat: company.address[index].lat,
@@ -58,16 +81,6 @@ export class CompaniesComponent implements OnInit {
           });
         });
       });
-    });
-
-    this.service.getCompanies().subscribe(data => {
-      data.map((company, index) => {
-        this.companiesList.splice(index, 1, company);
-      });
-      if (!this.companiesList.some(company => company === null)) {
-        this.loading = false;
-        window.scrollTo(0, 0);
-      }
     });
   }
 

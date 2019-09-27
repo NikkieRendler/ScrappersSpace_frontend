@@ -3,7 +3,7 @@ import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { CompanyDataToDisplay, CompanyWithLocation } from '../components/admin/admin-interfaces';
+import { CompanyDataToDisplay, CompanyWithLocation, CompanyMapQueryData } from '../components/admin/admin-interfaces';
 
 const CompaniesQuery = gql`
 {
@@ -52,20 +52,29 @@ const CompaniesQuery = gql`
 const CompaniesLocationQuery = (city) => gql`
 {
   getParsedCompaniesList(city: "${city}") {
-    name
-    address {
-      city
-      street
-      lat
-      lng
+    amount
+    companies {
+      name
+      address {
+        city
+        street
+        lat
+        lng
+      }
+      resources {
+        link
+      }
+      icon
     }
-    resources {
-      link
-    }
-    icon
   }
 }
-`
+`;
+
+const CitiesListQuery = () => gql`
+{
+  getCitiesList
+}
+`;
 
 @Injectable({
   providedIn: 'root'
@@ -82,11 +91,21 @@ export class CompaniesService {
     }));
   }
 
-  getCompaniesLocation(city): Observable<CompanyWithLocation[]> {
+  getCompaniesLocation(city): Observable<CompanyMapQueryData> {
     return this.apollo.watchQuery<any>({
       query: CompaniesLocationQuery(city)
     }).valueChanges.pipe(map(({ data }) => {
+      console.log("TCL: CompaniesService -> constructor -> data", data)
       return data.getParsedCompaniesList;
+    }));
+  }
+
+  getCitiesList(): Observable<any> {
+    return this.apollo.watchQuery<any>({
+      query: CitiesListQuery()
+    }).valueChanges.pipe(map(({ data }) => {
+      console.log("TCL: CompaniesService -> constructor -> data", data)
+      return data.getCitiesList;
     }));
   }
 

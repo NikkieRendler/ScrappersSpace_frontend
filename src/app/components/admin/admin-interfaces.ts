@@ -18,6 +18,11 @@ export interface CompanyDataToAdd {
     resources: Resource[];
 }
 
+export interface CompanyMapQueryData {
+    amount: number;
+    companies: CompanyWithLocation[];
+}
+
 export interface CompanyWithLocation {
     name: string;
     address: Address[];
