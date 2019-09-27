@@ -48,13 +48,13 @@
         </thead>
         <tbody>
             <tr *ngFor="let company of companiesWithLocation">
-                <td nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="7" nzXl="7" style="background-color: whitesmoke;">
+                <td style="background-color: whitesmoke;">
                     <div nz-col>
                         <b>{{ company.name }}</b>
                         <div *ngFor="let address of company.address">{{address.street}}</div>
                     </div>
                 </td>
-                <td nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="17" nzXl="17">
+                <td>
                     <div *ngFor="let vacancy of company.vacancies">
                         <div style="word-wrap: normal;">{{vacancy.title}}</div>
                         <a style="word-wrap: normal;">{{vacancy.link}}</a>
