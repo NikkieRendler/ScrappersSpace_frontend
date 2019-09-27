@@ -10,7 +10,6 @@ interface Marker {
   vacancies: Vacancy[];
   website: any;
   name: string;
-  icon?: any;
 }
 
 @Component({
@@ -48,7 +47,7 @@ export class CompaniesComponent implements OnInit {
   ngOnInit() {
     this.service.getCitiesList().subscribe(data => {
       this.citiesList = data;
-      this.fetchCompaniesLocationByCity(this.citiesList[0]);
+      this.fetchCompaniesLocationByCity(this.citiesList[0].city);
     });
 
     this.service.getCompanies().subscribe(data => {
@@ -66,9 +65,10 @@ export class CompaniesComponent implements OnInit {
   //   this.fetchCompaniesLocationByCity(city);
   // }
 
-  fetchCompaniesLocationByCity(city: City) {
-    console.log("TCL: CompaniesComponent -> fetchCompaniesLocationByCity -> city", city)
-    this.service.getCompaniesLocation(city.city).subscribe(data => {
+  fetchCompaniesLocationByCity(cityName: string) {
+    const selectedCity = this.citiesList.find(i => i.city === cityName);
+    console.log("TCL: CompaniesComponent -> fetchCompaniesLocationByCity -> city", cityName)
+    this.service.getCompaniesLocation(selectedCity.city).subscribe(data => {
       this.markers.length = 0;
       this.companiesAmount = data.amount;
       data.companies.map(company => {
@@ -80,19 +80,12 @@ export class CompaniesComponent implements OnInit {
             vacancies: company.vacancies,
             website: { url: `https://s2.googleusercontent.com/s2/favicons?domain_url=${company.website}`, scaledSize: { height: 27, width: 27 } },
             name: company.name,
-            icon: this.checkForIcon(company)
           });
         });
       });
-      this.selectedValue.lat = city.lat;
-      this.selectedValue.lng = city.lng;
+      this.selectedValue.lat = selectedCity.lat;
+      this.selectedValue.lng = selectedCity.lng;
     });
-  }
-
-  checkForIcon(company: CompanyWithLocation) {
-    if (company.icon) {
-      return { url: company.icon, scaledSize: { height: 30, width: 30 } };
-    }
   }
 
   selectMarker(event, selectedMarker: Marker) {

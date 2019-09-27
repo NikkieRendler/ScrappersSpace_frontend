@@ -2,7 +2,7 @@
     <h3 nz-title nzType="secondary">Карта вакансий</h3>
     <h4 nz-title nzType="secondary">Компаний в выбранном городе: {{companiesAmount}}</h4>
     <div class="map-wrapper">
-        <agm-map [latitude]='selectedValue.lat' [longitude]='selectedValue.lng' [mapTypeId]='mapType' [zoom]="12"
+        <agm-map [latitude]='selectedValue.lat' [longitude]='selectedValue.lng' [mapTypeId]='mapType' [zoom]="11"
             [fullscreenControl]="true">
             <agm-marker *ngFor="let marker of markers" [latitude]="marker.lat" [longitude]="marker.lng"
                 [opacity]="marker.alpha" [markerDraggable]="false" [iconUrl]="marker.website"
@@ -29,7 +29,7 @@
         </agm-map>
     </div>
 
-    <nz-select [(ngModel)]="selectedValue.city" (ngModelChange)="fetchCompaniesLocationByCity(selectedValue)"
+    <nz-select [(ngModel)]="selectedValue.city" (ngModelChange)="fetchCompaniesLocationByCity(selectedValue.city)"
         nzAllowClear nzPlaceHolder="Город">
         <nz-option *ngFor="let city of citiesList" nzValue="{{city.city}}" nzLabel="{{city.city}}"></nz-option>
     </nz-select>
