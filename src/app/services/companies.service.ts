@@ -108,7 +108,6 @@ export class CompaniesService {
     return this.apollo.watchQuery<any>({
       query: CompaniesLocationQuery(city)
     }).valueChanges.pipe(map(({ data }) => {
-      console.log("TCL: CompaniesService -> constructor -> data", data)
       return data.getParsedCompaniesList;
     }));
   }
@@ -117,7 +116,6 @@ export class CompaniesService {
     return this.apollo.watchQuery<any>({
       query: CitiesListQuery()
     }).valueChanges.pipe(map(({ data }) => {
-      console.log("TCL: CompaniesService -> constructor -> data", data)
       return data.getCitiesList;
     }));
   }

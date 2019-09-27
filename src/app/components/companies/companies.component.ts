@@ -24,15 +24,13 @@ export class CompaniesComponent implements OnInit {
   selectedValue: City = { city: "Київ", lat: 50.45466, lng: 30.5238 };
   citiesList: City[] = [];
   displayVacanciesList = [];
-  // latitude = 50.4340271;
-  // longitude = 30.5429637;
   markers: Marker[] = [];
   companiesAmount: number;
+  companiesWithLocation: CompanyWithLocation[] = [];
   mapType = 'roadmap';
   innerWidth: number;
-  loading = true;
-  companiesList: CompanyDataToDisplay[] = [null, null, null];
-  selectedMarker: { lat: any; lng: any; };
+  // loading = true;
+  // companiesList: CompanyDataToDisplay[] = [null, null, null];
 
   constructor(private service: CompaniesService) {
     this.getScreenSize();
@@ -50,27 +48,24 @@ export class CompaniesComponent implements OnInit {
       this.fetchCompaniesLocationByCity(this.citiesList[0].city);
     });
 
-    this.service.getCompanies().subscribe(data => {
-      data.map((company, index) => {
-        this.companiesList.splice(index, 1, company);
-      });
-      if (!this.companiesList.some(company => company === null)) {
-        this.loading = false;
-        window.scrollTo(0, 0);
-      }
-    });
+    // this.service.getCompanies().subscribe(data => {
+    //   data.map((company, index) => {
+    //     this.companiesList.splice(index, 1, company);
+    //   });
+    //   if (!this.companiesList.some(company => company === null)) {
+    //     this.loading = false;
+    //     window.scrollTo(0, 0);
+    //   }
+    // });
   }
-
-  // loadSelectedCity(city: City) {
-  //   this.fetchCompaniesLocationByCity(city);
-  // }
 
   fetchCompaniesLocationByCity(cityName: string) {
     const selectedCity = this.citiesList.find(i => i.city === cityName);
-    console.log("TCL: CompaniesComponent -> fetchCompaniesLocationByCity -> city", cityName)
     this.service.getCompaniesLocation(selectedCity.city).subscribe(data => {
       this.markers.length = 0;
       this.companiesAmount = data.amount;
+      this.companiesWithLocation.push(...data.companies);
+      console.log("TCL: CompaniesComponent -> fetchCompaniesLocationByCity -> his.companiesWithLocation", this.companiesWithLocation)
       data.companies.map(company => {
         company.address.map((address, index) => {
           this.markers.push({
@@ -78,7 +73,10 @@ export class CompaniesComponent implements OnInit {
             lng: company.address[index].lng,
             alpha: 1,
             vacancies: company.vacancies,
-            website: { url: `https://s2.googleusercontent.com/s2/favicons?domain_url=${company.website}`, scaledSize: { height: 27, width: 27 } },
+            website: {
+              url: `https://s2.googleusercontent.com/s2/favicons?domain_url=${company.website}`,
+              scaledSize: { height: 27, width: 27 }
+            },
             name: company.name,
           });
         });
@@ -90,7 +88,6 @@ export class CompaniesComponent implements OnInit {
 
   selectMarker(event, selectedMarker: Marker) {
     const markerToUse = this.markers.find(i => i.name === selectedMarker.name);
-    console.log("TCL: CompaniesComponent -> selectMarker -> markerToUse", markerToUse);
   }
 
 }

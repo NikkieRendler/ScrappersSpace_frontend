@@ -8,19 +8,22 @@
                 [opacity]="marker.alpha" [markerDraggable]="false" [iconUrl]="marker.website"
                 (markerClick)="selectMarker($event, marker)">
                 <agm-info-window [maxWidth]="250" [disableAutoPan]="true">
-                    <div style="font-weight: bold;">
+                    <div class="info-window-title">
                         {{marker.name}}
                     </div>
                     <div *ngIf="marker.vacancies.length !== 0; else noVacanciesWindow">
-                        <div style="word-wrap: normal; padding: 2px 0 2px" nz-col
-                            *ngFor="let vacancy of marker.vacancies">
-                            <a href="{{vacancy.link}}">
-                                {{vacancy.title}}
-                            </a>
+                        <div style="padding: 40px 0 3px">
+                            <div style="word-wrap: normal; padding: 3px 0 3px" nz-col
+                                *ngFor="let vacancy of marker.vacancies">
+                                <a href="{{vacancy.link}}">
+                                    {{vacancy.title}}
+                                </a>
+                            </div>
                         </div>
+
                     </div>
                     <ng-template #noVacanciesWindow>
-                        <div>
+                        <div style="word-wrap: normal; padding: 40px 0 3px">
                             На данный момент открытых вакансий нет
                         </div>
                     </ng-template>
@@ -35,7 +38,38 @@
     </nz-select>
 
     <h3 nz-title nzType="secondary">Компании</h3>
-    <div *ngFor="let company of companiesList" style="margin-bottom: 60px;">
+    <nz-table #basicTable [nzData]="markers">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Vacancies</th>
+                <!-- <th>Action</th> -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let company of companiesWithLocation">
+                <td nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="7" nzXl="7" style="background-color: whitesmoke;">
+                    <div nz-col>
+                        <b>{{ company.name }}</b>
+                        <div *ngFor="let address of company.address">{{address.street}}</div>
+                    </div>
+                </td>
+                <td nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="17" nzXl="17">
+                    <div *ngFor="let vacancy of company.vacancies">
+                        <div style="word-wrap: normal;">{{vacancy.title}}</div>
+                        <a style="word-wrap: normal;">{{vacancy.link}}</a>
+                        <div style="word-wrap: normal; padding: 5px 0 0">{{vacancy.content}}</div>
+                        <nz-divider *ngIf="company.vacancies.length > 1"></nz-divider>
+                    </div>
+                    <nz-divider nzType="vertical"></nz-divider>
+                </td>
+                <!-- <td>
+                    <a>Show on map</a> -->
+                <!-- </td> -->
+            </tr>
+        </tbody>
+    </nz-table>
+    <!-- <div *ngFor="let company of companiesList" style="margin-bottom: 60px;">
         <div *ngIf="loading; else companiesLoaded">
             <div nz-row nzType="flex" nzJustify="center" nzAlign="top">
                 <nz-card nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="7" nzXl="7" [nzCover]="coverTemplate"
@@ -185,5 +219,5 @@
             </div>
         </ng-template>
 
-    </div>
+    </div> -->
 </div>
