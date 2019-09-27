@@ -2,26 +2,38 @@
     <h3 nz-title nzType="secondary">Карта вакансий</h3>
     <h4 nz-title nzType="secondary">Компаний в выбранном городе: {{companiesAmount}}</h4>
     <div class="map-wrapper">
-        <agm-map [latitude]='latitude' [longitude]='longitude' [mapTypeId]='mapType' [zoom]="12">
+        <agm-map [latitude]='selectedValue.lat' [longitude]='selectedValue.lng' [mapTypeId]='mapType' [zoom]="12"
+            [fullscreenControl]="true">
             <agm-marker *ngFor="let marker of markers" [latitude]="marker.lat" [longitude]="marker.lng"
-                [opacity]="marker.alpha" [markerDraggable]="false" [iconUrl]="marker.icon"
+                [opacity]="marker.alpha" [markerDraggable]="false" [iconUrl]="marker.website"
                 (markerClick)="selectMarker($event, marker)">
-                <agm-info-window [maxWidth]="200" [disableAutoPan]="true">
-                    <div style="word-wrap: normal" nz-col *ngFor="let link of marker.link">
-                        <div style="font-weight: bold;">
-                            {{marker.name}}
-                        </div>
-                        <a href="{{link.link}}/vacancies">Вакансии</a>
+                <agm-info-window [maxWidth]="250" [disableAutoPan]="true">
+                    <div style="font-weight: bold;">
+                        {{marker.name}}
                     </div>
+                    <div *ngIf="marker.vacancies.length !== 0; else noVacanciesWindow">
+                        <div style="word-wrap: normal; padding: 2px 0 2px" nz-col
+                            *ngFor="let vacancy of marker.vacancies">
+                            <a href="{{vacancy.link}}">
+                                {{vacancy.title}}
+                            </a>
+                        </div>
+                    </div>
+                    <ng-template #noVacanciesWindow>
+                        <div>
+                            На данный момент открытых вакансий нет
+                        </div>
+                    </ng-template>
                 </agm-info-window>
             </agm-marker>
         </agm-map>
     </div>
 
-    <nz-select [(ngModel)]="selectedValue" (ngModelChange)="loadSelectedCity(selectedValue)" nzAllowClear nzPlaceHolder="Город">
-        <nz-option *ngFor="let city of citiesList" nzValue="{{city}}" nzLabel="{{city}}"></nz-option>
+    <nz-select [(ngModel)]="selectedValue.city" (ngModelChange)="fetchCompaniesLocationByCity(selectedValue)"
+        nzAllowClear nzPlaceHolder="Город">
+        <nz-option *ngFor="let city of citiesList" nzValue="{{city.city}}" nzLabel="{{city.city}}"></nz-option>
     </nz-select>
-   
+
     <h3 nz-title nzType="secondary">Компании</h3>
     <div *ngFor="let company of companiesList" style="margin-bottom: 60px;">
         <div *ngIf="loading; else companiesLoaded">

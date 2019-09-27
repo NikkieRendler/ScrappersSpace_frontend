@@ -55,11 +55,20 @@ const CompaniesLocationQuery = (city) => gql`
     amount
     companies {
       name
+      website
       address {
         city
         street
         lat
         lng
+      }
+      vacancies {
+        _id
+        company
+        title
+        link
+        content
+        pubDate
       }
       resources {
         link
@@ -72,7 +81,11 @@ const CompaniesLocationQuery = (city) => gql`
 
 const CitiesListQuery = () => gql`
 {
-  getCitiesList
+  getCitiesList {
+    city
+    lat
+    lng
+  }
 }
 `;
 
@@ -91,7 +104,7 @@ export class CompaniesService {
     }));
   }
 
-  getCompaniesLocation(city): Observable<CompanyMapQueryData> {
+  getCompaniesLocation(city: string): Observable<CompanyMapQueryData> {
     return this.apollo.watchQuery<any>({
       query: CompaniesLocationQuery(city)
     }).valueChanges.pipe(map(({ data }) => {

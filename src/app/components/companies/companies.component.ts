@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CompaniesService } from 'src/app/services/companies.service';
-import { CompanyDataToDisplay, CompanyWithLocation } from '../admin/admin-interfaces';
+import { CompanyDataToDisplay, CompanyWithLocation, Vacancy, City } from '../admin/admin-interfaces';
 import { HostListener } from '@angular/core';
 
 interface Marker {
   lat: number;
   lng: number;
   alpha: number;
-  link: any[];
+  vacancies: Vacancy[];
+  website: any;
   name: string;
   icon?: any;
 }
@@ -21,11 +22,11 @@ interface Marker {
 
 
 export class CompaniesComponent implements OnInit {
-  selectedValue: string = 'Київ';
-  citiesList: string[] = [];
+  selectedValue: City = { city: "Київ", lat: 50.45466, lng: 30.5238 };
+  citiesList: City[] = [];
   displayVacanciesList = [];
-  latitude = 50.4340271;
-  longitude = 30.5429637;
+  // latitude = 50.4340271;
+  // longitude = 30.5429637;
   markers: Marker[] = [];
   companiesAmount: number;
   mapType = 'roadmap';
@@ -47,9 +48,8 @@ export class CompaniesComponent implements OnInit {
   ngOnInit() {
     this.service.getCitiesList().subscribe(data => {
       this.citiesList = data;
+      this.fetchCompaniesLocationByCity(this.citiesList[0]);
     });
-
-    this.fetchCompaniesLocationByCity('Київ');
 
     this.service.getCompanies().subscribe(data => {
       data.map((company, index) => {
@@ -62,12 +62,14 @@ export class CompaniesComponent implements OnInit {
     });
   }
 
-  loadSelectedCity(city) {
-    this.fetchCompaniesLocationByCity(city);
-  }
+  // loadSelectedCity(city: City) {
+  //   this.fetchCompaniesLocationByCity(city);
+  // }
 
-  fetchCompaniesLocationByCity(city: string) {
-    this.service.getCompaniesLocation(city).subscribe(data => {
+  fetchCompaniesLocationByCity(city: City) {
+    console.log("TCL: CompaniesComponent -> fetchCompaniesLocationByCity -> city", city)
+    this.service.getCompaniesLocation(city.city).subscribe(data => {
+      this.markers.length = 0;
       this.companiesAmount = data.amount;
       data.companies.map(company => {
         company.address.map((address, index) => {
@@ -75,18 +77,21 @@ export class CompaniesComponent implements OnInit {
             lat: company.address[index].lat,
             lng: company.address[index].lng,
             alpha: 1,
-            link: company.resources,
+            vacancies: company.vacancies,
+            website: { url: `https://s2.googleusercontent.com/s2/favicons?domain_url=${company.website}`, scaledSize: { height: 27, width: 27 } },
             name: company.name,
             icon: this.checkForIcon(company)
           });
         });
       });
+      this.selectedValue.lat = city.lat;
+      this.selectedValue.lng = city.lng;
     });
   }
 
   checkForIcon(company: CompanyWithLocation) {
     if (company.icon) {
-      return { url: company.icon, scaledSize: { height: 25, width: 25 } };
+      return { url: company.icon, scaledSize: { height: 30, width: 30 } };
     }
   }
 
