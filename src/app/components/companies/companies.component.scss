@@ -16,19 +16,28 @@ agm-map {
 }
 
 .map-wrapper {
-    border: 3px #fff solid;
+    border: 3px #fafafa solid;
 }
 
-nz-select {
-    width: 200px;
-    margin: 30px 0 30px;
+.select-search-wrapper {
+    padding: 30px 0 30px;
 }
 
 .info-window-title {
     font-weight: bold;
     position: fixed;
     padding-bottom: 5px;
-    background-color: white;
-    box-shadow: 3px 3px 10px white;
+    background-color: #fafafa;
+    box-shadow: 3px 3px 10px #fafafa;
     width: 90%;
 }
+
+.company-vacancies-body {
+    width: 70vw;
+    word-break: break-word;
+}
+
+// .select-city {
+//     width: 100%;
+//     margin-right: 20px;
+// }

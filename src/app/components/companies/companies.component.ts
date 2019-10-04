@@ -21,7 +21,7 @@ interface Marker {
 
 
 export class CompaniesComponent implements OnInit {
-  selectedValue: City = { city: "Київ", lat: 50.45466, lng: 30.5238 };
+  selectedValue: City = { city: 'Київ', lat: 50.45466, lng: 30.5238 };
   citiesList: City[] = [];
   displayVacanciesList = [];
   markers: Marker[] = [];
@@ -29,6 +29,7 @@ export class CompaniesComponent implements OnInit {
   companiesWithLocation: CompanyWithLocation[] = [];
   mapType = 'roadmap';
   innerWidth: number;
+  searchValue: any = null;
   // loading = true;
   // companiesList: CompanyDataToDisplay[] = [null, null, null];
 
@@ -63,9 +64,9 @@ export class CompaniesComponent implements OnInit {
     const selectedCity = this.citiesList.find(i => i.city === cityName);
     this.service.getCompaniesLocation(selectedCity.city).subscribe(data => {
       this.markers.length = 0;
+      this.companiesWithLocation.length = 0;
       this.companiesAmount = data.amount;
       this.companiesWithLocation.push(...data.companies);
-      console.log("TCL: CompaniesComponent -> fetchCompaniesLocationByCity -> his.companiesWithLocation", this.companiesWithLocation)
       data.companies.map(company => {
         company.address.map((address, index) => {
           this.markers.push({
@@ -86,8 +87,9 @@ export class CompaniesComponent implements OnInit {
     });
   }
 
-  selectMarker(event, selectedMarker: Marker) {
-    const markerToUse = this.markers.find(i => i.name === selectedMarker.name);
+  search() {
+    console.log(this.searchValue);
+
   }
 
 }
