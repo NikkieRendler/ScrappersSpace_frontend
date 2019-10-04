@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CompaniesService } from 'src/app/services/companies.service';
-import { CompanyDataToDisplay, CompanyWithLocation } from '../admin/admin-interfaces';
+import { CompanyDataToDisplay, CompanyWithLocation, Vacancy, City } from '../admin/admin-interfaces';
 import { HostListener } from '@angular/core';
 
 interface Marker {
   lat: number;
   lng: number;
   alpha: number;
-  link: any[];
+  vacancies: Vacancy[];
+  website: any;
   name: string;
-  icon?: any;
 }
 
 @Component({
@@ -21,15 +21,17 @@ interface Marker {
 
 
 export class CompaniesComponent implements OnInit {
+  selectedValue: City = { city: 'Київ', lat: 50.45466, lng: 30.5238 };
+  citiesList: City[] = [];
   displayVacanciesList = [];
-  latitude = 50.4340271;
-  longitude = 30.5429637;
   markers: Marker[] = [];
+  companiesAmount: number;
+  companiesWithLocation: CompanyWithLocation[] = [];
   mapType = 'roadmap';
   innerWidth: number;
-  loading = true;
-  companiesList: CompanyDataToDisplay[] = [null, null, null];
-  selectedMarker: { lat: any; lng: any; };
+  searchValue: any = null;
+  // loading = true;
+  // companiesList: CompanyDataToDisplay[] = [null, null, null];
 
   constructor(private service: CompaniesService) {
     this.getScreenSize();
@@ -42,44 +44,52 @@ export class CompaniesComponent implements OnInit {
     this.innerWidth = window.innerWidth;
   }
   ngOnInit() {
+    this.service.getCitiesList().subscribe(data => {
+      this.citiesList = data;
+      this.fetchCompaniesLocationByCity(this.citiesList[0].city);
+    });
 
-    this.service.getCompaniesLocation('Киев').subscribe(data => {
-      data.map(company => {
-        company.icon ? console.log(company) : null;
+    // this.service.getCompanies().subscribe(data => {
+    //   data.map((company, index) => {
+    //     this.companiesList.splice(index, 1, company);
+    //   });
+    //   if (!this.companiesList.some(company => company === null)) {
+    //     this.loading = false;
+    //     window.scrollTo(0, 0);
+    //   }
+    // });
+  }
 
+  fetchCompaniesLocationByCity(cityName: string) {
+    const selectedCity = this.citiesList.find(i => i.city === cityName);
+    this.service.getCompaniesLocation(selectedCity.city).subscribe(data => {
+      this.markers.length = 0;
+      this.companiesWithLocation.length = 0;
+      this.companiesAmount = data.amount;
+      this.companiesWithLocation.push(...data.companies);
+      data.companies.map(company => {
         company.address.map((address, index) => {
           this.markers.push({
             lat: company.address[index].lat,
             lng: company.address[index].lng,
             alpha: 1,
-            link: company.resources,
+            vacancies: company.vacancies,
+            website: {
+              url: `https://s2.googleusercontent.com/s2/favicons?domain_url=${company.website}`,
+              scaledSize: { height: 27, width: 27 }
+            },
             name: company.name,
-            icon: this.checkForIcon(company)
           });
         });
       });
-    });
-
-    this.service.getCompanies().subscribe(data => {
-      data.map((company, index) => {
-        this.companiesList.splice(index, 1, company);
-      });
-      if (!this.companiesList.some(company => company === null)) {
-        this.loading = false;
-        window.scrollTo(0, 0);
-      }
+      this.selectedValue.lat = selectedCity.lat;
+      this.selectedValue.lng = selectedCity.lng;
     });
   }
 
-  checkForIcon(company: CompanyWithLocation) {
-    if (company.icon) {
-      return { url: company.icon, scaledSize: { height: 25, width: 25 } };
-    }
-  }
+  search() {
+    console.log(this.searchValue);
 
-  selectMarker(event, selectedMarker: Marker) {
-    const markerToUse = this.markers.find(i => i.name === selectedMarker.name);
-    console.log("TCL: CompaniesComponent -> selectMarker -> markerToUse", markerToUse);
   }
 
 }

@@ -18,11 +18,26 @@ export interface CompanyDataToAdd {
     resources: Resource[];
 }
 
+export interface CompanyMapQueryData {
+    amount: number;
+    companies: CompanyWithLocation[];
+}
+
 export interface CompanyWithLocation {
     name: string;
     address: Address[];
     resources: LocationResource[];
+    vacancies: Vacancy[];
+    website: string;
     icon?: string;
+}
+
+export interface Vacancy {
+    company: string;
+    content: string;
+    link: string;
+    pubDate: string;
+    title: string;
 }
 
 export interface Address {
@@ -34,6 +49,12 @@ export interface Address {
 
 export interface LocationResource {
     link: string;
+}
+
+export interface City {
+    city: string;
+    lat: number;
+    lng: number;
 }
 
 export interface ResourceTypes {

@@ -13,13 +13,15 @@ import { GraphQLModule } from './graphql.module';
 import { ChartsComponent } from './components/charts/charts.component';
 import { LOCALE_ID } from '@angular/core';
 import localeRu from '@angular/common/locales/ru';
-import { registerLocaleData } from '@angular/common';
+import { registerLocaleData, CommonModule } from '@angular/common';
 import { AdminComponent } from './components/admin/admin.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { CompaniesComponent } from './components/companies/companies.component';
 import { ChartsDescriptionComponent } from './components/charts/charts-description/charts-description.component';
 import { AgmCoreModule } from '@agm/core';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+
 
 
 registerLocaleData(localeRu, 'ru');
@@ -34,6 +36,7 @@ registerLocaleData(localeRu, 'ru');
     ChartsDescriptionComponent
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     AppRoutingModule,
     NgZorroAntdModule,
@@ -42,6 +45,7 @@ registerLocaleData(localeRu, 'ru');
     NzFormModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    NzToolTipModule,
     ChartModule,
     FlexLayoutModule,
     GraphQLModule,

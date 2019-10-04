@@ -1,22 +1,103 @@
 <div class="companies-wrapper">
     <h3 nz-title nzType="secondary">Карта вакансий</h3>
+    <h4 nz-title nzType="secondary">Компаний в выбранном городе: {{companiesAmount}}</h4>
     <div class="map-wrapper">
-        <agm-map [latitude]='latitude' [longitude]='longitude' [mapTypeId]='mapType' [zoom]="12">
+        <agm-map [latitude]='selectedValue.lat' [longitude]='selectedValue.lng' [mapTypeId]='mapType' [zoom]="11"
+            [fullscreenControl]="true">
             <agm-marker *ngFor="let marker of markers" [latitude]="marker.lat" [longitude]="marker.lng"
-                    [opacity]="marker.alpha" [markerDraggable]="false" [iconUrl]="marker.icon" (markerClick)="selectMarker($event, marker)">
-                <agm-info-window [maxWidth]="200" [disableAutoPan]="true">
-                    <div style="word-wrap: normal" nz-col *ngFor="let link of marker.link">
-                        <div style="font-weight: bold;">
-                                {{marker.name}}
-                        </div>
-                        <a href="{{link.link}}/vacancies">Вакансии</a>
+                [opacity]="marker.alpha" [markerDraggable]="false" [iconUrl]="marker.website">
+                <agm-info-window [maxWidth]="250" [disableAutoPan]="true">
+                    <div class="info-window-title">
+                        {{marker.name}}
                     </div>
+                    <div *ngIf="marker.vacancies.length !== 0; else noVacanciesWindow">
+                        <div style="padding: 40px 0 3px">
+                            <div style="word-wrap: normal; padding: 3px 0 3px" nz-col
+                                *ngFor="let vacancy of marker.vacancies">
+                                <a href="{{vacancy.link}}">
+                                    {{vacancy.title}}
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                    <ng-template #noVacanciesWindow>
+                        <div style="word-wrap: normal; padding: 40px 0 3px">
+                            На данный момент открытых вакансий нет
+                        </div>
+                    </ng-template>
                 </agm-info-window>
             </agm-marker>
         </agm-map>
     </div>
-    <h3 nz-title nzType="secondary">Компании</h3>
-    <div *ngFor="let company of companiesList" style="margin-bottom: 60px;">
+
+
+
+    <div nz-row nzType="flex" nzJustify="start" nzAlign="middle" nzXs="12" nzSm="12" nzMd="12" nzLg="7" nzXl="7" class="select-search-wrapper">
+        <div nz-col nzSpan="4" style="margin-right: 20px">
+            <nz-select style="width: 100%" [(ngModel)]="selectedValue.city"
+                (ngModelChange)="fetchCompaniesLocationByCity(selectedValue.city)" nzAllowClear
+                nzPlaceHolder="Выберите город">
+                <nz-option *ngFor="let city of citiesList" nzValue="{{city.city}}" nzLabel="{{city.city}}"></nz-option>
+            </nz-select>
+        </div>
+        <div nz-col nzSpan="4">
+            <!-- <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+                <input [(ngModel)]="searchValue" type="text" nz-input placeholder="Поиск" />
+            </nz-input-group>
+            <ng-template #suffixIconButton>
+                <button nz-button nzType="primary" (click)="search()" nzSearch><i nz-icon nzType="search"></i></button>
+            </ng-template> -->
+        </div>
+    </div>
+
+
+    <h3 nz-title nzType="secondary">Вакансии</h3>
+
+    <nz-descriptions [nzColumn]="{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }" nzBordered nzLayout="vertical">
+        <nz-descriptions-item *ngFor="let company of companiesWithLocation" nzTitle={{company.name}}>
+            <div [ngClass]="innerWidth > 751 ? '' : 'company-vacancies-body'" *ngFor="let vacancy of company.vacancies">
+                <div>{{vacancy.title}}</div>
+                <div style="padding-bottom: 20px"><a>{{vacancy.link}}</a></div>
+                <div>{{vacancy.content}}</div>
+                <nz-divider
+                    *ngIf="company.vacancies.length > 1 && company.vacancies.indexOf(vacancy) !== company.vacancies.length - 1">
+                </nz-divider>
+            </div>
+        </nz-descriptions-item>
+
+    </nz-descriptions>
+
+    <!-- <nz-table #basicTable [nzData]="markers">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Vacancies</th> 
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let company of companiesWithLocation">
+                <td style="background-color: whitesmoke;">
+                    <div nz-col>
+                        <b>{{ company.name }}</b>
+                        <div *ngFor="let address of company.address">{{address.street}}</div>
+                    </div>
+                </td>
+                <td>
+                    <div *ngFor="let vacancy of company.vacancies">
+                        <div style="word-wrap: normal;">{{vacancy.title}}</div>
+                        <a style="word-wrap: normal;">{{vacancy.link}}</a>
+                        <div style="word-wrap: normal; padding: 5px 0 0">{{vacancy.content}}</div>
+                        <nz-divider *ngIf="company.vacancies.length > 1"></nz-divider>
+                    </div>
+                    <nz-divider nzType="vertical"></nz-divider>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table> -->
+
+
+    <!-- <div *ngFor="let company of companiesList" style="margin-bottom: 60px;">
         <div *ngIf="loading; else companiesLoaded">
             <div nz-row nzType="flex" nzJustify="center" nzAlign="top">
                 <nz-card nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="7" nzXl="7" [nzCover]="coverTemplate"
@@ -166,5 +247,5 @@
             </div>
         </ng-template>
 
-    </div>
+    </div> -->
 </div>
