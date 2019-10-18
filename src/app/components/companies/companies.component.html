@@ -5,7 +5,7 @@
         <agm-map [latitude]='selectedValue.lat' [longitude]='selectedValue.lng' [mapTypeId]='mapType' [zoom]="11"
             [fullscreenControl]="true">
             <agm-marker *ngFor="let marker of markers" [latitude]="marker.lat" [longitude]="marker.lng"
-                [opacity]="marker.alpha" [markerDraggable]="false" [iconUrl]="marker.website">
+                [opacity]="marker.alpha" [markerDraggable]="false">
                 <agm-info-window [maxWidth]="250" [disableAutoPan]="true">
                     <div class="info-window-title">
                         {{marker.name}}

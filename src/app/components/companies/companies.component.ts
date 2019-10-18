@@ -8,7 +8,7 @@ interface Marker {
   lng: number;
   alpha: number;
   vacancies: Vacancy[];
-  website: any;
+  website?: any;
   name: string;
 }
 
@@ -74,10 +74,10 @@ export class CompaniesComponent implements OnInit {
             lng: company.address[index].lng,
             alpha: 1,
             vacancies: company.vacancies,
-            website: {
-              url: `https://s2.googleusercontent.com/s2/favicons?domain_url=${company.website}`,
-              scaledSize: { height: 27, width: 27 }
-            },
+            // website: {
+            //   url: `https://s2.googleusercontent.com/s2/favicons?domain_url=${company.website}`,
+            //   scaledSize: { height: 27, width: 27 }
+            // },
             name: company.name,
           });
         });
